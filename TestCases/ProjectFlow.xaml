@@ -14,6 +14,8 @@
   <x:Members>
     <x:Property Name="projectName" Type="InArgument(x:String)" />
     <x:Property Name="randomNo" Type="InArgument(x:String)" />
+    <x:Property Name="dataSourceName" Type="InArgument(x:String)" />
+    <x:Property Name="dsIngestionmethod" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -68,7 +70,7 @@
   <Flowchart DisplayName="ProjectFlow" sap2010:WorkflowViewState.IdRef="Flowchart_1">
     <Flowchart.StartNode>
       <FlowStep x:Name="__ReferenceID4" sap2010:WorkflowViewState.IdRef="FlowStep_8">
-        <ui:CommentOut>
+        <ui:CommentOut sap2010:WorkflowViewState.IdRef="CommentOut_1">
           <ui:CommentOut.Body>
             <Sequence DisplayName="Ignored Activities">
               <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke LoginToApp workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_8" UnSafe="False" WorkflowFileName="LoginPage\LoginToApp.xaml">
@@ -78,7 +80,6 @@
               </ui:InvokeWorkflowFile>
             </Sequence>
           </ui:CommentOut.Body>
-          <sap2010:WorkflowViewState.IdRef>CommentOut_1</sap2010:WorkflowViewState.IdRef>
         </ui:CommentOut>
         <FlowStep.Next>
           <FlowStep x:Name="__ReferenceID0" sap2010:WorkflowViewState.IdRef="FlowStep_1">
@@ -106,11 +107,26 @@
                       <FlowStep x:Name="__ReferenceID3" sap2010:WorkflowViewState.IdRef="FlowStep_6">
                         <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke CreateNewDS workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="DataSourcePage\CreateNewDS.xaml">
                           <ui:InvokeWorkflowFile.Arguments>
-                            <OutArgument x:TypeArguments="x:String" x:Key="dataSourceName" />
+                            <OutArgument x:TypeArguments="x:String" x:Key="dataSourceName">[dataSourceName]</OutArgument>
                             <InArgument x:TypeArguments="x:String" x:Key="randomNo">[randomNo]</InArgument>
                             <InArgument x:TypeArguments="x:String" x:Key="projectName" />
+                            <OutArgument x:TypeArguments="x:String" x:Key="dSTypeFromUser">[dsIngestionmethod]</OutArgument>
                           </ui:InvokeWorkflowFile.Arguments>
                         </ui:InvokeWorkflowFile>
+                        <FlowStep.Next>
+                          <FlowStep x:Name="__ReferenceID5" sap2010:WorkflowViewState.IdRef="FlowStep_9">
+                            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke OverviewTab workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_9" UnSafe="False" WorkflowFileName="DataSourcePage\OverviewTab.xaml">
+                              <ui:InvokeWorkflowFile.Arguments>
+                                <InArgument x:TypeArguments="x:String" x:Key="dataSourceName">[dataSourceName]</InArgument>
+                                <InArgument x:TypeArguments="x:String" x:Key="category" />
+                                <InArgument x:TypeArguments="x:String" x:Key="subCategoryType" />
+                                <InArgument x:TypeArguments="x:String" x:Key="addTags" />
+                                <InArgument x:TypeArguments="x:String" x:Key="projectName">[projectName]</InArgument>
+                                <InArgument x:TypeArguments="x:String" x:Key="dSTypeFromUser">[dsIngestionmethod]</InArgument>
+                              </ui:InvokeWorkflowFile.Arguments>
+                            </ui:InvokeWorkflowFile>
+                          </FlowStep>
+                        </FlowStep.Next>
                       </FlowStep>
                     </FlowStep.Next>
                   </FlowStep>
@@ -126,7 +142,8 @@
     <x:Reference>__ReferenceID2</x:Reference>
     <x:Reference>__ReferenceID3</x:Reference>
     <x:Reference>__ReferenceID4</x:Reference>
-    <sads:DebugSymbol.Symbol>dzREOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlXFRlc3RDYXNlc1xQcm9qZWN0Rmxvdy54YW1sDwFbAYIBAQJEA4IBDwIBAUcJUhkCARJVDVklAgEQXBFhKQIBCmQVaC0CAQZrGXExAgECVcYBVeoBAgERXlFeXgIBDl9NX1cCAQxcxgFc5gECAQtmVGZhAgEIZMoBZOoBAgEHblVuXwIBBGvMAWvtAQIBAw==</sads:DebugSymbol.Symbol>
+    <x:Reference>__ReferenceID5</x:Reference>
+    <sads:DebugSymbol.Symbol>dzREOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlXFRlc3RDYXNlc1xQcm9qZWN0Rmxvdy54YW1sFgFbAYIBAQJGA5MBDwIBAUkJUxkCAR5WDVolAgEcXRFiKQIBFmUVaS0CARJsGXMxAgEKdh1/NQIBAlbGAVbqAQIBHV9RX14CARpgTWBXAgEYXcYBXeYBAgEXZ1RnYQIBFGXKAWXqAQIBE25cbmwCARBxXHFvAgEOb1VvXwIBDGzMAWztAQIBC3hfeG8CAQh8XHxpAgEGfV99cgIBBHbQAXbxAQIBAw==</sads:DebugSymbol.Symbol>
   </Flowchart>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -166,11 +183,27 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_9" sap:VirtualizedContainerService.HintSize="314,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_9">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">220,474.5</av:Point>
+            <av:Size x:Key="ShapeSize">200,51</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="FlowStep_6">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <av:Point x:Key="ShapeLocation">220,394.5</av:Point>
             <av:Size x:Key="ShapeSize">200,51</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">320,445.5 320,474.5</av:PointCollection>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
