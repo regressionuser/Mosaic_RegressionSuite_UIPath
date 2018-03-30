@@ -1,0 +1,672 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="EditProject" this:EditProject.randomNo="[New Random().Next(100, 9999).ToString]"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:this="clr-namespace:"
+ xmlns:ui="http://schemas.uipath.com/workflow/activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="randomNo" Type="InArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>EditProject_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.Core</AssemblyReference>
+      <AssemblyReference>UiPath.Core.Activities</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:Boolean" Name="is_Edit_Button_Exist_On_Project_Name" />
+      <Variable x:TypeArguments="x:Boolean" Name="is_Edit_Button_Exist_On_Project_Description" />
+      <Variable x:TypeArguments="x:Boolean" Name="is_Edit_Project_Name_Text_Box_Exist" />
+      <Variable x:TypeArguments="x:Boolean" Name="is_Save_Button_For_Edit_Project_Name_Exist" />
+      <Variable x:TypeArguments="x:Boolean" Name="is_Cancel_Button_For_Edit_Project_Name_Exist" />
+      <Variable x:TypeArguments="x:Boolean" Name="is_Edit_Project_Description_Text_Box_Exist" />
+      <Variable x:TypeArguments="x:Boolean" Name="is_Save_Button_For_Edit_Project_Description_Exist" />
+      <Variable x:TypeArguments="x:Boolean" Name="is_Cancel_Button_For_Edit_Project_Description_Exist" />
+      <Variable x:TypeArguments="x:String" Name="edited_Project_Name" />
+      <Variable x:TypeArguments="x:String" Name="actual_Text_For_Edited_Project_Name" />
+      <Variable x:TypeArguments="x:String" Name="success_Message_For_Edited_Project_Name" />
+      <Variable x:TypeArguments="x:String" Name="edited_Project_Description" />
+      <Variable x:TypeArguments="x:String" Name="success_Message_For_Edited_Project_Description" />
+      <Variable x:TypeArguments="x:String" Name="actual_Text_For_Edited_Project_Description" />
+      <Variable x:TypeArguments="x:String" Name="validation_Message_For_Special_Char_In_Project_Name" />
+      <Variable x:TypeArguments="x:String" Name="validation_Message_For_Blank_Project_Name" />
+      <Variable x:TypeArguments="x:String" Name="validation_Message_For_Char_Length_In_Project_Name" />
+    </Sequence.Variables>
+    <ui:Hover DelayBefore="{x:Null}" DelayMS="{x:Null}" DisplayName="Hover On Project Name" sap2010:WorkflowViewState.IdRef="Hover_1" SendWindowMessages="False" SimulateHover="False">
+      <ui:Hover.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Hover.CursorPosition>
+      <ui:Hover.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="ad8493a4a26ddba370b8280d984c6786" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='projectTitle' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Hover.Target>
+    </ui:Hover>
+    <ui:UiElementExists DisplayName="is_Edit_Button_Exist_On_Project_Name      " Exists="[is_Edit_Button_Exist_On_Project_Name]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="ad8493a4a26ddba370b8280d984c6786" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='projectTitle' tag='I' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <ui:Hover DelayBefore="{x:Null}" DelayMS="{x:Null}" DisplayName="Hover on Project Description" sap2010:WorkflowViewState.IdRef="Hover_2" SendWindowMessages="False" SimulateHover="False">
+      <ui:Hover.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Hover.CursorPosition>
+      <ui:Hover.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d587232c45a8ab8a56dcd508a12bfa26" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='projectDesc' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Hover.Target>
+    </ui:Hover>
+    <ui:UiElementExists DisplayName="is_Edit_Button_Exist_On_Project_Description" Exists="[is_Edit_Button_Exist_On_Project_Description]" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="d587232c45a8ab8a56dcd508a12bfa26" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='projectDesc' tag='I' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[is_Edit_Button_Exist_On_Project_Name And is_Edit_Button_Exist_On_Project_Description]" sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="1.Edit button for project name present.&#xD;&#xA;2.Edit button for project description present." />
+          <ui:Hover DelayBefore="{x:Null}" DelayMS="{x:Null}" DisplayName="Hover On Project Name" sap2010:WorkflowViewState.IdRef="Hover_3" SendWindowMessages="False" SimulateHover="False">
+            <ui:Hover.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Hover.CursorPosition>
+            <ui:Hover.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="ad8493a4a26ddba370b8280d984c6786" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='projectTitle' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:Hover.Target>
+          </ui:Hover>
+          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click On Edit Button For Project Name" sap2010:WorkflowViewState.IdRef="Click_5" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="ad8493a4a26ddba370b8280d984c6786" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='projectTitle' tag='I' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+          <ui:Hover DelayBefore="{x:Null}" DelayMS="{x:Null}" DisplayName="Hover on Project Description" sap2010:WorkflowViewState.IdRef="Hover_4" SendWindowMessages="False" SimulateHover="False">
+            <ui:Hover.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Hover.CursorPosition>
+            <ui:Hover.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d587232c45a8ab8a56dcd508a12bfa26" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='projectDesc' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:Hover.Target>
+          </ui:Hover>
+          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click On Edit Button For Project Description" sap2010:WorkflowViewState.IdRef="Click_6" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="ba356b222b2518aaf26249b3a8265b0b" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='projectDesc' tag='I' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[&quot; 1.Edit button for project name exist condition - &quot; +is_Edit_Button_Exist_On_Project_Name.ToString+ vbNewLine+&#xD;&#xA;&quot; 2.Edit button for project description exist condition - &quot; +is_Edit_Button_Exist_On_Project_Description.ToString+ vbNewLine]" />
+      </If.Else>
+    </If>
+    <ui:UiElementExists DisplayName="is_Edit_Project_Name_Text_Box_Exist" Exists="[is_Edit_Project_Name_Text_Box_Exist]" sap2010:WorkflowViewState.IdRef="UiElementExists_3">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="8d5caf903088c0b3b5de13027f8b5d1f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='project_name' tag='INPUT' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <ui:UiElementExists DisplayName="is_Save_Button_For_Edit_Project_Name_Exist" Exists="[is_Save_Button_For_Edit_Project_Name_Exist]" sap2010:WorkflowViewState.IdRef="UiElementExists_5">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="fb67ee46481b225f288a5dc8f5507590" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <ui:UiElementExists DisplayName="is_Cancel_Button_For_Edit_Project_Name_Exist" Exists="[is_Cancel_Button_For_Edit_Project_Name_Exist]" sap2010:WorkflowViewState.IdRef="UiElementExists_6">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="53f104b5cc08feb232aa2078b5381d96" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' idx='1' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <ui:UiElementExists DisplayName="is_Edit_Project_Description_Text_Box_Exist" Exists="[is_Edit_Project_Description_Text_Box_Exist]" sap2010:WorkflowViewState.IdRef="UiElementExists_4">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="a2bf15fc57664e3009ada9d5eb41b0be" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='project_desc' tag='INPUT' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <ui:UiElementExists DisplayName="is_Save_Button_For_Edit_Project_Description_Exist" Exists="[is_Save_Button_For_Edit_Project_Description_Exist]" sap2010:WorkflowViewState.IdRef="UiElementExists_7">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="8c97aefedd8f7803dfda7bde92c5aee4" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Save' idx='2' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <ui:UiElementExists DisplayName="is_Cancel_Button_For_Edit_Project_Description_Exist" Exists="[is_Cancel_Button_For_Edit_Project_Description_Exist]" sap2010:WorkflowViewState.IdRef="UiElementExists_8">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="f838589cecae39f75ee4dfcaba9c353b" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' idx='2' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[is_Edit_Project_Name_Text_Box_Exist And&#xD;&#xA;is_Save_Button_For_Edit_Project_Name_Exist And&#xD;&#xA;is_Cancel_Button_For_Edit_Project_Name_Exist And&#xD;&#xA;is_Edit_Project_Description_Text_Box_Exist And&#xD;&#xA;is_Save_Button_For_Edit_Project_Description_Exist And&#xD;&#xA;is_Cancel_Button_For_Edit_Project_Description_Exist]" sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="1.Edit project name text box present.&#xD;&#xA;2.Save button on edit project name present.&#xD;&#xA;3.Cancel button on edit project name exist.&#xD;&#xA;4.Edit project description text box present.&#xD;&#xA;5.Save button on edit project description present.&#xD;&#xA;6.Cancel button on edit project description exist." />
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="[&quot; 1.Edit project name text box exist condition - &quot; +is_Edit_Project_Name_Text_Box_Exist.ToString+ vbNewLine+&#xD;&#xA;&quot; 2.Save button for edit project name exist condition - &quot; +is_Save_Button_For_Edit_Project_Name_Exist.ToString+ vbNewLine+&#xD;&#xA;&quot; 3.Cancel button for edit project name exist condition - &quot; +is_Cancel_Button_For_Edit_Project_Name_Exist.ToString+ vbNewLine+&#xD;&#xA;&quot; 4.Edit project description text box exist condition - &quot; +is_Edit_Project_description_Text_Box_Exist.ToString+ vbNewLine+&#xD;&#xA;&quot; 5.Save button for edit project description exist condition - &quot; +is_Save_Button_For_Edit_Project_Description_Exist.ToString+ vbNewLine+&#xD;&#xA;&quot; 6.Cancel button for edit project description exist condition - &quot; +is_Cancel_Button_For_Edit_Project_Description_Exist.ToString]" />
+      </If.Else>
+    </If>
+    <ui:SetValue ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Clear Project Name Field" sap2010:WorkflowViewState.IdRef="SetValue_4">
+      <ui:SetValue.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="1cfe98f598ec3b93c716e0e982cfc423" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='project_name' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:SetValue.Target>
+      <ui:SetValue.Text>
+        <InArgument x:TypeArguments="x:String">
+          <Literal x:TypeArguments="x:String" Value="" />
+        </InArgument>
+      </ui:SetValue.Text>
+    </ui:SetValue>
+    <ui:TypeInto DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="False" DelayBefore="1000" DelayMS="1000" DisplayName="Enter Project Name" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_5" SendWindowMessages="False" SimulateType="False" Text=" ">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8d5caf903088c0b3b5de13027f8b5d1f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='project_name' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:TypeInto.Target>
+    </ui:TypeInto>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" DisplayName="Click On Save Button" sap2010:WorkflowViewState.IdRef="Click_14" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fb67ee46481b225f288a5dc8f5507590" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Validation Message For Edited Project Name With Special Char" sap2010:WorkflowViewState.IdRef="GetValue_6">
+      <ui:GetValue.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="c96bc8fd8c8875867428e2a941858571" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='DIV' class='toast toast-error' parentclass='toast-bottom-right' parentid='toast-container' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:GetValue.Target>
+      <ui:GetValue.Value>
+        <OutArgument x:TypeArguments="x:String">[validation_Message_For_Blank_Project_Name]</OutArgument>
+      </ui:GetValue.Value>
+    </ui:GetValue>
+    <ui:Click DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="1000" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_15" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fa63272304e50a3a986fc585356fd0e6" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='BUTTON' omit:class='toast-close-button' omit:parentclass='toast toast-error' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:SetValue ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Clear Project Name Field" sap2010:WorkflowViewState.IdRef="SetValue_3">
+      <ui:SetValue.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="1cfe98f598ec3b93c716e0e982cfc423" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='project_name' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:SetValue.Target>
+      <ui:SetValue.Text>
+        <InArgument x:TypeArguments="x:String">
+          <Literal x:TypeArguments="x:String" Value="" />
+        </InArgument>
+      </ui:SetValue.Text>
+    </ui:SetValue>
+    <ui:TypeInto DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="False" DelayBefore="1000" DelayMS="1000" DisplayName="Enter Project Name" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_4" SendWindowMessages="False" SimulateType="False" Text="@#$">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8d5caf903088c0b3b5de13027f8b5d1f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='project_name' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:TypeInto.Target>
+    </ui:TypeInto>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" DisplayName="Click On Save Button" sap2010:WorkflowViewState.IdRef="Click_12" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fb67ee46481b225f288a5dc8f5507590" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Validation Message For Edited Project Name With Special Char" sap2010:WorkflowViewState.IdRef="GetValue_5">
+      <ui:GetValue.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="c96bc8fd8c8875867428e2a941858571" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='DIV' class='toast toast-error' parentclass='toast-bottom-right' parentid='toast-container' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:GetValue.Target>
+      <ui:GetValue.Value>
+        <OutArgument x:TypeArguments="x:String">[validation_Message_For_Special_Char_In_Project_Name]</OutArgument>
+      </ui:GetValue.Value>
+    </ui:GetValue>
+    <ui:Click DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="1000" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_19" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fa63272304e50a3a986fc585356fd0e6" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='BUTTON' omit:class='toast-close-button' omit:parentclass='toast toast-error' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:SetValue ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Clear Project Name Field" sap2010:WorkflowViewState.IdRef="SetValue_6">
+      <ui:SetValue.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="1cfe98f598ec3b93c716e0e982cfc423" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='project_name' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:SetValue.Target>
+      <ui:SetValue.Text>
+        <InArgument x:TypeArguments="x:String">
+          <Literal x:TypeArguments="x:String" Value="" />
+        </InArgument>
+      </ui:SetValue.Text>
+    </ui:SetValue>
+    <ui:TypeInto DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="False" DelayBefore="1000" DelayMS="1000" DisplayName="Enter Project Name" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_7" SendWindowMessages="False" SimulateType="False" Text="TextTextTextTextTextTextTextTextTextTextTextTextText">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8d5caf903088c0b3b5de13027f8b5d1f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='project_name' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:TypeInto.Target>
+    </ui:TypeInto>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" DisplayName="Click On Save Button" sap2010:WorkflowViewState.IdRef="Click_18" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fb67ee46481b225f288a5dc8f5507590" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Validation Message For Edited Project Name With Special Char" sap2010:WorkflowViewState.IdRef="GetValue_8">
+      <ui:GetValue.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="4b1d923b8a14a9f0164c56507cb9185b" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='DIV' class='toast toast-error' parentclass='toast-bottom-right' parentid='toast-container' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:GetValue.Target>
+      <ui:GetValue.Value>
+        <OutArgument x:TypeArguments="x:String">[validation_Message_For_Char_Length_In_Project_Name]</OutArgument>
+      </ui:GetValue.Value>
+    </ui:GetValue>
+    <If Condition="[validation_Message_For_Special_Char_In_Project_Name.Contains(&quot;Project name can't blank and only ( -, / ,_ ) special characters allowd&quot;) And&#xD;&#xA;validation_Message_For_Blank_Project_Name.Contains(&quot;Project name can't blank and only ( -, / ,_ ) special characters allowd&quot;) And&#xD;&#xA;validation_Message_For_Char_Length_In_Project_Name.Contains(&quot;Project name not be more than 50 characters long&quot;)]" sap2010:WorkflowViewState.IdRef="If_6">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_8">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Info" Message="1.Error message verified for edited project name for special char.&#xD;&#xA;2.Error message verified For edited project name for blank.&#xD;&#xA;3.Error message verified For edited project name for char length." />
+          <ui:Click DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="1000" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_13" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fa63272304e50a3a986fc585356fd0e6" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='BUTTON' omit:class='toast-close-button' omit:parentclass='toast toast-error' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Info" Message="[&quot;1.Error message does not verified for edited project name for special char. Actual is - &quot; +validation_Message_For_Special_Char_In_Project_Name+ &quot; || Expcted is - Project name can't blank and only ( -, / ,_ ) special characters allowd&quot; +vbNewLine+&#xD;&#xA;&quot;2.Error message does not verified for edited project name for blank name. Actual is - &quot; +validation_Message_For_Blank_Project_Name+ &quot; || Expcted is - Project name can't blank and only ( -, / ,_ ) special characters allowd&quot; +vbNewLine+&#xD;&#xA;&quot;3.Error message does not verified for edited project name for char length. Actual is - &quot; +validation_Message_For_Char_Length_In_Project_Name+ &quot; || Expcted is - Project name not be more than 50 characters long&quot;]" />
+      </If.Else>
+    </If>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[edited_Project_Name]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">["Edited_Project_Name_"+randomNo]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:SetValue ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Clear Project Name Field" sap2010:WorkflowViewState.IdRef="SetValue_1">
+      <ui:SetValue.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="1cfe98f598ec3b93c716e0e982cfc423" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='project_name' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:SetValue.Target>
+      <ui:SetValue.Text>
+        <InArgument x:TypeArguments="x:String">
+          <Literal x:TypeArguments="x:String" Value="" />
+        </InArgument>
+      </ui:SetValue.Text>
+    </ui:SetValue>
+    <ui:TypeInto DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="False" DelayBefore="1000" DelayMS="1000" DisplayName="Enter Project Name" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_2" SendWindowMessages="False" SimulateType="False" Text="[edited_Project_Name]">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8d5caf903088c0b3b5de13027f8b5d1f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='project_name' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:TypeInto.Target>
+    </ui:TypeInto>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" DisplayName="Click On Save Button" sap2010:WorkflowViewState.IdRef="Click_8" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fb67ee46481b225f288a5dc8f5507590" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Success Message For Edited Project Name" sap2010:WorkflowViewState.IdRef="GetValue_2">
+      <ui:GetValue.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="358cb95a968141b604cab3006ca7c38e" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='DIV' class='toast toast-success' parentclass='toast-bottom-right' parentid='toast-container' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:GetValue.Target>
+      <ui:GetValue.Value>
+        <OutArgument x:TypeArguments="x:String">[success_Message_For_Edited_Project_Name]</OutArgument>
+      </ui:GetValue.Value>
+    </ui:GetValue>
+    <If Condition="[success_Message_For_Edited_Project_Name.Contains(&quot;Project name updated successfully.&quot;)]" sap2010:WorkflowViewState.IdRef="If_4">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="Success message verified for edited project name." />
+          <ui:Click DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="1000" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_9" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="6416dad64077202fad95f10bb82408eb" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='BUTTON' aaname='×' parentclass='toast toast-success' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Info" Message="[&quot;Success message does not verified for edited project name. Actual is - &quot; +actual_Text_For_Edited_Project_Name+ &quot; || Expcted is - Project name updated successfully.&quot;]" />
+      </If.Else>
+    </If>
+    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text For Edited Project Name" sap2010:WorkflowViewState.IdRef="GetValue_1">
+      <ui:GetValue.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="930b2190d1f9a2d3763d6f65e6bd4d5c" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='projectTitle' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:GetValue.Target>
+      <ui:GetValue.Value>
+        <OutArgument x:TypeArguments="x:String">[actual_Text_For_Edited_Project_Name]</OutArgument>
+      </ui:GetValue.Value>
+    </ui:GetValue>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[edited_Project_Description]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">["Edited_Project_Description_"+randomNo]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:SetValue ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Clear Project Description Field" sap2010:WorkflowViewState.IdRef="SetValue_2">
+      <ui:SetValue.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="7532d254d992e9c7a1e97ae5f253b8fe" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='project_desc' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:SetValue.Target>
+      <ui:SetValue.Text>
+        <InArgument x:TypeArguments="x:String">
+          <Literal x:TypeArguments="x:String" Value="" />
+        </InArgument>
+      </ui:SetValue.Text>
+    </ui:SetValue>
+    <ui:TypeInto DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="False" DelayBefore="1000" DelayMS="1000" DisplayName="Enter Project Description" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_3" SendWindowMessages="False" SimulateType="False" Text="[edited_Project_Description]">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="7532d254d992e9c7a1e97ae5f253b8fe" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='project_desc' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:TypeInto.Target>
+    </ui:TypeInto>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" DisplayName="Click On Save Button" sap2010:WorkflowViewState.IdRef="Click_10" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8c97aefedd8f7803dfda7bde92c5aee4" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Save' idx='2' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Success Message For Edited Project Description" sap2010:WorkflowViewState.IdRef="GetValue_3">
+      <ui:GetValue.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="a836246bbc08114d7defcda39545e25c" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='DIV' class='toast toast-success' parentclass='toast-bottom-right' parentid='toast-container' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:GetValue.Target>
+      <ui:GetValue.Value>
+        <OutArgument x:TypeArguments="x:String">[success_Message_For_Edited_Project_Description]</OutArgument>
+      </ui:GetValue.Value>
+    </ui:GetValue>
+    <If Condition="[success_Message_For_Edited_Project_Description.Contains(&quot;Project description updated successfully.&quot;)]" sap2010:WorkflowViewState.IdRef="If_5">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Info" Message="Success message verified for edited project description." />
+          <ui:Click DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="1000" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_11" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="6416dad64077202fad95f10bb82408eb" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='BUTTON' aaname='×' parentclass='toast toast-success' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Info" Message="[&quot;Success message does not verified for edited project description. Actual is - &quot; +success_Message_For_Edited_Project_Description+ &quot; || Expcted is - Project description updated successfully.&quot;]" />
+      </If.Else>
+    </If>
+    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text For Edited Project Description" sap2010:WorkflowViewState.IdRef="GetValue_4">
+      <ui:GetValue.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="3316c7dc97a23ec5cef235131ba7a409" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='projectDesc' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:GetValue.Target>
+      <ui:GetValue.Value>
+        <OutArgument x:TypeArguments="x:String">[actual_Text_For_Edited_Project_Description]</OutArgument>
+      </ui:GetValue.Value>
+    </ui:GetValue>
+    <If Condition="[actual_Text_For_Edited_Project_Name.Contains(edited_Project_Name) And&#xD;&#xA;actual_Text_For_Edited_Project_Description.Contains(edited_Project_Description)]" sap2010:WorkflowViewState.IdRef="If_3">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="1.Edited project name updated successfully.&#xD;&#xA;2.Edited project description updated successfully." />
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="[&quot;1.Edited project name does not verified successfully. Actual is &quot; +actual_Text_For_Edited_Project_Name+ &quot; || Expected is - &quot; +edited_Project_Name+ vbNewLine+&#xD;&#xA;&quot;2.Edited project description does not verified successfully. Actual is &quot; +actual_Text_For_Edited_Project_Description+ &quot; || Expected is - &quot; +edited_Project_Description]" />
+      </If.Else>
+    </If>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Hover_1" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="Hover_2" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Hover_3" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Click_5" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Hover_4" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Click_6" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,799">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="675,947" />
+      <sap2010:ViewStateData Id="UiElementExists_3" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="UiElementExists_5" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="UiElementExists_6" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="UiElementExists_4" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="UiElementExists_7" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="UiElementExists_8" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="675,243" />
+      <sap2010:ViewStateData Id="SetValue_4" sap:VirtualizedContainerService.HintSize="675,134" />
+      <sap2010:ViewStateData Id="TypeInto_5" sap:VirtualizedContainerService.HintSize="675,134" />
+      <sap2010:ViewStateData Id="Click_14" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="GetValue_6" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="Click_15" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="SetValue_3" sap:VirtualizedContainerService.HintSize="675,134" />
+      <sap2010:ViewStateData Id="TypeInto_4" sap:VirtualizedContainerService.HintSize="675,134" />
+      <sap2010:ViewStateData Id="Click_12" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="GetValue_5" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="Click_19" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="SetValue_6" sap:VirtualizedContainerService.HintSize="675,134" />
+      <sap2010:ViewStateData Id="TypeInto_7" sap:VirtualizedContainerService.HintSize="675,134" />
+      <sap2010:ViewStateData Id="Click_18" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="GetValue_8" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="LogMessage_13" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Click_13" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="336,361">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_14" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="675,513" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="675,60" />
+      <sap2010:ViewStateData Id="SetValue_1" sap:VirtualizedContainerService.HintSize="675,134" />
+      <sap2010:ViewStateData Id="TypeInto_2" sap:VirtualizedContainerService.HintSize="675,134" />
+      <sap2010:ViewStateData Id="Click_8" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="GetValue_2" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="LogMessage_9" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Click_9" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="336,361">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_10" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="675,509" />
+      <sap2010:ViewStateData Id="GetValue_1" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="675,60" />
+      <sap2010:ViewStateData Id="SetValue_2" sap:VirtualizedContainerService.HintSize="675,134" />
+      <sap2010:ViewStateData Id="TypeInto_3" sap:VirtualizedContainerService.HintSize="675,134" />
+      <sap2010:ViewStateData Id="Click_10" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="GetValue_3" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="LogMessage_11" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Click_11" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="336,361">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_12" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="675,509" />
+      <sap2010:ViewStateData Id="GetValue_4" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="LogMessage_7" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_8" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="675,243" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="697,8732">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="EditProject_1" sap:VirtualizedContainerService.HintSize="737,8932" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
