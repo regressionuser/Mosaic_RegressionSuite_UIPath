@@ -7,6 +7,7 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:swa="clr-namespace:System.Windows.Automation;assembly=UIAutomationTypes"
  xmlns:ui="http://schemas.uipath.com/workflow/activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <TextExpression.NamespacesForImplementation>
@@ -33,6 +34,7 @@
       <x:String>UiPath.Core.Activities</x:String>
       <x:String>System.Windows.Markup</x:String>
       <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>System.Windows.Automation</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -57,6 +59,7 @@
       <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
       <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
       <AssemblyReference>System.Collections.Immutable</AssemblyReference>
+      <AssemblyReference>UIAutomationTypes</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="DS_TabVerification" sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -66,7 +69,27 @@
       <Variable x:TypeArguments="scg:IEnumerable(x:String)" Name="setExpected_List" />
       <Variable x:TypeArguments="x:Int32" Name="element_counter" />
       <Variable x:TypeArguments="x:Boolean" Name="is_DifferentFlag" />
+      <Variable x:TypeArguments="x:Boolean" Name="element_exists" />
     </Sequence.Variables>
+    <ui:UiElementExists DisplayName="Check_TabsPresent" Exists="[element_exists]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="8418c30225d0322d435007e6776341e4" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='tabs' tag='UL' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[element_exists]" sap2010:WorkflowViewState.IdRef="If_3">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="Tabs exists on screen" />
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="swa:ElementNotAvailableException" Name="Exception" />
+          </Sequence.Variables>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Error" Message="Tabs not exists on screen" />
+          <TerminateWorkflow DisplayName="Terminate workflow" Exception="[Exception]" sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" Reason="Element not present on screen" />
+        </Sequence>
+      </If.Else>
+    </If>
     <ui:FindChildren Children="[list_item]" DisplayName="GetTabList" Filter="&lt;webctrl /&gt;" sap2010:WorkflowViewState.IdRef="FindChildren_1" Scope="FIND_CHILDREN">
       <ui:FindChildren.Target>
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="05a37f8542937541440983f36dbeaa68" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='tabs' tag='UL' /&gt;" WaitForReady="INTERACTIVE" />
@@ -168,10 +191,22 @@
         <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" Buttons="Ok" DisplayName="Message box" sap2010:WorkflowViewState.IdRef="MessageBox_2" Text="Not Equal count" TopMost="True" />
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>dxZEOlxEU19WZXJpZnlfVGFicy54YW1sMj4DrAEOAgEBRgVKFwIBO0sFUg4CATdTBWsSAgEobAVzDgIBJHQFew4CASB8BYMBDgIBHIQBBaoBCgIBAkiYAUjyAQIBPkZNRmACAT1GH0YsAgE8UDpQTwIBOk07TUkCAThTigFTlwECATZZC2gWAgEpcUFxrAECASduQm5UAgEleS95MAIBI3YwdkECASGBATGBATYCAR9+Mn5EAgEdhAEThAFAAgEDhgEJpQEUAgEGqAEJqAHBAQIBBF4NZR8CATBmDWbEAQIBLGcNZ3gCASqHAQuHAfwBAgEaiAELpAETAgEHqAGeAagBrwECAQVeQ15LAgEzYEBgTwIBMWNnY28CATRmRGZUAgEuZrABZsEBAgEtZ2RndQIBK4cBeIcB+QECARuJAQ2jARgCAQuIAUaIAW8CAQiKAQ+aARQCARGbAQ+iARgCAQyKAR2KAZ4BAgESjAETjAH9AQIBGI8BE5gBHgIBE6ABOaABTAIBD50BOp0BSwIBDYwBgAGMAfoBAgEZkAEVlwEeAgEUlQFBlQFFAgEXkgFCkgFUAgEV</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2JEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aDFcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRGF0YVNvdXJjZVBhZ2VcRFNfVmVyaWZ5X1RhYnMueGFtbEBBA8MBDgIBAUoFThoCAUpPBVwKAgE/XQVhFwIBO2IFaQ4CATdqBYIBEgIBKIMBBYoBDgIBJIsBBZIBDgIBIJMBBZoBDgIBHJsBBcEBCgIBAkyDAUzdAQIBTkzoAUzuAQIBTUpASlICAUtPE08lAgFAUQlRkAECAUhUCVoUAgFCX5gBX/IBAgE+XU1dYAIBPV0fXSwCATxnOmdPAgE6ZDtkSQIBOGqKAWqXAQIBNnALfxYCASmIAUGIAawBAgEnhQFChQFUAgElkAEvkAEwAgEjjQEwjQFBAgEhmAExmAE2AgEflQEylQFEAgEdmwETmwFAAgEDnQEJvAEUAgEGvwEJvwHBAQIBBFF2UY0BAgFJWAtYlwECAUZZC1m2AQIBQ3UNfB8CATB9DX3EAQIBLH4NfngCASqeAQueAfwBAgEanwELuwETAgEHvwGeAb8BrwECAQVYeViUAQIBR1mUAVmzAQIBRVlJWVYCAUR1Q3VLAgEzd0B3TwIBMXpnem8CATR9RH1UAgEufbABfcEBAgEtfmR+dQIBK54BeJ4B+QECARugAQ26ARgCAQufAUafAW8CAQihAQ+xARQCARGyAQ+5ARgCAQyhAR2hAZ4BAgESowETowH9AQIBGKYBE68BHgIBE7cBObcBTAIBD7QBOrQBSwIBDaMBgAGjAfoBAgEZpwEVrgEeAgEUrAFBrAFFAgEXqQFCqQFUAgEV</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="1012,106" />
+      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="336,277">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="1012,425" />
       <sap2010:ViewStateData Id="FindChildren_1" sap:VirtualizedContainerService.HintSize="1012,106" />
       <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="1012,60" />
       <sap2010:ViewStateData Id="GetAttribute_2" sap:VirtualizedContainerService.HintSize="314,96" />
@@ -224,14 +259,14 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="MessageBox_2" sap:VirtualizedContainerService.HintSize="314,59" />
       <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1012,1117" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1034,2344">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1034,2955">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ssdsd_1" sap:VirtualizedContainerService.HintSize="1074,2424" />
+      <sap2010:ViewStateData Id="ssdsd_1" sap:VirtualizedContainerService.HintSize="1074,3475" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

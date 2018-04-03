@@ -14,6 +14,7 @@
     <x:Property Name="randomNo" Type="InArgument(x:String)" />
     <x:Property Name="projectName" Type="InArgument(x:String)" />
     <x:Property Name="dSTypeFromUser" Type="OutArgument(x:String)" />
+    <x:Property Name="ds_List" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -63,6 +64,8 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="CreateNewDS" sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -71,6 +74,21 @@
       <Variable x:TypeArguments="x:Boolean" Name="basicDS" />
       <Variable x:TypeArguments="x:String" Name="successMessageForCreatedDS" />
     </Sequence.Variables>
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'IMG'" sap2010:WorkflowViewState.IdRef="Click_5" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="3b5ad0b7d1b729aae3dc254fbe1417f0" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='sidebar' src='../styles/images/projectImages/data_icon.png' tag='IMG' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
     <ui:Click DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DelayBefore="3000" DisplayName="Click 'BUTTON  createdsclick'" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
@@ -107,7 +125,7 @@
         <OutArgument x:TypeArguments="x:String">[dataSourceName]</OutArgument>
       </Assign.To>
       <Assign.Value>
-        <InArgument x:TypeArguments="x:String">["autods_"+randomNo]</InArgument>
+        <InArgument x:TypeArguments="x:String">[ds_List+"_"+randomNo]</InArgument>
       </Assign.Value>
     </Assign>
     <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;Data source name is &quot; +dataSourceName]" />
@@ -200,7 +218,7 @@
     </ui:Click>
     <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'DIV  topTipMaxiqId7'" sap2010:WorkflowViewState.IdRef="GetValue_1">
       <ui:GetValue.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="758265d2e1825c5a20331947bebf0cd2" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='DIV' class='toast toast-success' parentclass='toast-bottom-right' parentid='toast-container' title='MOSAIC' /&gt;" TimeoutMS="1000" WaitForReady="INTERACTIVE" />
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="758265d2e1825c5a20331947bebf0cd2" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='DIV' class='toast toast-success' parentclass='toast-bottom-right' parentid='toast-container' title='MOSAIC' /&gt;" TimeoutMS="2500" WaitForReady="INTERACTIVE" />
       </ui:GetValue.Target>
       <ui:GetValue.Value>
         <OutArgument x:TypeArguments="x:String">[successMessageForCreatedDS]</OutArgument>
@@ -231,10 +249,11 @@
         <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Error" Message="Success message does not verified for created DS." />
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>dzlEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlXERhdGFTb3VyY2VQYWdlXENyZWF0ZU5ld0RTLnhhbWw+RAPrAQ4CAQFKBVgQAgFIWQVgFQIBQmEFaAoCATtpBXAOAgE2cQVxqQECATNyBXYTAgEvdwV3ngECASt4BYIBFQIBKoMBBbkBCgIBFboBBcgBEAIBEskBBdABEwIBDdEBBekBCgIBAlaYAVb5AQIBSkpHSk0CAUleSl56AgFHXoUBXosBAgFGWUpZWwIBRFszWzgCAUNhE2EkAgE8YwljmwECAUBmCWafAQIBPm4wbkQCATlrMWtBAgE3cXJxpgECATR0mAF0hgICATJylwJyqQICATB3V3dqAgEudx53MAIBLIMBE4MBPwIBFoUBCZkBFAIBJJwBCbcBDgIBGMYBmAHGAY8CAgEUugFHugFNAgETzgExzgFNAgEOywGDAcsBtQICARHLAcACywHGAgIBENEBE9EBagIBA9MBCeQBFAIBB+cBCecBrQECAQVjdmOYAQIBQWZ2ZpwBAgE/hgELlwEbAgEnmAELmAGgAQIBJZwBF5wBRQIBGZ4BDbIBGAIBHrUBDbUBngICARvUAQvUAaUBAgEL1QEL4wEWAgEI5wF35wGqAQIBBpUBZZUBlQECASmSATmSAT4CASiYAXiYAZ0BAgEmnwEPsAEfAgEhsQEPsQGmAQIBH7UBogG1AYwCAgEc1AF41AGiAQIBDOEBiQHhAYQCAgEK4QGPAuEBlQICAQmuAWmuAZkBAgEjqwE9qwFCAgEisQF8sQGjAQIBIA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d19EOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aDFcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRGF0YVNvdXJjZVBhZ2VcQ3JlYXRlTmV3RFMueGFtbEBHA/0BDgIBAU0FWxACAUxcBWoQAgFJawVyFQIBQ3MFegoCATx7BYIBDgIBNoMBBYMBqQECATOEAQWIARMCAS+JAQWJAZ4BAgErigEFlAEVAgEqlQEFywEKAgEVzAEF2gEQAgES2wEF4gETAgEN4wEF+wEKAgECWZgBWakCAgFNaJgBaPkBAgFLXEdcTQIBSnBKcHoCAUhwhQFwiwECAUdrSmtbAgFFbTNtOAIBRHMTcyQCAT11CXWbAQIBQXgJeJ8BAgE/gAEwgAFGAgE5fTF9QQIBN4MBcoMBpgECATSGAZgBhgGGAgIBMoQBlwKEAakCAgEwiQFXiQFqAgEuiQEeiQEwAgEslQETlQE/AgEWlwEJqwEUAgEkrgEJyQEOAgEY2AGYAdgBjwICARTMAUfMAU0CARPgATHgAU0CAQ7dAYMB3QG1AgIBEd0BwALdAcYCAgEQ4wET4wFqAgED5QEJ9gEUAgEH+QEJ+QGtAQIBBXV2dZgBAgFCeHZ4nAECAUCYAQupARsCASeqAQuqAaABAgElrgEXrgFFAgEZsAENxAEYAgEexwENxwGeAgIBG+YBC+YBpQECAQvnAQv1ARYCAQj5AXf5AaoBAgEGpwFlpwGVAQIBKaQBOaQBPgIBKKoBeKoBnQECASaxAQ/CAR8CASHDAQ/DAaYBAgEfxwGiAccBjAICARzmAXjmAaIBAgEM8wGJAfMBhAICAQrzAY8C8wGVAgIBCcABacABmQECASO9AT29AUICASLDAXzDAaMBAgEg</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Click_5" sap:VirtualizedContainerService.HintSize="1036,106" />
       <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="1036,106" />
       <sap2010:ViewStateData Id="ImageFound_1" sap:VirtualizedContainerService.HintSize="1036,106" />
       <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
@@ -287,14 +306,14 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_9" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="1036,509" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1058,3031">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1058,3177">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CreateNewDS_1" sap:VirtualizedContainerService.HintSize="1098,3311" />
+      <sap2010:ViewStateData Id="CreateNewDS_1" sap:VirtualizedContainerService.HintSize="1098,3457" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
