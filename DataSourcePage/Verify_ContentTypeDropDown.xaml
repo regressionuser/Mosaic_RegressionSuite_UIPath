@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="ConfigurationTab" mva:VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="ConfigurationTab_1"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Verify_ContentTypeDropDown" mva:VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="Verify_ContentTypeDropDown_1"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -33,6 +33,7 @@
       <x:String>UiPath.Core</x:String>
       <x:String>UiPath.Core.Activities</x:String>
       <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Windows.Automation</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -52,44 +53,30 @@
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>PresentationCore</AssemblyReference>
       <AssemblyReference>System.Xaml</AssemblyReference>
-      <AssemblyReference>System.ServiceModel</AssemblyReference>
-      <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
       <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
       <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
+      <AssemblyReference>UIAutomationTypes</AssemblyReference>
       <AssemblyReference>System.Collections.Immutable</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="ConfigurationTab" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="Verify_ContentTypeDropDown" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
+      <Variable x:TypeArguments="scg:List(x:String)" Name="get_DropDownValues" />
       <Variable x:TypeArguments="scg:IEnumerable(ui:UiElement)" Name="list_item" />
-      <Variable x:TypeArguments="scg:List(x:String)" Name="getTabs_list" />
       <Variable x:TypeArguments="scg:IEnumerable(x:String)" Name="setExpected_List" />
       <Variable x:TypeArguments="x:Int32" Name="element_counter" />
       <Variable x:TypeArguments="x:Boolean" Name="is_DifferentFlag" />
     </Sequence.Variables>
-    <ui:Click DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DelayBefore="1500" DisplayName="Click_ConfigurationsTab" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
-      <ui:Click.CursorPosition>
-        <ui:CursorPosition Position="Center">
-          <ui:CursorPosition.OffsetX>
-            <InArgument x:TypeArguments="x:Int32" />
-          </ui:CursorPosition.OffsetX>
-          <ui:CursorPosition.OffsetY>
-            <InArgument x:TypeArguments="x:Int32" />
-          </ui:CursorPosition.OffsetY>
-        </ui:CursorPosition>
-      </ui:Click.CursorPosition>
-      <ui:Click.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="eb159c81d6303af47779625679d12932" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Configurations' parentid='tabs' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
-      </ui:Click.Target>
-    </ui:Click>
-    <ui:FindChildren Children="[list_item]" DisplayName="GetTabList" Filter="&lt;webctrl /&gt;" sap2010:WorkflowViewState.IdRef="FindChildren_1" Scope="FIND_CHILDREN">
+    <ui:FindChildren Children="[list_item]" DisplayName="GetDropDownValues" Filter="&lt;webctrl /&gt;" sap2010:WorkflowViewState.IdRef="FindChildren_2" Scope="FIND_CHILDREN">
       <ui:FindChildren.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="da36b8038c234f72bbaca6924f1e6299" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='2' parentid='tabs' tag='UL' /&gt;" WaitForReady="INTERACTIVE" />
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="642675d1cb1f5494be976ba7be8f8c3f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='connectionForm' tag='SELECT' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:FindChildren.Target>
     </ui:FindChildren>
     <Assign DisplayName="CreateList" sap2010:WorkflowViewState.IdRef="Assign_1">
       <Assign.To>
-        <OutArgument x:TypeArguments="scg:List(x:String)">[getTabs_list]</OutArgument>
+        <OutArgument x:TypeArguments="scg:List(x:String)">[get_DropDownValues]</OutArgument>
       </Assign.To>
       <Assign.Value>
         <InArgument x:TypeArguments="scg:List(x:String)">[new List(of String)]</InArgument>
@@ -101,7 +88,7 @@
           <ActivityAction.Argument>
             <DelegateInArgument x:TypeArguments="ui:UiElement" Name="item" />
           </ActivityAction.Argument>
-          <Sequence DisplayName="AddValuesToList" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Sequence DisplayName="AddValuesToList" sap2010:WorkflowViewState.IdRef="Sequence_3">
             <Sequence.Variables>
               <Variable x:TypeArguments="ui:GenericValue" Name="result" />
               <Variable x:TypeArguments="ui:GenericValue" Name="getListValues" />
@@ -114,7 +101,7 @@
                 <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[item]" WaitForReady="INTERACTIVE" />
               </ui:GetAttribute.Target>
             </ui:GetAttribute>
-            <AddToCollection x:TypeArguments="x:String" Collection="[getTabs_list]" DisplayName="Add to collection" sap2010:WorkflowViewState.IdRef="AddToCollection`1_1" Item="[getListValues]" />
+            <AddToCollection x:TypeArguments="x:String" Collection="[get_DropDownValues]" DisplayName="Add to collection" sap2010:WorkflowViewState.IdRef="AddToCollection`1_1" Item="[getListValues]" />
             <WriteLine DisplayName="Write line" sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="[getListValues]" />
           </Sequence>
         </ActivityAction>
@@ -125,7 +112,7 @@
         <OutArgument x:TypeArguments="scg:IEnumerable(x:String)">[setExpected_List]</OutArgument>
       </Assign.To>
       <Assign.Value>
-        <InArgument x:TypeArguments="s:String[]">[{"Connection","Fields","Adv. Settings","History","Snapshots"}]</InArgument>
+        <InArgument x:TypeArguments="s:String[]">[{"Select data source type","Delimited file","RDBMS","TSV","CSV","Excel sheet","Fixed length","FTP/SFTP","REMOTE_DATA","NOSQL"}]</InArgument>
       </Assign.Value>
     </Assign>
     <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
@@ -144,18 +131,18 @@
         <InArgument x:TypeArguments="x:Boolean">False</InArgument>
       </Assign.Value>
     </Assign>
-    <If Condition="[getTabs_list.Count=setExpected_List.Count]" sap2010:WorkflowViewState.IdRef="If_2">
+    <If Condition="[get_DropDownValues.Count=setExpected_List.Count]" sap2010:WorkflowViewState.IdRef="If_3">
       <If.Then>
-        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;List 1 Count : &quot;+getTabs_list.Count.ToString+ &quot; List 2 : &quot; +setExpected_List.Count.ToString+&quot;&quot;]" />
-          <While sap2010:WorkflowViewState.IdRef="While_1" Condition="[element_counter&lt;getTabs_list.Count]">
-            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
-              <If Condition="[getTabs_list(element_counter).Trim.ToString.Equals(setExpected_List(element_counter).Trim.ToString) And(Not is_DifferentFlag)]" sap2010:WorkflowViewState.IdRef="If_1">
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;List 1 Count : &quot;+get_DropDownValues.Count.ToString+ &quot; List 2 : &quot; +setExpected_List.Count.ToString+&quot;&quot;]" />
+          <While sap2010:WorkflowViewState.IdRef="While_1" Condition="[element_counter&lt;get_DropDownValues.Count]">
+            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+              <If Condition="[get_DropDownValues(element_counter).Trim.ToString.Contains(setExpected_List(element_counter).Trim.ToString) And(Not is_DifferentFlag)]" sap2010:WorkflowViewState.IdRef="If_2">
                 <If.Then>
-                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[getTabs_list(element_counter).ToString +&quot; : Matching to Item : &quot; +setExpected_List(element_counter).ToString]" />
+                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[get_DropDownValues(element_counter).ToString +&quot; : Matching to Item : &quot; +setExpected_List(element_counter).ToString]" />
                 </If.Then>
                 <If.Else>
-                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
                     <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
                       <Assign.To>
                         <OutArgument x:TypeArguments="x:Boolean">[is_DifferentFlag]</OutArgument>
@@ -180,20 +167,19 @@
         </Sequence>
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Error" Message="Tab List expected count is not matching with actual count , please check " />
+        <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" Buttons="Ok" DisplayName="Message box" sap2010:WorkflowViewState.IdRef="MessageBox_1" Text="Not Equal count" TopMost="True" />
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d2REOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aDFcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRGF0YVNvdXJjZVBhZ2VcQ29uZmlndXJhdGlvblRhYi54YW1sNT4DuwEOAgEBRgVUEAIBP1UFWRcCATtaBWEOAgE3YgV6EgIBKHsFggEOAgEkgwEFigEOAgEgiwEFkgEOAgEckwEFuQEKAgECUpgBUokCAgFBRkdGTQIBQFeYAVf6AQIBPlVNVWACAT1VH1UsAgE8XzpfTwIBOlw7XEkCAThiigFilwECATZoC3cWAgEpgAEygAFxAgEnfUJ9VAIBJYgBL4gBMAIBI4UBMIUBQQIBIZABMZABNgIBH40BMo0BRAIBHZMBE5MBQAIBA5UBCbQBFAIBBrcBCbcBxQECAQRtDXQfAgEwdQ11xAECASx2DXZ4AgEqlgELlgH8AQIBGpcBC7MBEwIBB7cBd7cBwgECAQVtQ21LAgEzb0BvTwIBMXJncm8CATR1RHVUAgEudbABdcEBAgEtdmR2dQIBK5YBeJYB+QECARuYAQ2yARgCAQuXAUaXAW8CAQiZAQ+pARQCARGqAQ+xARgCAQyZAR2ZAZ4BAgESmwETmwH9AQIBGJ4BE6cBHgIBE68BOa8BTAIBD6wBOqwBSwIBDZsBgAGbAfoBAgEZnwEVpgEeAgEUpAFBpAFFAgEXoQFCoQFUAgEV</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d25EOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aDFcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRGF0YVNvdXJjZVBhZ2VcVmVyaWZ5X0NvbnRlbnRUeXBlRHJvcERvd24ueGFtbDJAA64BDgIBAUgFTBcCATtNBVQOAgE3VQVtEgIBKG4FdQ4CASR2BX0OAgEgfgWFAQ4CARyGAQWsAQoCAQJKmAFKgAICAT5IVEhnAgE9SB9ILAIBPFI6Uk8CATpPO09PAgE4VYoBVZcBAgE2WwtqFgIBKXMyc7IBAgEncEJwVAIBJXsvezACASN4MHhBAgEhgwExgwE2AgEfgAEygAFEAgEdhgEThgFGAgEDiAEJpwEUAgEGqgEJqgHBAQIBBGANZx8CATBoDWjKAQIBLGkNaXgCASqJAQuJAYICAgEaigELpgETAgEHqgGeAaoBrwECAQVgQ2BLAgEzYkBiTwIBMWVnZW8CATRoRGhaAgEuaLYBaMcBAgEtaWRpdQIBK4kBeIkB/wECARuLAQ2lARgCAQuKAUaKAXUCAQiMAQ+cARQCARGdAQ+kARgCAQyMAR2MAaYBAgESjgETjgGDAgIBGJEBE5oBHgIBE6IBOaIBTAIBD58BOp8BSwIBDY4BgAGOAYACAgEZkgEVmQEeAgEUlwFBlwFFAgEXlAFClAFUAgEV</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="1012,106" />
-      <sap2010:ViewStateData Id="FindChildren_1" sap:VirtualizedContainerService.HintSize="1012,106" />
+      <sap2010:ViewStateData Id="FindChildren_2" sap:VirtualizedContainerService.HintSize="1012,106" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="1012,60" />
       <sap2010:ViewStateData Id="GetAttribute_1" sap:VirtualizedContainerService.HintSize="314,96" />
       <sap2010:ViewStateData Id="AddToCollection`1_1" sap:VirtualizedContainerService.HintSize="314,22" />
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="314,61" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,383">
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="336,383">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -211,19 +197,19 @@
       <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="1012,60" />
       <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="1012,60" />
       <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="1012,60" />
-      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="651,91" />
-      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="651,91" />
+      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="242,60" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="264,184">
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="264,184">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="603,332" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="603,332" />
       <sap2010:ViewStateData Id="Assign_6" sap:VirtualizedContainerService.HintSize="603,60" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="625,556">
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="625,556">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -231,27 +217,26 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="While_1" sap:VirtualizedContainerService.HintSize="651,714" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="673,969">
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="673,969">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="1012,1117" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1034,2490">
+      <sap2010:ViewStateData Id="MessageBox_1" sap:VirtualizedContainerService.HintSize="314,59" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="1012,1117" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1034,2344">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ConfigurationTab_1" sap:VirtualizedContainerService.HintSize="1074,2610">
+      <sap2010:ViewStateData Id="Verify_ContentTypeDropDown_1" sap:VirtualizedContainerService.HintSize="1074,2424">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="ShouldCollapseAll">False</x:Boolean>
-            <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
