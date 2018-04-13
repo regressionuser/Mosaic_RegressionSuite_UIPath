@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Compare_Tables" mva:VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="Compare_Tables_1"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Compare_Tables"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -10,6 +10,16 @@
  xmlns:sd="clr-namespace:System.Data;assembly=System.Data"
  xmlns:ui="http://schemas.uipath.com/workflow/activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_ExpectedFilePath" Type="InArgument(x:String)" />
+    <x:Property Name="in_ActualFilePath" Type="InArgument(x:String)" />
+    <x:Property Name="expected_SheetName" Type="InArgument(x:String)" />
+    <x:Property Name="actual_SheetName" Type="InArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>Compare_Tables_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -68,8 +78,8 @@
       <Variable x:TypeArguments="x:Int32" Name="expected_NoColumns" />
       <Variable x:TypeArguments="x:Int32" Name="actual_NoColumns" />
     </Sequence.Variables>
-    <ui:ReadRange AddHeaders="False" DataTable="[ExpectedDataTable]" DisplayName="Read range" sap2010:WorkflowViewState.IdRef="ReadRange_1" Range="A1" SheetName="Sheet1" WorkbookPath="TableCompare\ExpectedDataFile.xlsx" />
-    <ui:ReadRange AddHeaders="False" DataTable="[ActualDataTable]" DisplayName="Read range" sap2010:WorkflowViewState.IdRef="ReadRange_2" Range="A1" SheetName="Sheet1" WorkbookPath="TableCompare\ActualDataFile.xlsx" />
+    <ui:ReadRange AddHeaders="False" DataTable="[ExpectedDataTable]" DisplayName="Read range" sap2010:WorkflowViewState.IdRef="ReadRange_1" Range="A1" SheetName="[expected_SheetName]" WorkbookPath="[in_ExpectedFilePath]" />
+    <ui:ReadRange AddHeaders="False" DataTable="[ActualDataTable]" DisplayName="Read range" sap2010:WorkflowViewState.IdRef="ReadRange_2" Range="A1" SheetName="[actual_SheetName]" WorkbookPath="[in_ActualFilePath]" />
     <Sequence DisplayName="No of rows and columns" sap2010:WorkflowViewState.IdRef="Sequence_2">
       <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
         <Assign.To>
@@ -204,7 +214,7 @@
         </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d2BEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aDFcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcVGFibGVDb21wYXJlXENvbXBhcmVfVGFibGVzLnhhbWxFPgPQAQ4CAQFAOEBVAgEDQThBVQIBAkcFR98BAgFhSAVI2wECAVtJBWsQAgFEbAXOAQoCAQRHMEdFAgFlR5MBR5cBAgFkR6IBR6oBAgFjR7gBR9wBAgFiSDBIQwIBX0iRAUiVAQIBXkigAUioAQIBXUi2AUjYAQIBXEoHURACAVdSB1kQAgFTWgdhEAIBT2IHaRACAUtqB2qeAgIBRWwTbFwCAQVuCcwBFAIBCk8xT08CAVpMMkxDAgFYVzFXTQIBVlQyVEECAVRfMV9SAgFSXDJcRgIBUGcxZ1ACAU5kMmREAgFManRqmwICAUZzC3oUAgFAewuCARQCATyDAQvDARMCARLEAQvLARACAQt4NXg2AgFDdTZ1QAIBQYABN4ABPAIBP304fT8CAT2EAQ3CARgCAReDAUaDAXUCARPEARnEASgCAQzGAQ/GAY8BAgEQyQEPyQGTAQIBDooBD5EBGAIBOJIBD7kBFwIBHboBD8EBGAIBGMYBfMYBjAECARHJAXzJAZABAgEPjwE5jwE6AgE7jAE6jAFHAgE5kwERuAEcAgEikgFKkgGBAQIBHr8BOb8BRQIBG7wBOrwBRAIBGZQBE5sBHAIBNJwBE6MBHAIBMKQBE68BGAIBKLABE7cBHAIBI5kBPpkBdgIBN5YBP5YBVAIBNaEBPqEBdAIBM54BP54BUgIBMaQBIaQBUwIBKaYBF60BIAIBLLUBPbUBTAIBJrIBPrIBSwIBJKsBQ6sBRwIBL6gBRKgBSwIBLQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2BEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aDFcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcVGFibGVDb21wYXJlXENvbXBhcmVfVGFibGVzLnhhbWxFSAPaAQ4CAQFKOEpVAgEDSzhLVQIBAlEFUeABAgFjUgVS2gECAVtTBXUQAgFEdgXYAQoCAQRRMFFFAgFpUZMBUZcBAgFoUaIBUbgBAgFmUcYBUd0BAgFkUjBSQwIBYVKRAVKVAQIBYFKgAVK0AQIBXlLCAVLXAQIBXFQHWxACAVdcB2MQAgFTZAdrEAIBT2wHcxACAUt0B3SeAgIBRXYTdlwCAQV4CdYBFAIBClkxWU8CAVpWMlZDAgFYYTFhTQIBVl4yXkECAVRpMWlSAgFSZjJmRgIBUHExcVACAU5uMm5EAgFMdHR0mwICAUZ9C4QBFAIBQIUBC4wBFAIBPI0BC80BEwIBEs4BC9UBEAIBC4IBNYIBNgIBQ382f0ACAUGKATeKATwCAT+HATiHAT8CAT2OAQ3MARgCAReNAUaNAXUCARPOARnOASgCAQzQAQ/QAY8BAgEQ0wEP0wGTAQIBDpQBD5sBGAIBOJwBD8MBFwIBHcQBD8sBGAIBGNABfNABjAECARHTAXzTAZABAgEPmQE5mQE6AgE7lgE6lgFHAgE5nQERwgEcAgEinAFKnAGBAQIBHskBOckBRQIBG8YBOsYBRAIBGZ4BE6UBHAIBNKYBE60BHAIBMK4BE7kBGAIBKLoBE8EBHAIBI6MBPqMBdgIBN6ABP6ABVAIBNasBPqsBdAIBM6gBP6gBUgIBMa4BIa4BUwIBKbABF7cBIAIBLL8BPb8BTAIBJrwBPrwBSwIBJLUBQ7UBRwIBL7IBRLIBSwIBLQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -265,7 +275,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Compare_Tables_1" sap:VirtualizedContainerService.HintSize="862,3216" />
+      <sap2010:ViewStateData Id="Compare_Tables_1" sap:VirtualizedContainerService.HintSize="862,3136" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
