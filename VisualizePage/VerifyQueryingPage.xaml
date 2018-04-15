@@ -1,0 +1,787 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="VerifyQueryingPage" this:VerifyQueryingPage.HbaseCheckBox="False" this:VerifyQueryingPage.NOSQLCheckBox="False" this:VerifyQueryingPage.FlowName="AutoRegFlow_ProcessNode" this:VerifyQueryingPage.NodeName="LookUpNode" this:VerifyQueryingPage.StatusViewNo="2354889" this:VerifyQueryingPage.randomNo="[new random().Next(11111,99999).ToString]"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:sd="clr-namespace:System.Data;assembly=System.Data"
+ xmlns:this="clr-namespace:"
+ xmlns:ui="http://schemas.uipath.com/workflow/activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="HbaseCheckBox" Type="InArgument(x:Boolean)" />
+    <x:Property Name="NOSQLCheckBox" Type="InArgument(x:Boolean)" />
+    <x:Property Name="FlowName" Type="InArgument(x:String)" />
+    <x:Property Name="NodeName" Type="InArgument(x:String)" />
+    <x:Property Name="StatusViewNo" Type="InArgument(x:String)" />
+    <x:Property Name="randomNo" Type="InArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>VerifyQueryingPage_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.Core</AssemblyReference>
+      <AssemblyReference>UiPath.Core.Activities</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="VerifyQueryingPage" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="ui:UiElement" Name="element_VisualizeTab" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_QueryingTab" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_SelectQueryDropDown" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_QueryNameInputBox" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_SaveButton" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_ClearButton" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_RunButton" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_SaveOutputButton" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_HbaseCheckBox" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_NOSQLCheckBox" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_QueryInputBox" />
+      <Variable x:TypeArguments="x:String" Name="actualTextFromQueryInputBox" />
+      <Variable x:TypeArguments="x:String" Default="[&quot;select * from App_&quot; +FlowName+&quot;_&quot;+NodeName+&quot;_&quot;+StatusViewNo+ &quot; limit 20&quot;]" Name="query" />
+      <Variable x:TypeArguments="x:String" Default="[&quot;AutoQuery_&quot;+randomNo]" Name="queryName" />
+      <Variable x:TypeArguments="sd:DataTable" Default="[New System.Data.DataTable]" Name="dataFromVisualizeOutput" />
+    </Sequence.Variables>
+    <ui:WaitImageAppear DisplayName="element_VisualizeTab" FoundElement="[element_VisualizeTab]" sap2010:WorkflowViewState.IdRef="WaitImageAppear_4">
+      <ui:WaitImageAppear.Image>
+        <ui:ImageTarget Image="{x:Null}" Accuracy="0.1" TargetImageBase64="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" />
+      </ui:WaitImageAppear.Image>
+      <ui:WaitImageAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;wnd app='chrome.exe' cls='Chrome_WidgetWin_1' title='MOSAIC - Google Chrome' /&gt;&lt;wnd aaname='Horizontal' cls='Chrome_RenderWidgetHostHWND' idx='1' title='Chrome Legacy Window' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:WaitImageAppear.Target>
+    </ui:WaitImageAppear>
+    <If Condition="[element_VisualizeTab.IsVisible]" DisplayName="Verify and select visualize tab" sap2010:WorkflowViewState.IdRef="If_7">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_27">
+          <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="3000" DisplayName="Click on visualize tab" sap2010:WorkflowViewState.IdRef="Click_7" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[element_VisualizeTab]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Info" Message="Clicked on visualize tab." />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Error" Message="[&quot;visualize tab exist condition - &quot; +element_VisualizeTab.IsVisible.ToString]" />
+      </If.Else>
+    </If>
+    <ui:WaitUiElementAppear DisplayName="element_QueryingTab" FoundElement="[element_QueryingTab]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_13" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="bb3f9f2c31b8c4d649149a246bbe021e" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Querying' parentid='app' tag='A' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <If Condition="[element_QueryingTab.IsVisible]" DisplayName="Verify and select querying tab" sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="3000" DisplayName="Click on querying tab" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[element_QueryingTab]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="Clicked on querying tab." />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="[&quot;Querying tab exist condition - &quot; +element_QueryingTab.IsVisible.ToString]" />
+      </If.Else>
+    </If>
+    <ui:WaitUiElementAppear DisplayName="element_SelectQueryDropDown" FoundElement="[element_SelectQueryDropDown]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_4" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="954cf1b3e07c9d97e5df503132d99e83" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='SELECT' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:WaitUiElementAppear DisplayName="element_QueryNameInputBox" FoundElement="[element_QueryNameInputBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_5" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="e029e149758347ffc4ed4235661277de" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='content' tag='INPUT' class='form-control ng-scope ng-pristine ng-valid' parentclass='col-md-4' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:WaitUiElementAppear DisplayName="element_SaveButton" FoundElement="[element_SaveButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_6" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="4c1975cba1f06496c9e42135a527c7c3" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Save' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:WaitUiElementAppear DisplayName="element_ClearButton" FoundElement="[element_ClearButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_7" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="db523d12219963cfe579e78f953c1c13" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Clear' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:WaitUiElementAppear DisplayName="element_RunButton" FoundElement="[element_RunButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_8" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="9b2ea451a7361f2bc162ccbdcd89a2f1" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Run' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:WaitUiElementAppear DisplayName="element_SaveOutputButton" FoundElement="[element_SaveOutputButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_9" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="fbb294cbe3744ced0f36585050e2bc35" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Save OutPut' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:WaitUiElementAppear DisplayName="element_HbaseCheckBox" FoundElement="[element_HbaseCheckBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_10" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="15dec0ea0f8599b7d0b5406213ed38d1" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl name='hbaseCheck' tag='INPUT' parentclass='ui-checkbox' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:WaitUiElementAppear DisplayName="element_NOSQLCheckBox" FoundElement="[element_NOSQLCheckBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_11" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="8bfdf80b1543b1e2fb4be5f5e639e1f7" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='2' name='hbaseCheck' tag='INPUT' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:WaitUiElementAppear DisplayName="element_QueryInputBox" FoundElement="[element_QueryInputBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_12" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="7e8ef25ca343b79f4cbea59ed8cf1a35" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TEXTAREA' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <If Condition="[element_SelectQueryDropDown.IsVisible And&#xA;element_QueryNameInputBox.IsVisible And&#xA;element_SaveButton.IsVisible And&#xA;element_QueryInputBox.IsVisible And&#xA;element_HbaseCheckBox.IsVisible And&#xA;element_NOSQLCheckBox.IsVisible And &#xA;element_ClearButton.IsVisible And&#xA;element_RunButton.IsVisible And&#xA;element_SaveOutputButton.IsVisible]" DisplayName="Verify All Elements On Querying Page" sap2010:WorkflowViewState.IdRef="If_3">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="1.Select query drop down present.&#xA;2.Query name input box present.&#xA;3.Save button present.&#xA;4.Query input box present.&#xA;5.Hbase check box present.&#xA;6.NOSQL check box present.&#xA;7.Clear button present.&#xA;8.Run button present.&#xA;9.Save out put button present." />
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="[&quot;1.Select query drop down present condition - &quot;+element_SelectQueryDropDown.IsVisible.ToString+vbNewLine+&#xA;&quot;2.query name input box present conditon - &quot; +element_QueryNameInputBox.IsVisible.ToString+vbNewLine+&#xA;&quot;3.Save button present condition - &quot; +element_SaveButton.IsVisible.ToString+vbNewLine+&#xA;&quot;4.query input box present condition - &quot; +element_QueryInputBox.IsVisible.ToString+vbNewLine+&#xA;&quot;5.Hbase check box present condition - &quot; +element_HbaseCheckBox.IsVisible.ToString+vbNewLine+&#xA;&quot;6.NOSQL check box present condition - &quot; +element_NOSQLCheckBox.IsVisible.ToString+vbNewLine+&#xA;&quot;7.Clear button present condition - &quot; +element_ClearButton.IsVisible.ToString+vbNewLine+&#xA;&quot;8.Run button present condition - &quot; +element_RunButton.IsVisible.ToString+vbNewLine+&#xA;&quot;9.Save out put button present condition - &quot; +element_SaveOutputButton.IsVisible.ToString]" />
+      </If.Else>
+    </If>
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_13">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_20">
+          <ui:TypeInto DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayBefore="1000" DelayMS="1000" DisplayName="Set Query" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="Select * From">
+            <ui:TypeInto.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[element_QueryInputBox]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+            </ui:TypeInto.Target>
+          </ui:TypeInto>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_14">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_21">
+          <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="4000" DisplayName="Click on Clear button" sap2010:WorkflowViewState.IdRef="Click_3" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[element_ClearButton]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_11">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_18">
+          <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get text from query input box" sap2010:WorkflowViewState.IdRef="GetValue_1">
+            <ui:GetValue.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[element_QueryInputBox]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+            </ui:GetValue.Target>
+            <ui:GetValue.Value>
+              <OutArgument x:TypeArguments="x:String">[actualTextFromQueryInputBox]</OutArgument>
+            </ui:GetValue.Value>
+          </ui:GetValue>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_12">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_19">
+          <If Condition="[actualTextFromQueryInputBox.IsNullOrEmpty]" DisplayName="Verify query input box is cleared or not" sap2010:WorkflowViewState.IdRef="If_4">
+            <If.Then>
+              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="Cleared functionality working successfully." />
+            </If.Then>
+            <If.Else>
+              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="[&quot;Cleared functionality does not working successfully. query input box status after clear functionality - &quot; +actualTextFromQueryInputBox.IsNullOrEmpty.ToString+ actualTextFromQueryInputBox]" />
+            </If.Else>
+          </If>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
+    <ui:TypeInto DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayBefore="2000" DelayMS="2000" DisplayName="Set Query" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_2" SendWindowMessages="False" SimulateType="False" Text="[query]">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[element_QueryInputBox]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:TypeInto.Target>
+    </ui:TypeInto>
+    <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DisplayName="Set Query Name" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_4" SendWindowMessages="False" SimulateType="False" Text="[queryName]">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_QueryNameInputBox]" WaitForReady="INTERACTIVE" />
+      </ui:TypeInto.Target>
+    </ui:TypeInto>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="3000" DisplayName="Click on save button" sap2010:WorkflowViewState.IdRef="Click_5" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[element_SaveButton]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:SelectItem ContinueOnError="{x:Null}" Items="{x:Null}" DelayAfter="2000" DelayBefore="2000" DisplayName="Select query name from drop down" sap2010:WorkflowViewState.IdRef="SelectItem_2" Item="[queryName]">
+      <ui:SelectItem.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[element_SelectQueryDropDown]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:SelectItem.Target>
+    </ui:SelectItem>
+    <If Condition="[HbaseCheckBox]" DisplayName="Check Hbase check box" sap2010:WorkflowViewState.IdRef="If_5">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_9">
+          <ui:Check ContinueOnError="{x:Null}" Action="Check" DelayAfter="1000" DelayBefore="2000" DisplayName="Check Hbase checkbox" sap2010:WorkflowViewState.IdRef="Check_2">
+            <ui:Check.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[element_HbaseCheckBox]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+            </ui:Check.Target>
+          </ui:Check>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="Checked Hbase check box." />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Warn" Message="Hbase check box check status is false." />
+      </If.Else>
+    </If>
+    <If Condition="[NOSQLCheckBox]" DisplayName="Check NOSQL check box" sap2010:WorkflowViewState.IdRef="If_6">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_14">
+          <ui:Check ContinueOnError="{x:Null}" Action="Check" DelayAfter="1000" DelayBefore="2000" DisplayName="Check NOSQL checkbox" sap2010:WorkflowViewState.IdRef="Check_3">
+            <ui:Check.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[element_NOSQLCheckBox]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+            </ui:Check.Target>
+          </ui:Check>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Info" Message="Checked NOSQL check box." />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Warn" Message="NOSQL check box check status is false." />
+      </If.Else>
+    </If>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="10000" DisplayName="Click on Run button" sap2010:WorkflowViewState.IdRef="Click_6" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[element_RunButton]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <Sequence DisplayName="Data scraping" sap2010:WorkflowViewState.IdRef="Sequence_31">
+      <Sequence.Variables>
+        <Variable x:TypeArguments="sd:DataTable" Default="[New System.Data.DataTable]" Name="ExtractDataTable" />
+      </Sequence.Variables>
+      <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="Chrome" DisplayName="Attach Browser 'MOSAIC Page'" sap2010:WorkflowViewState.IdRef="BrowserScope_2" InformativeScreenshot="b80685005a19fc42b1ed6f9214a634f7" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;">
+        <ui:BrowserScope.Body>
+          <ActivityAction x:TypeArguments="x:Object">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+            </ActivityAction.Argument>
+            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_32">
+              <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_30">
+                <ui:ExtractData NextLinkSelector="{x:Null}" ContinueOnError="True" DataTable="[ExtractDataTable]" DelayBetweenPagesMS="300" DisplayName="Extract Structured Data 'DIV  1523624259424-grid...'" ExtractMetadata="&lt;extract&gt;&lt;row exact='1'&gt;&lt;webctrl tag='div' class='ui-grid-viewport ng-isolate-scope' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-canvas' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-row ng-scope'/&gt;&lt;webctrl tag='div' class='ng-isolate-scope' idx='1'/&gt;&lt;/row&gt;&lt;column exact='1' name='Column1' attr='text'&gt;&lt;webctrl tag='div' class='ui-grid-viewport ng-isolate-scope' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-canvas' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-row ng-scope'/&gt;&lt;webctrl tag='div' class='ng-isolate-scope' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-cell ng-scope ui-grid-coluiGrid-002T' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-cell-contents ng-binding ng-scope' idx='1'/&gt;&lt;/column&gt;&lt;column exact='1' name='Column2' attr='text'&gt;&lt;webctrl tag='div' class='ui-grid-viewport ng-isolate-scope' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-canvas' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-row ng-scope'/&gt;&lt;webctrl tag='div' class='ng-isolate-scope' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-cell ng-scope ui-grid-coluiGrid-002U' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-cell-contents ng-binding ng-scope' idx='1'/&gt;&lt;/column&gt;&lt;column exact='1' name='Column3' attr='text'&gt;&lt;webctrl tag='div' class='ui-grid-viewport ng-isolate-scope' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-canvas' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-row ng-scope'/&gt;&lt;webctrl tag='div' class='ng-isolate-scope' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-cell ng-scope ui-grid-coluiGrid-002V' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-cell-contents ng-binding ng-scope' idx='1'/&gt;&lt;/column&gt;&lt;column exact='1' name='Column4' attr='text'&gt;&lt;webctrl tag='div' class='ui-grid-viewport ng-isolate-scope' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-canvas' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-row ng-scope'/&gt;&lt;webctrl tag='div' class='ng-isolate-scope' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-cell ng-scope ui-grid-coluiGrid-002W' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-cell-contents ng-binding ng-scope' idx='1'/&gt;&lt;/column&gt;&lt;column exact='1' name='Column5' attr='text'&gt;&lt;webctrl tag='div' class='ui-grid-viewport ng-isolate-scope' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-canvas' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-row ng-scope'/&gt;&lt;webctrl tag='div' class='ng-isolate-scope' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-cell ng-scope ui-grid-coluiGrid-002X' idx='1'/&gt;&lt;webctrl tag='div' class='ui-grid-cell-contents ng-binding ng-scope' idx='1'/&gt;&lt;/column&gt;&lt;/extract&gt;" sap2010:WorkflowViewState.IdRef="ExtractData_4" MaxNumberOfResults="100">
+                  <ui:ExtractData.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="cc0192a4311a22da97484f8ce6fbdfa1" Selector="&lt;webctrl id='1523624259424-grid-container' tag='DIV' /&gt;" WaitForReady="COMPLETE" />
+                  </ui:ExtractData.Target>
+                </ui:ExtractData>
+              </Sequence>
+              <ui:ExcelApplicationScope Password="{x:Null}" DisplayName="Excel application scope" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_2" WorkbookPath="D:\Mosaic_RegressionSuite_Local\Mosaic_RegressionSuite_UIPath\TestData\ActualDataFile.xlsx">
+                <ui:ExcelApplicationScope.Body>
+                  <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+                    <ActivityAction.Argument>
+                      <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+                    </ActivityAction.Argument>
+                    <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_23">
+                      <ui:ExcelWriteRange AddHeaders="False" DataTable="[ExtractDataTable]" DisplayName="Write Range" sap2010:WorkflowViewState.IdRef="ExcelWriteRange_2" SheetName="Sheet1" StartingCell="A1" />
+                    </Sequence>
+                  </ActivityAction>
+                </ui:ExcelApplicationScope.Body>
+              </ui:ExcelApplicationScope>
+            </Sequence>
+          </ActivityAction>
+        </ui:BrowserScope.Body>
+      </ui:BrowserScope>
+    </Sequence>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="WaitImageAppear_4" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_7" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="LogMessage_13" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Sequence_27" sap:VirtualizedContainerService.HintSize="336,323">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_14" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_7" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_13" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_2" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="336,323">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_4" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_5" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_6" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_7" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_8" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_9" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_10" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_11" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_12" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_6" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_20" sap:VirtualizedContainerService.HintSize="336,175">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_13" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_3" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_21" sap:VirtualizedContainerService.HintSize="336,175">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_14" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="GetValue_1" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_18" sap:VirtualizedContainerService.HintSize="336,175">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_11" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_7" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_8" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_19" sap:VirtualizedContainerService.HintSize="486,175">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_12" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TypeInto_2" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TypeInto_4" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_5" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SelectItem_2" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Check_2" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_9" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_10" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Check_3" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_11" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_14" sap:VirtualizedContainerService.HintSize="222,266">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_12" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_6" sap:VirtualizedContainerService.HintSize="617,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExtractData_4" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_30" sap:VirtualizedContainerService.HintSize="559,230">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExcelWriteRange_2" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_23" sap:VirtualizedContainerService.HintSize="336,211">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExcelApplicationScope_2" sap:VirtualizedContainerService.HintSize="559,320" />
+      <sap2010:ViewStateData Id="Sequence_32" sap:VirtualizedContainerService.HintSize="581,714">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="BrowserScope_2" sap:VirtualizedContainerService.HintSize="595,860" />
+      <sap2010:ViewStateData Id="Sequence_31" sap:VirtualizedContainerService.HintSize="617,984">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="639,3383">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="VerifyQueryingPage_1" sap:VirtualizedContainerService.HintSize="679,3503" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
