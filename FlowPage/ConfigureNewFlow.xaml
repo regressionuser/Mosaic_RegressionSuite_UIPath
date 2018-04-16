@@ -7,7 +7,6 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
- xmlns:swa="clr-namespace:System.Windows.Automation;assembly=UIAutomationTypes"
  xmlns:ui="http://schemas.uipath.com/workflow/activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
@@ -73,15 +72,7 @@
         <Variable x:TypeArguments="x:Boolean" Name="Is_ConfigureNewFlowButtonDisplayed" />
         <Variable x:TypeArguments="x:Boolean" Name="Is_ConfigNewFlowPopupDisplayed" />
         <Variable x:TypeArguments="x:String" Default="[new Random().Next(1,9999).ToString]" Name="RandomNumber" />
-        <Variable x:TypeArguments="x:String" Name="FlowName" />
         <Variable x:TypeArguments="x:String" Name="CreatedFlowName" />
-        <Variable x:TypeArguments="x:Boolean" Name="FlowFilter" />
-        <Variable x:TypeArguments="x:String" Name="filteredFlowName" />
-        <Variable x:TypeArguments="x:Boolean" Name="Is_RunFlowButtonDisplayed" />
-        <Variable x:TypeArguments="x:Boolean" Name="Is_CloneFlowButtonDisplayed" />
-        <Variable x:TypeArguments="x:Boolean" Name="Is_ExportFlowButtonDisplayed" />
-        <Variable x:TypeArguments="x:Boolean" Name="Is_ScheduleFlowButtonDisplayed" />
-        <Variable x:TypeArguments="x:Boolean" Name="Is_DeleteFlowButtonDisplayed" />
         <Variable x:TypeArguments="x:String" Name="ErrorMsgForInvalidFlowName" />
       </Sequence.Variables>
       <ui:UiElementExists DisplayName="Is_ConfigNewFlowButtonDisplayed" Exists="[Is_ConfigureNewFlowButtonDisplayed]" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
@@ -240,124 +231,34 @@
           <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="FAILED: Flow did not create successfully" />
         </If.Else>
       </If>
-      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke FlowScreenVerification workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="FlowPage\FlowScreenVerification.xaml">
-        <ui:InvokeWorkflowFile.Arguments>
-          <scg:Dictionary x:TypeArguments="x:String, Argument" />
-        </ui:InvokeWorkflowFile.Arguments>
-      </ui:InvokeWorkflowFile>
-      <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="2000" DisplayName="Click Flow Button" sap2010:WorkflowViewState.IdRef="ClickImage_5" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
-        <ui:ClickImage.CursorPosition>
-          <ui:CursorPosition Position="Center">
-            <ui:CursorPosition.OffsetX>
-              <InArgument x:TypeArguments="x:Int32" />
-            </ui:CursorPosition.OffsetX>
-            <ui:CursorPosition.OffsetY>
-              <InArgument x:TypeArguments="x:Int32" />
-            </ui:CursorPosition.OffsetY>
-          </ui:CursorPosition>
-        </ui:ClickImage.CursorPosition>
-        <ui:ClickImage.Image>
-          <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAAEYAAAA2CAYAAAB6DO9FAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUVSURBVGhD7ZpHSyVLGIbvbzEwgnmjGDeKggtxZwJBTBsVwQCKigFzwjCIAUU3BsSFuFAUxYWCWcFBzIo5YMAcxm94C/rQeqrvzJ1b3e2BLng4Vtd3Guqxqk6lf6ysrMjAHEOMAoYYBSxCjLe3N72/v1N+fj63XA0sRoyUioqKuDGisSgxc3Nz7LO0tJQbJxJVxLy8vNDb2xudnp7SyMgIJSYmko2NDTf2T5DExMTE0Pfv39nfFRUV3FhRqCImNzeXsrKyqK6ujmZnZ1lF8N92c3Pjxv8OuRjka2trWb66utosVhSadKXw8HDWetbW1sjBwYEb8298FhMUFMRaZV9fn1msKDQbYwICAuj+/p7a2tq45Z6enjQ1NcUEKCWIcXJyoq2tLVpdXSV7e3vuu0Sg6eBbVVXF/tNoAfLnkHJ4eEjHx8dUUFDAuqGc8vJyk5jBwUG6u7sjf3//D+8QjaZi0I1ubm6opaXF9AyDMsaho6MjM2ESUleamJhgn0lJSdw4kWgqBkDK1dUV2dnZsXxmZiabvIWGhprFSkhikDo6OrgxotFcDMYaJPzXbW1taXd3lwYGBrixEpKY5eVl+vbtGzdGNJqLAQsLCzQ+Ps7kIAUGBnLjJCAGrczHx4dbrga6iMnOzmYTQIwt09PT3Bg5Xl5epp9qrdBFjKurKz0/P7OxJS0tjRujN7qIAZjs/fz5k81LeOWfiYqK4j5XC13EWFtb08nJCRtf4uPjuTGfubi4IA8PD26ZGugiJiwsjEnZ3NykpaUlJooXJwcJYxJ+yXjlotFFTH9/P+3t7bHugZSRkcGNkyOlpqYmbrloNBeD7oBlQUlJCctD0sPDAwUHB5vFykHa2NhgA3ZsbCw3RiSai+nt7aXLy0tydHRkeSwEMa+5vb2lhIQEs3gJJGxnjI6O0vX1Nfn6+nLjRKGpmIiICDZ/ycvL+/AckoaHh1nlsZZCxT+DlJOTw37q9/f3VZ8FayYGXQWzV2wtKA2g0dHRVFZWxkUSg7iQkBB6fX1Vdd2kuhh3d3dqaGigp6cnWlxcJGdnZ27c75CLKSwsZGNNa2urWZwoVBGDyRum+tvb22wSh8EVcqQV9d8gicGgjdTc3MyNE4UqYrq7u9mGUnt7O6WmppKLiws37r+AtLKywj4bGxu5MSLRdPD9P0gJpwS8ctFYlBicOvDK1MBixNTU1HCfq4XFiNEaQ4wChhgFVBGDDe+UlBT2Uy0H25PJyclsSl9ZWcn97ldBFTH19fVs6xITOxyOSWB9A0FYRCKG992vgmpiIIJXeUPMH4rBRaCzszO29kELGxoaYqtt3J5Cl8OJAuIwsUMeXRF5rJNwhh0ZGWl6t0h0FYNKSitunF8XFxezPPZsUGEc23Z2drLvzczMsHWXlJ+fn2fI3y0S1cRgl06eIApS5GK6urrYJndcXJzpu5OTk+x00s/Pz1R5SNrZ2aEfP36wPI5zDw4OTJLUQNcWg9NInBbIu0NPT4/pGSqOVoPFKFbq+A66Ez5x3yY9Pf3Du0Wiqxi0GEiQnxnhahoqj80oXFFDOe7CoCXhGQRhKxQnDGhV8neLRFcxuPuCMQUb4ijDWTa6FvZ1kccgvL6+zrql9K6xsTE21mBbQ3qnGugqBnncsMI+7+PjI9sPRmvABFGKh4Dz83O27Yk8LiViD1jtm5uqiPkbUHG5EL35MmK+GoYYBQwxChhiFDDEKGCIUcAQo4AhRgFDDBcr+gWOhjdhcg9pWAAAAABJRU5ErkJggg==" />
-        </ui:ClickImage.Image>
-        <ui:ClickImage.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
-        </ui:ClickImage.Target>
-      </ui:ClickImage>
-      <ui:UiElementExists DisplayName="Verify if flow filter is present" Exists="[FlowFilter]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
-        <ui:UiElementExists.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="4c4c8c72feea474d9e53950e52dfd846" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='top' tag='INPUT' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
-        </ui:UiElementExists.Target>
-      </ui:UiElementExists>
-      <If Condition="[FlowFilter]" DisplayName="If (Flow filter is present)" sap2010:WorkflowViewState.IdRef="If_5">
-        <If.Then>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Trace" Message="SUCCESS: Flow filter exists on Screen" />
-        </If.Then>
-        <If.Else>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Error" Message="FAILED: Not able to find Flow filter on the screen" />
-        </If.Else>
-      </If>
-      <ui:TypeInto DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayBefore="2000" DisplayName="Type into FlowName" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_3" SendWindowMessages="False" SimulateType="False" Text="[FlowName]">
-        <ui:TypeInto.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d8b2807502e51f8e313e245cef6263c0" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='top' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
-        </ui:TypeInto.Target>
-      </ui:TypeInto>
-      <ui:WaitUiElementAppear FoundElement="{x:Null}" DisplayName="Find FlowName Element in Filtered List" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_1" WaitActive="False" WaitVisible="False">
-        <ui:WaitUiElementAppear.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="de0b42989e1cf3b6fc1db04c5b6ef7f5" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='selectappclick' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
-        </ui:WaitUiElementAppear.Target>
-      </ui:WaitUiElementAppear>
-      <ui:GetAttribute ContinueOnError="{x:Null}" Attribute="aaname" DisplayName="Get attribute FlowName in filtered list" sap2010:WorkflowViewState.IdRef="GetAttribute_1">
-        <ui:GetAttribute.Result>
-          <OutArgument x:TypeArguments="x:String">[filteredFlowName]</OutArgument>
-        </ui:GetAttribute.Result>
-        <ui:GetAttribute.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="de0b42989e1cf3b6fc1db04c5b6ef7f5" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='selectappclick' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
-        </ui:GetAttribute.Target>
-      </ui:GetAttribute>
-      <If Condition="[filteredFlowName.Trim.Contains(FlowName)]" DisplayName="If (Verify if flowName Searched is correct)" sap2010:WorkflowViewState.IdRef="If_6">
-        <If.Then>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Info" Message="[&quot;SUCCESS: Filtered Flow Successfully... Filtered flow name is: &quot;+filteredFlowName.Trim]" />
-        </If.Then>
-        <If.Else>
-          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
-            <Sequence.Variables>
-              <Variable x:TypeArguments="swa:ElementNotAvailableException" Name="FilteredException" />
-            </Sequence.Variables>
-            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Error" Message="FAILED: TERMINATING FLOW: Could not filter flow successfully" />
-            <TerminateWorkflow DisplayName="Terminate workflow" Exception="[FilteredException]" sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" />
+      <ui:CommentOut DisplayName="Comment out">
+        <ui:CommentOut.Body>
+          <Sequence DisplayName="Ignored Activities">
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke FlowScreenVerification workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="FlowPage\FlowScreenVerification.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <scg:Dictionary x:TypeArguments="x:String, Argument" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <sap2010:WorkflowViewState.IdRef>Sequence_5</sap2010:WorkflowViewState.IdRef>
           </Sequence>
-        </If.Else>
-      </If>
-      <ui:ImageFound DisplayName="Is_Run_FlowButtonDisplayed" Found="[Is_RunFlowButtonDisplayed]" sap2010:WorkflowViewState.IdRef="ImageFound_4">
-        <ui:ImageFound.Image>
-          <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAABAAAAAUCAYAAACEYr13AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACmSURBVDhPY/hPIRiEBvx4+fT/o89/oTzCAMOAVwcO/pdp2P+/aeeD/69+QwXxAOwG1O2G4KaD/2deeP3/Bx4H4TcAig27jv1ff+8LVAUqIMoAGHaccvb/kbeo/iLJABhOXX3n/yuoepINSF1/CyWWiDYgfNZ5DOeDAEEDLHtO4AxAEMBtADgK30JFcQNMA46c+N904On/j0QmRgwDSAWjBlBswP//APnmp/wC8nF7AAAAAElFTkSuQmCC" />
-        </ui:ImageFound.Image>
-        <ui:ImageFound.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
-        </ui:ImageFound.Target>
-      </ui:ImageFound>
-      <ui:ImageFound DisplayName="Is_Clone_FlowButtonDisplayed" Found="[Is_CloneFlowButtonDisplayed]" sap2010:WorkflowViewState.IdRef="ImageFound_5">
-        <ui:ImageFound.Image>
-          <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAABEAAAAUCAYAAABroNZJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAC3SURBVDhPY/hPBUADQ75/+v/xMx789SdUISpAGPL5xv/qvmP/Z649ixNX9+3/v/w5VD0SQBjy+vL/1JX3oBzs4PLm/f8X3IJykAB2Q17e+j9xxv7/4T248JH/M699gqgFAqyGXF67+3/nGSxhAse3/ndOuvz/FVg1DkPOrNz9f+I1MBMHuPd/4kgw5Oed/50te4Ehf/7/TLINAYHf34Ah/+3/EYoMgQLyoxgZkJ3YKACjhqCD//8BvYMEr7ZCz94AAAAASUVORK5CYII=" />
-        </ui:ImageFound.Image>
-        <ui:ImageFound.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
-        </ui:ImageFound.Target>
-      </ui:ImageFound>
-      <ui:ImageFound DisplayName="Is_Export_FlowButtonDisplayed" Found="[Is_ExportFlowButtonDisplayed]" sap2010:WorkflowViewState.IdRef="ImageFound_6">
-        <ui:ImageFound.Image>
-          <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAABEAAAAVCAYAAACg/AXsAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADNSURBVDhPY/hPBTBqCCYgYMi3/2fWH/nfdOI1lI8d4DEEaMDa/f8N63b/l6nb+78aj0E4DEE2AIZxG4TVkI8njqAZAMP7/y94DFWEBPCHybVTUM0H/6/HEyyD1JAfty7/n7n2LARvvvX/0eeX/89cuvP/yKWn/z9+fvR/PUxu7fn/R17+hepCM+TMSlgAQrBlx/7/4T0Q7N+EKpd64C1UFwFDUPGx/9tuXPyfOuHi/zNHjuE25NbOg3CbCeGJl35CdREKWCLBqCHo4P9/ADfIMdufdSKkAAAAAElFTkSuQmCC" />
-        </ui:ImageFound.Image>
-        <ui:ImageFound.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
-        </ui:ImageFound.Target>
-      </ui:ImageFound>
-      <ui:ImageFound DisplayName="Is_Schedule_FlowButtonDisplayed" Found="[Is_ScheduleFlowButtonDisplayed]" sap2010:WorkflowViewState.IdRef="ImageFound_7">
-        <ui:ImageFound.Image>
-          <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAABAAAAAUCAYAAACEYr13AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFjSURBVDhP7VGxasJQFO2H+BP5hG79A7dubo7dBJFObRHRDIJbnYpDkA5tBwnaIo8MCVSDHYKUNFCKCRmiRSMSTu+LD01Sl9Kt9MCF3PNuzj333iP8En9aYLOEM51iOKaYzhBuBJ/BAYENHMaQr/SQKyei0sc5m4maPTICEZzBIyT6Id82YfpLotYIfAfddj/miwNP1G6RFvBMFKjo9O5dEICrMVxb/GsJvaOSkyHUIH6KkRJwqXuuzDBcC4LAucaLSIIJzriLJ18QGQG9Q7PKJlyecOuLOayHhAA8dOs9SIot8oyAeUsWqyM4PFnYuFEMtCjU3UQ2GrTcgrrfQ0ogfNZoUSp1TMyQQDjWcELvLSsSTHaJEVls0hgXDPcf6cOHbyMUqbvUnGxHFEgLcKxe0bja3v64xnCpaCjV1PiEUt2AuRJ1At8FOKJPWMxASe4jX6WQ6ZT6DMHe+Q6HBX6AfwHgC9xntVnIJz9cAAAAAElFTkSuQmCC" />
-        </ui:ImageFound.Image>
-        <ui:ImageFound.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
-        </ui:ImageFound.Target>
-      </ui:ImageFound>
-      <ui:ImageFound DisplayName="Is_Delete_FlowButtonDisplayed" Found="[Is_DeleteFlowButtonDisplayed]" sap2010:WorkflowViewState.IdRef="ImageFound_8">
-        <ui:ImageFound.Image>
-          <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADSSURBVDhPY/hPRTBqGAT8eP7g/5FLd8D4zNMvUFHsAL9hP+/875xw6v82sGG3/s+cdOT/to9QOSwAq2G3dh78H96z/394x+7/Mk17IWwQbtn937IDyl566z+6udhd9vP5/+UTgAbV4cATLv6/9f03VDEC4PDm2//rJ4E0Xf7/6OXl/6kr7/1/deDg/4nXoOKTLv9/BVWJDPAbBtL0etQwNIDfMGDM+UOTh3/T7v+GLXv/OzaQbNj//6+OHEOkLzRcfeg1VBUqwGkYOWDUMFLB//8As9yOueRbmLsAAAAASUVORK5CYII=" />
-        </ui:ImageFound.Image>
-        <ui:ImageFound.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
-        </ui:ImageFound.Target>
-      </ui:ImageFound>
-      <If Condition="[Is_RunFlowButtonDisplayed and Is_CloneFlowButtonDisplayed and Is_ExportFlowButtonDisplayed and Is_ScheduleFlowButtonDisplayed and Is_DeleteFlowButtonDisplayed]" DisplayName="If (Verify if all buttons are present)" sap2010:WorkflowViewState.IdRef="If_7">
-        <If.Then>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Info" Message="[&quot;SUCCESS: All Buttons Verified Successfully&quot;+vbNewLine+&#xD;&#xA;&quot;Status Of Run button On UI Is: &quot;+Is_RunFlowButtonDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Clone button on UI is: &quot;+Is_CloneFlowButtonDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Export button on UI is: &quot;+Is_ExportFlowButtonDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Schedule button on UI is: &quot;+Is_ScheduleFlowButtonDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Delete button on UI is: &quot;+Is_DeleteFlowButtonDisplayed.ToString]" />
-        </If.Then>
-        <If.Else>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_15" Level="Error" Message="[&quot;FAILED: Error in finding either one or more below buttons on UI &quot; +vbNewLine+&#xD;&#xA;&quot;Status of Run button on UI is: &quot;+Is_RunFlowButtonDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Clone button on UI is: &quot;+Is_CloneFlowButtonDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Export button on UI is: &quot;+Is_ExportFlowButtonDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Schedule button on UI is: &quot;+Is_ScheduleFlowButtonDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Delete button on UI is: &quot;+Is_DeleteFlowButtonDisplayed.ToString]" />
-        </If.Else>
-      </If>
+        </ui:CommentOut.Body>
+        <sap2010:WorkflowViewState.IdRef>CommentOut_1</sap2010:WorkflowViewState.IdRef>
+      </ui:CommentOut>
+      <ui:CommentOut DisplayName="Comment out">
+        <ui:CommentOut.Body>
+          <Sequence DisplayName="Ignored Activities">
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke AddExistingDStoFlow workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="FlowPage\AddExistingDStoFlow.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <scg:Dictionary x:TypeArguments="x:String, Argument" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <sap2010:WorkflowViewState.IdRef>Sequence_6</sap2010:WorkflowViewState.IdRef>
+          </Sequence>
+        </ui:CommentOut.Body>
+        <sap2010:WorkflowViewState.IdRef>CommentOut_2</sap2010:WorkflowViewState.IdRef>
+      </ui:CommentOut>
     </Sequence>
-    <sads:DebugSymbol.Symbol>d0ZEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQ29uZmlndXJlTmV3Rmxvdy54YW1sjAFFA+kCDgIBAUYF5wIQAgECSzZLXAIBA1cHWxwDAagBXAdjDAMBoQFkB3UXAwGdAXYHfRcDAZcBfgeFAQwDAZABhgEHjQEQAwGLAY4BB5IBFQMBhwGTAQekARcDAYMBpQEHrAEVAgF/rQEHxQEMAgF0xgEHygEVAgFvywEHzwEVAgFr0AEH4QEXAgFn4gEH6QEVAgFj6gEH6gGyAQIBYOsBB/IBDAIBV/MBB/cBHwIBVfgBB4kCFwIBUYoCB44CHAIBTI8CB5YCDAIBRZcCB5sCFQIBQJwCB6ACIAIBPqECB6gCGQIBOakCB7YCDAIBLbcCB74CFwIBJ78CB8YCFwIBIccCB84CFwIBG88CB9YCFwIBFdcCB94CFwIBD98CB+YCDAIBBFmFAVnvAQMBrAFZ+gFZgAIDAasBV1BXdgMBqQFcFVw7AwGiAV4LXqYBAwGmAWELYa4BAwGkAWRpZG8DAZ4Bc2FzkQEDAaABcDVwOgMBnwF7THt8AwGcAXuHAXuNAQMBmwF2VnZ4AwGZAXg1eDoDAZgBfhV+NwMBkQGAAQuAAbEBAwGVAYMBC4MBsQEDAZMBiwEyiwFMAwGOAYgBM4gBPQMBjAGQAZoBkAHqAQMBigGOAXiOAX4DAYkBjgGZAo4BtQIDAYgBkwFpkwFvAwGEAaIBYaIBkQEDAYYBnwE1nwE6AwGFAaoBM6oBTwMBgAGnAZoBpwGfAgMBggGtARWtAXACAXWvAQvAARYCAXnDAQvDAaoBAgF3yAGaAcgBggICAXPGAXjGAX4CAXLGAZICxgGeAgIBcM0BmgHNAeoBAgFuywF4ywF+AgFtywGTAssBrwICAWzQAWnQAW8CAWjfAWHfAZEBAgFq3AE13AE6AgFp5wEz5wFEAgFk5AGaAeQB7gECAWbqAXXqAa8BAgFh6wEV6wFAAgFY7QEL7QHkAQIBXfABC/ABpgECAVvzAcUB8wHrAQIBVvgBafgBbwIBUocCYYcCkQECAVSEAjWEAjoCAVOMAoUBjALhAQIBUIwC7AGMAvIBAgFPigJRigJfAgFNjwIVjwIjAgFGkQILkQKkAQIBSpQCC5QCsQECAUiZApoBmQL2AQIBRJcClQKXAqECAgFClwJ4lwJ+AgFBngKaAZ4C9wECAT+hAj2hAkUCATyjAjOjAkUCATqmApoBpgL3AQIBPakCFakCQQIBLqsCC6sC4AECATauAgu0AhYCATG8Aky8AnwCASy8AocBvAKNAQIBK7cCRbcCYgIBKbkCNbkCOgIBKMQCTMQCfAIBJsQChwHEAo0BAgElvwJHvwJmAgEjwQI1wQI6AgEizAJMzAJ8AgEgzAKHAcwCjQECAR/HAkjHAmgCAR3JAjXJAjoCARzUAkzUAnwCARrUAocB1AKNAQIBGc8CSs8CbAIBF9ECNdECOgIBFtwCTNwCfAIBFNwChwHcAo0BAgET1wJI1wJoAgER2QI12QI6AgEQ3wIV3wK3AQIBBeECC+ECwwUCAQ3kAgvkAtsFAgELXnleowEDAacBYXlhqwEDAaUBgAF4gAGuAQMBlgGDAXmDAa4BAwGUAbABDbAB1wECAXyxAQ2/ARgCAXrDAXrDAacBAgF47QF47QHhAQIBXvABefABowECAVyRAnqRAqEBAgFLlAJ6lAKuAQIBSasCeasC3QECATeyAg2yAr0BAgE0swINswKZAQIBMuECeeECwAUCAQ7kAnrkAtgFAgEMsAF8sAHUAQIBfb0BoAG9AYgCAgF7sgJ8sgK6AQIBNbMCS7MCYAIBMw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0ZEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQ29uZmlndXJlTmV3Rmxvdy54YW1sTEQDhgIOAgEBRQWEAhACAQJKNkpcAgEDTgdSHAIBV1MHWgwCAVBbB2wXAgFMbQd0FwIBRnUHfAwCAT99B4QBEAIBOoUBB4kBFQIBNooBB5sBFwIBMpwBB6MBFQIBLqQBB7wBDAIBI70BB8EBFQIBHsIBB8YBFQIBGscBB9gBFwIBFtkBB+ABFQIBEuEBB+EBsgECAQ/iAQfpAQwCAQbqAQf2ARcCAQX3AQeDAhcCAQRQhQFQ7wECAVtQ+gFQgAICAVpOUE52AgFYUxVTOwIBUVULVaYBAgFVWAtYrgECAVNbaVtvAgFNamFqkQECAU9nNWc6AgFOckxyfAIBS3KHAXKNAQIBSm1WbXgCAUhvNW86AgFHdRV1NwIBQHcLd7EBAgFEegt6sQECAUKCATKCAUwCAT1/M389AgE7hwGaAYcB6gECATmFAXiFAX4CATiFAZkChQG1AgIBN4oBaYoBbwIBM5kBYZkBkQECATWWATWWAToCATShATOhAU8CAS+eAZoBngGfAgIBMaQBFaQBcAIBJKYBC7cBFgIBKLoBC7oBqgECASa/AZoBvwGCAgIBIr0BeL0BfgIBIb0BkgK9AZ4CAgEfxAGaAcQB6gECAR3CAXjCAX4CARzCAZMCwgGvAgIBG8cBaccBbwIBF9YBYdYBkQECARnTATXTAToCARjeATPeAUQCARPbAZoB2wHuAQIBFeEBdeEBrwECARDiARXiAUACAQfkAQvkAeQBAgEM5wEL5wGmAQIBClV5VaMBAgFWWHlYqwECAVR3eHeuAQIBRXp5eq4BAgFDpwENpwHXAQIBK6gBDbYBGAIBKboBeroBpwECASfkAXjkAeEBAgEN5wF55wGjAQIBC6cBfKcB1AECASy0AaABtAGIAgIBKg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -400,56 +301,39 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="675,239" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="675,87" />
-      <sap2010:ViewStateData Id="ClickImage_5" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="LogMessage_10" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="LogMessage_11" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="675,239" />
-      <sap2010:ViewStateData Id="TypeInto_3" sap:VirtualizedContainerService.HintSize="675,134" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="GetAttribute_1" sap:VirtualizedContainerService.HintSize="675,134" />
-      <sap2010:ViewStateData Id="LogMessage_12" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="LogMessage_13" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="314,22" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="336,277">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,211">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="675,425" />
-      <sap2010:ViewStateData Id="ImageFound_4" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="ImageFound_5" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="ImageFound_6" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="ImageFound_7" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="ImageFound_8" sap:VirtualizedContainerService.HintSize="675,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_14" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="LogMessage_15" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_7" sap:VirtualizedContainerService.HintSize="675,239" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="697,5911">
+      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="675,289" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="336,211">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="719,6035">
+      <sap2010:ViewStateData Id="CommentOut_2" sap:VirtualizedContainerService.HintSize="675,289" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="697,3903">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="MosaicFlow_1" sap:VirtualizedContainerService.HintSize="759,6115" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="719,4027">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="MosaicFlow_1" sap:VirtualizedContainerService.HintSize="759,4827" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
