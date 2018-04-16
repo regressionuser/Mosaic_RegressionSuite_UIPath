@@ -8,6 +8,7 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:swa="clr-namespace:System.Windows.Automation;assembly=UIAutomationTypes"
  xmlns:ui="http://schemas.uipath.com/workflow/activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <TextExpression.NamespacesForImplementation>
@@ -33,6 +34,7 @@
       <x:String>UiPath.Core</x:String>
       <x:String>UiPath.Core.Activities</x:String>
       <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Windows.Automation</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -57,6 +59,7 @@
       <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
       <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
       <AssemblyReference>System.Collections.Immutable</AssemblyReference>
+      <AssemblyReference>UIAutomationTypes</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="AddExistingDStoFlow" sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -66,8 +69,26 @@
       <Variable x:TypeArguments="scg:IEnumerable(ui:UiElement)" Name="ListIems" />
       <Variable x:TypeArguments="ui:GenericValue" Name="getListValues" />
       <Variable x:TypeArguments="x:Int32" Name="element_counter" />
+      <Variable x:TypeArguments="x:String" Name="Get_ExistingDSPopupTitle" />
+      <Variable x:TypeArguments="x:Boolean" Name="Is_ExistingDSPopupFilterPresent" />
+      <Variable x:TypeArguments="ui:UiElement" Name="UiElement_FilterInputField" />
+      <Variable x:TypeArguments="ui:UiElement" Name="UiElement_PopupOkayBtn" />
+      <Variable x:TypeArguments="ui:UiElement" Name="UiElement_PopupCancelBtn" />
+      <Variable x:TypeArguments="x:Boolean" Name="is_ActionCheckBoxDisplayed" />
+      <Variable x:TypeArguments="x:String" Name="get_searchedDSName" />
+      <Variable x:TypeArguments="x:String" Name="DSNameToSearch" />
+      <Variable x:TypeArguments="ui:UiElement" Name="UiElement_ForActionCheckBox" />
+      <Variable x:TypeArguments="swa:ElementNotAvailableException" Name="elementNotFoundException" />
     </Sequence.Variables>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'DIV'" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[DSNameToSearch]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">Excel_Auto_Reg1</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click data dropdown" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -82,7 +103,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="c75fc2f133aaf36e3a71b8b451b31f78" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div' idx='2' parentid='topCanvas' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="3000" DisplayName="Click image 'chrome.exe  MOSAIC'" sap2010:WorkflowViewState.IdRef="ClickImage_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+    <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="3000" DisplayName="Click image Select existing DS" sap2010:WorkflowViewState.IdRef="ClickImage_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
       <ui:ClickImage.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -100,25 +121,53 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:ClickImage.Target>
     </ui:ClickImage>
-    <ui:FindChildren Children="[ListIems]" DisplayName="Find children 'DIV  tabs'" Filter="&lt;webctrl /&gt;" sap2010:WorkflowViewState.IdRef="FindChildren_1" Scope="FIND_CHILDREN">
+    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'H4'" sap2010:WorkflowViewState.IdRef="GetValue_1">
+      <ui:GetValue.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="b1d264a84cf489181e43dcff46482776" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='H4' /&gt;" TimeoutMS="8000" WaitForReady="INTERACTIVE" />
+      </ui:GetValue.Target>
+      <ui:GetValue.Value>
+        <OutArgument x:TypeArguments="x:String">[Get_ExistingDSPopupTitle]</OutArgument>
+      </ui:GetValue.Value>
+    </ui:GetValue>
+    <ui:WaitUiElementAppear DisplayName="Find Element 'INPUT'" FoundElement="[UiElement_FilterInputField]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_4" WaitActive="True" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="eb4fbb4b0c862390e037374718b74805" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' parentid='top' tag='INPUT' type='text' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:WaitUiElementAppear DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_PopupOkayBtn]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_5" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="12f09426ed23bc38da30b4f810167f99" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Okay' parentid='top' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:WaitUiElementAppear DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_PopupCancelBtn]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_6" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="84cfc08d21bd34aa19164641edc8bd22" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' parentid='top' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:UiElementExists DisplayName="Element Exists" Exists="[Is_ExistingDSPopupFilterPresent]" sap2010:WorkflowViewState.IdRef="UiElementExists_6">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[UiElement_FilterInputField]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[Get_ExistingDSPopupTitle.Contains(&quot;Select existing data source/ node&quot;) and Is_ExistingDSPopupFilterPresent]" sap2010:WorkflowViewState.IdRef="If_3">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[&quot;SUCCESS: Title on Existing DS popup matched. The title found on popup is: &quot;+Get_ExistingDSPopupTitle.Trim+vbNewLine+&#xD;&#xA;&quot;SUCCESS: Filter status on Existing DS popup is found as: &quot;+Is_ExistingDSPopupFilterPresent.ToString]" />
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="[&quot;FAILED: Due to one of the below reasons:&quot;+vbNewLine+&#xD;&#xA;&quot;The title found On popup Is: &quot;+Get_ExistingDSPopupTitle.Trim+&quot; While the expected title is: &quot;+&quot;Select existing data source/ node&quot;+vbNewLine+&#xD;&#xA;&quot;Filter status on Existing DS popup is found as: &quot;+Is_ExistingDSPopupFilterPresent.ToString]" />
+      </If.Else>
+    </If>
+    <ui:FindChildren Children="[ListIems]" DisplayName="getTabList (Find children based on UL tag) " Filter="&lt;webctrl /&gt;" sap2010:WorkflowViewState.IdRef="FindChildren_1" Scope="FIND_CHILDREN">
       <ui:FindChildren.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="3d2cd46bf5cf8271a810486d1efe32d7" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='tabs' tag='UL' /&gt;" WaitForReady="INTERACTIVE" />
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="ce957a8be1518fd663b7eebf1ec3572b" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='tabs' tag='UL' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:FindChildren.Target>
     </ui:FindChildren>
-    <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+    <Assign DisplayName="Assign (define a list)" sap2010:WorkflowViewState.IdRef="Assign_2">
       <Assign.To>
         <OutArgument x:TypeArguments="scg:List(x:String)">[get_TabList]</OutArgument>
       </Assign.To>
       <Assign.Value>
         <InArgument x:TypeArguments="scg:List(x:String)">[new List (of String)]</InArgument>
-      </Assign.Value>
-    </Assign>
-    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
-      <Assign.To>
-        <OutArgument x:TypeArguments="scg:IEnumerable(x:String)">[ExpectedList]</OutArgument>
-      </Assign.To>
-      <Assign.Value>
-        <InArgument x:TypeArguments="s:String[]">[{"Existing data sources,Data sources created in flow,Inputs file(File parameters),Node from other flows as head,RCP type datasources"}]</InArgument>
       </Assign.Value>
     </Assign>
     <ui:ForEach x:TypeArguments="ui:UiElement" DisplayName="For each" sap2010:WorkflowViewState.IdRef="ForEach`1_2" Values="[ListIems]">
@@ -137,77 +186,205 @@
               </ui:GetAttribute.Target>
             </ui:GetAttribute>
             <AddToCollection x:TypeArguments="x:String" Collection="[get_TabList]" DisplayName="Add to collection" sap2010:WorkflowViewState.IdRef="AddToCollection`1_3" Item="[getListValues]" />
-            <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
-              <Assign.To>
-                <OutArgument x:TypeArguments="x:Int32">[element_counter]</OutArgument>
-              </Assign.To>
-              <Assign.Value>
-                <InArgument x:TypeArguments="x:Int32">0</InArgument>
-              </Assign.Value>
-            </Assign>
-            <If Condition="[get_TabList.Count = ExpectedList.Count]" sap2010:WorkflowViewState.IdRef="If_1">
-              <If.Then>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="Count Matched" />
-              </If.Then>
-              <If.Else>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="Count mismatch" />
-              </If.Else>
-            </If>
-            <If Condition="[get_TabList(element_counter).Trim.ToString.Equals(ExpectedList(element_counter).Trim.Tostring)]" sap2010:WorkflowViewState.IdRef="If_2">
-              <If.Then>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;Element Matched. Actual List item is: &quot;+get_TabList(element_counter).Trim.ToString+&quot; While the expected item is: &quot;+ExpectedList(element_counter).Trim.ToString]" />
-              </If.Then>
-              <If.Else>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="[&quot;Element MisMatch. Actual List item is: &quot;+get_TabList(element_counter).Trim.ToString+&quot; While the expected item is: &quot;+ExpectedList(element_counter).Trim.ToString]" />
-              </If.Else>
-            </If>
-            <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
-              <Assign.To>
-                <OutArgument x:TypeArguments="x:Int32">[element_counter]</OutArgument>
-              </Assign.To>
-              <Assign.Value>
-                <InArgument x:TypeArguments="x:Int32">[element_counter+1]</InArgument>
-              </Assign.Value>
-            </Assign>
           </Sequence>
         </ActivityAction>
       </ui:ForEach.Body>
     </ui:ForEach>
-    <sads:DebugSymbol.Symbol>d0BEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcQWRkRXhpc3RpbmdEU3RvRmxvdy54YW1sLT4DsQEOAgEBRgVUEAIBNFUFZhUCATBnBWsXAgEsbAVzDgIBKHQFew4CASR8Ba8BEgIBAlKYAVL7AgIBNVVnVW0CATFkX2SPAQIBM2EzYTgCATJpmAFp8gECAS9nW2duAgEuZx9nKwIBLXE6cVACAStuO25IAgEpeTJ5ugECASd2QnZQAgElfHx8iAECASOCAQusARYCAQODAQ2KAR8CAR2LAQ2LAcMBAgEZjAENkwEWAgEVlAENmwESAgEPnAENowESAgEJpAENqwEWAgEEgwFDgwFLAgEghQFAhQFPAgEeiAFniAFvAgEhiwFEiwFTAgEbiwGvAYsBwAECARqRATeRATgCARiOATiOAUkCARaUARuUAUUCARCWARGWAZABAgETmQERmQGSAQIBEZwBG5wBfQIBCp4BEZ4BuAICAQ2hARGhAboCAgELqQE3qQFKAgEHpgE4pgFJAgEFlgF+lgGNAQIBFJkBf5kBjwECARKeAX6eAbUCAgEOoQF/oQG3AgIBDA==</sads:DebugSymbol.Symbol>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="scg:IEnumerable(x:String)">[ExpectedList]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="s:String[]">[{"Existing data sources","Data sources created in flow","Inputs file(File parameters)","Node from other flows as head","RCP type datasources"}]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Int32">[element_counter]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Int32">0</InArgument>
+      </Assign.Value>
+    </Assign>
+    <If Condition="[get_TabList.Count = ExpectedList.Count]" sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;SUCCESS: Count of total tabs to be present on Existing DS popup Matched: List 1(Actual) Count is : &quot;+get_TabList.Count.ToString+&quot; and List 2(Expected) count is : &quot; +ExpectedList.Count.ToString+&quot;&quot;]" />
+          <While sap2010:WorkflowViewState.IdRef="While_1" Condition="[element_counter&lt;get_TabList.Count]">
+            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+              <If Condition="[get_TabList(element_counter).Trim.ToString.Equals(ExpectedList(element_counter).Trim.Tostring)]" sap2010:WorkflowViewState.IdRef="If_2">
+                <If.Then>
+                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Trace" Message="[&quot;Element Matched. Actual List item is: &quot;+get_TabList(element_counter).Trim.ToString+&quot; While the expected item is: &quot;+ExpectedList(element_counter).Trim.ToString]" />
+                </If.Then>
+                <If.Else>
+                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="[&quot;Element MisMatch. Actual List item is: &quot;+get_TabList(element_counter).Trim.ToString+&quot; While the expected item is: &quot;+ExpectedList(element_counter).Trim.ToString]" />
+                </If.Else>
+              </If>
+              <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:Int32">[element_counter]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:Int32">[element_counter+1]</InArgument>
+                </Assign.Value>
+              </Assign>
+            </Sequence>
+          </While>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[&quot;FAILED: Count of total tabs to be present on Existing DS popup MISMATCHED: List 1(Actual) Count is : &quot;+get_TabList.Count.ToString+&quot; and List 2(Expected) count is : &quot; +ExpectedList.Count.ToString+&quot;&quot;]" />
+      </If.Else>
+    </If>
+    <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayMS="3000" DisplayName="Type into" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_2" SendWindowMessages="False" SimulateType="False" Text="[DSNameToSearch]">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_FilterInputField]" WaitForReady="INTERACTIVE" />
+      </ui:TypeInto.Target>
+    </ui:TypeInto>
+    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'INPUT'" sap2010:WorkflowViewState.IdRef="GetValue_2">
+      <ui:GetValue.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d1a17a3098c118e8c6e0fae9b03958a3" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='selectdsclick' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:GetValue.Target>
+      <ui:GetValue.Value>
+        <OutArgument x:TypeArguments="x:String">[get_searchedDSName]</OutArgument>
+      </ui:GetValue.Value>
+    </ui:GetValue>
+    <ui:WaitUiElementAppear DisplayName="Find Element 'SPAN'" FoundElement="[UiElement_ForActionCheckBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_7" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="4cdec76a7b21749f26158a7dbff7969c" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='selectdsclick' tag='SPAN' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:UiElementExists DisplayName="Element Exists" Exists="[is_ActionCheckBoxDisplayed]" sap2010:WorkflowViewState.IdRef="UiElementExists_7">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[UiElement_ForActionCheckBox]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[get_searchedDSName.Contains(DSNameToSearch) and is_ActionCheckBoxDisplayed]" sap2010:WorkflowViewState.IdRef="If_4">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;SUCCESS: Successfully found the searched record. Searched Record is: &quot;+get_searchedDSName.Trim +vbNewLine+&#xD;&#xA;&quot;SUCCESS: Found status of Action checkbox to select the DS as: &quot;+is_ActionCheckBoxDisplayed.ToString]" />
+          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_3" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_ForActionCheckBox]" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="[&quot;FAILED: Failed due to one of the reasons below: &quot;+vbNewLine+&#xD;&#xA;&quot;The searched record is &quot;+get_searchedDSName.Trim + &quot; whereas the record to be searched was &quot; +DSNameToSearch +vbNewLine+&#xD;&#xA;&quot;Found existance status of Action checkbox to be: &quot; +is_ActionCheckBoxDisplayed.ToString]" />
+          <TerminateWorkflow DisplayName="Terminate workflow" Exception="[elementNotFoundException]" sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" />
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_4" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_PopupOkayBtn]" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <sads:DebugSymbol.Symbol>d0lEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQWRkRXhpc3RpbmdEU3RvRmxvdy54YW1sZ0EDsgIOAgEBUwVaDgMBggFbBWkQAwGAAWoFexUCAXx8BYMBEwIBd4QBBYgBHgIBc4kBBY0BHgIBb44BBZIBHgIBa5MBBZcBGgIBZZgBBZ8BCgIBXaABBaQBFwIBWaUBBawBDgIBVa0BBcABEgIBSMEBBcgBDgIBRMkBBdABDgIBQNEBBe4BCgIBKe8BBfMBEwIBI/QBBfsBEwIBH/wBBYACHgIBG4ECBYUCGgIBFYYCBaECCgIBBaICBbACEAIBAlgwWD8DAYUBVTFVQQMBgwFnmAFn+wIDAYEBamdqbQIBfXlfeY8BAgF/djN2OAIBfoEBMYEBSwIBeH6DAX7NAQIBe37YAX7eAQIBeoQBTYQBawIBdYYBmAGGAYgCAgF0iQFOiQFoAgFxiwGYAYsBgwICAXCOAU6OAWoCAW2QAZgBkAGFAgIBbJUBc5UBeQIBapMBPZMBYAIBaJUBSpUBaAIBZpgBE5gBiwECAV6aAQmaAfQCAgFjnQEJnQHhAwIBYaIBmAGiAfIBAgFcoAFtoAGAAQIBW6ABH6ABKwIBWqoBOqoBUAIBWKcBO6cBSAIBVq0BfK0BiAECAVSzAQu9ARYCAUnGATLGAcIBAgFHwwFCwwFQAgFFzgEvzgEwAgFDywEwywFBAgFB0QET0QE9AgEq0wEJ6QEUAgEt7AEJ7AHiAgIBK+8Bdu8BfAIBKO8BigLvAZwCAgEm8QFf8QF9AgEk+QEx+QFFAgEg9gGYAfYB+gECASL8AUz8AWsCAR3+AZgB/gH9AQIBHIMCdIMCegIBGoECPYECWwIBGIMCSoMCaQIBFoYCE4YCYQIBBogCCZkCFAIBD5wCCZ8CFAIBCq4CX64CeQIBA5oBdpoB8QICAWSdAXedAd4DAgFitAENuwEfAgFOvAENvAHDAQIBStQBC9QB4QICAT7VAQvoARMCAS7sAXfsAd8CAgEsiQILiQLsAgIBE4oCC5gCFgIBEJ0CC50CygMCAQ2eAgueAp4BAgELtAFDtAFLAgFRtgFAtgFPAgFPuQFnuQFvAgFSvAFEvAFTAgFMvAGvAbwBwAECAUvUAXjUAd4CAgE/1gEN5wEYAgEy1QFG1QFuAgEviQJ4iQLpAgIBFJYCZZYChAECARGdAnmdAscDAgEOngJJngJlAgEM1wEP3gEUAgE43wEP5gEYAgEz1wEd1wF/AgE52QET2QG7AgIBPNwBE9wBvAICATrkATnkAUwCATbhATrhAUsCATTZAYEB2QG4AgIBPdwBgQHcAbkCAgE7</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="691,106" />
-      <sap2010:ViewStateData Id="ClickImage_1" sap:VirtualizedContainerService.HintSize="691,106" />
-      <sap2010:ViewStateData Id="FindChildren_1" sap:VirtualizedContainerService.HintSize="691,106" />
-      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="691,60" />
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="691,60" />
-      <sap2010:ViewStateData Id="GetAttribute_1" sap:VirtualizedContainerService.HintSize="653,96" />
-      <sap2010:ViewStateData Id="AddToCollection`1_3" sap:VirtualizedContainerService.HintSize="653,22" />
-      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="653,60" />
-      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="653,239" />
-      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="653,239" />
+      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="1062,60" />
+      <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="1062,106" />
+      <sap2010:ViewStateData Id="ClickImage_1" sap:VirtualizedContainerService.HintSize="1062,106" />
+      <sap2010:ViewStateData Id="GetValue_1" sap:VirtualizedContainerService.HintSize="1062,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_4" sap:VirtualizedContainerService.HintSize="1062,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_5" sap:VirtualizedContainerService.HintSize="1062,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_6" sap:VirtualizedContainerService.HintSize="1062,106" />
+      <sap2010:ViewStateData Id="UiElementExists_6" sap:VirtualizedContainerService.HintSize="1062,68" />
+      <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="314,93" />
+      <sap2010:ViewStateData Id="LogMessage_6" sap:VirtualizedContainerService.HintSize="314,93" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="1062,243" />
+      <sap2010:ViewStateData Id="FindChildren_1" sap:VirtualizedContainerService.HintSize="1062,106" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="1062,60" />
+      <sap2010:ViewStateData Id="GetAttribute_1" sap:VirtualizedContainerService.HintSize="314,96" />
+      <sap2010:ViewStateData Id="AddToCollection`1_3" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,282">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ForEach`1_2" sap:VirtualizedContainerService.HintSize="1062,417" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="1062,60" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="1062,60" />
+      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="701,93" />
+      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,93" />
+      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,93" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="653,243" />
       <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="653,60" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="675,1040">
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="675,467">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_2" sap:VirtualizedContainerService.HintSize="691,1174" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="713,1936">
+      <sap2010:ViewStateData Id="While_1" sap:VirtualizedContainerService.HintSize="701,627" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="723,884">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="AddExistingDStoFlow_1" sap:VirtualizedContainerService.HintSize="753,2016" />
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,93" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1062,1034" />
+      <sap2010:ViewStateData Id="TypeInto_2" sap:VirtualizedContainerService.HintSize="1062,96" />
+      <sap2010:ViewStateData Id="GetValue_2" sap:VirtualizedContainerService.HintSize="1062,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_7" sap:VirtualizedContainerService.HintSize="1062,106" />
+      <sap2010:ViewStateData Id="UiElementExists_7" sap:VirtualizedContainerService.HintSize="1062,68" />
+      <sap2010:ViewStateData Id="LogMessage_7" sap:VirtualizedContainerService.HintSize="314,93" />
+      <sap2010:ViewStateData Id="Click_3" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,325">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_8" sap:VirtualizedContainerService.HintSize="314,93" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="336,279">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="1062,475" />
+      <sap2010:ViewStateData Id="Click_4" sap:VirtualizedContainerService.HintSize="1062,68" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1084,4587">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="AddExistingDStoFlow_1" sap:VirtualizedContainerService.HintSize="1124,4394" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
