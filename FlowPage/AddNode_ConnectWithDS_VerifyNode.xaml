@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="dragdrop" mva:VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="dragdrop_1"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="dragdrop"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -9,6 +9,13 @@
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:ui="http://schemas.uipath.com/workflow/activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="NodeName" Type="OutArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>dragdrop_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -70,8 +77,16 @@
       <Variable x:TypeArguments="x:Boolean" Name="Is_NodePopup_DescriptionDisplayed" />
       <Variable x:TypeArguments="x:String" Name="Get_SuccessOrErrorMsg" />
       <Variable x:TypeArguments="x:String" Default="[new Random().Next(1,9999).ToString]" Name="RandomNo" />
-      <Variable x:TypeArguments="x:String" Name="NodeName" />
+      <Variable x:TypeArguments="ui:UiElement" Name="UiElement_CreatedNodePopupTitle" />
     </Sequence.Variables>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[NodeName]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">["AutoNode_"+RandomNo]</InArgument>
+      </Assign.Value>
+    </Assign>
     <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_DOWN" DisplayName="Click 'RECT'" sap2010:WorkflowViewState.IdRef="Click_6" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
@@ -206,10 +221,10 @@
     </ui:UiElementExists>
     <If Condition="[Get_NodePopupTitle.Contains(&quot;Add node name&quot;) and Is_NodePopup_NameFieldDisplayed and Is_NodePopup_DescriptionDisplayed and Is_NodePopup_SaveBtnDisplayed and Is_NodePopup_CancelBtnDisplayed]" sap2010:WorkflowViewState.IdRef="If_1">
       <If.Then>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;SUCCESS: Add a new node popup verified successfully&quot;+vbNewLine+&#xD;&#xA;&quot;Found new node popup title as &quot;+Get_NodePopupTitle +vbNewLine+&#xD;&#xA;&quot;Status of Node Name Field on UI is: &quot;+Is_NodePopup_NameFieldDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Description field on UI is: &quot;+Is_NodePopup_DescriptionDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Save button on UI is: &quot;+Is_NodePopup_SaveBtnDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Cancel button on UI is: &quot;+Is_NodePopup_CancelBtnDisplayed.ToString]" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;SUCCESS: Add a new node popup verified successfully&quot;+vbNewLine+&#xA;&quot;Found new node popup title as &quot;+Get_NodePopupTitle +vbNewLine+&#xA;&quot;Status of Node Name Field on UI is: &quot;+Is_NodePopup_NameFieldDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Description field on UI is: &quot;+Is_NodePopup_DescriptionDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Save button on UI is: &quot;+Is_NodePopup_SaveBtnDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Cancel button on UI is: &quot;+Is_NodePopup_CancelBtnDisplayed.ToString]" />
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[&quot;FAILED: Add a new node popup verification failed due to one of the below reasons&quot;+vbNewLine+&#xD;&#xA;&quot;Found new node popup title as &quot;+Get_NodePopupTitle.Trim +&quot;While the expected title is 'Add node name'&quot;+vbNewLine+&#xD;&#xA;&quot;Status of Node Name Field on UI is: &quot;+Is_NodePopup_NameFieldDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Description field on UI is: &quot;+Is_NodePopup_DescriptionDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Save button on UI is: &quot;+Is_NodePopup_SaveBtnDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Cancel button on UI is: &quot;+Is_NodePopup_CancelBtnDisplayed.ToString]" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[&quot;FAILED: Add a new node popup verification failed due to one of the below reasons&quot;+vbNewLine+&#xA;&quot;Found new node popup title as &quot;+Get_NodePopupTitle.Trim +&quot;While the expected title is 'Add node name'&quot;+vbNewLine+&#xA;&quot;Status of Node Name Field on UI is: &quot;+Is_NodePopup_NameFieldDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Description field on UI is: &quot;+Is_NodePopup_DescriptionDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Save button on UI is: &quot;+Is_NodePopup_SaveBtnDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Cancel button on UI is: &quot;+Is_NodePopup_CancelBtnDisplayed.ToString]" />
       </If.Else>
     </If>
     <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_11" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
@@ -329,14 +344,6 @@
         <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Trace" Message="[&quot;FAILED: Failed to verify the error message when user clicks on save button without entering node name. The error message recieved from UI is: &quot;+Get_SuccessOrErrorMsg]" />
       </If.Else>
     </If>
-    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
-      <Assign.To>
-        <OutArgument x:TypeArguments="x:String">[NodeName]</OutArgument>
-      </Assign.To>
-      <Assign.Value>
-        <InArgument x:TypeArguments="x:String">["NewAutoNode_"+RandomNo]</InArgument>
-      </Assign.Value>
-    </Assign>
     <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type into" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_2" SendWindowMessages="False" SimulateType="False" Text="[NodeName]">
       <ui:TypeInto.Target>
         <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_NodePopup_NameField]" WaitForReady="INTERACTIVE" />
@@ -499,7 +506,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="a2d1b54e8d9ad95ce6db6a9b2c2771f9" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='node1' tag='rect' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:WaitUiElementAppear FoundElement="{x:Null}" DisplayName="Find Element 'H3'" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_11" WaitActive="False" WaitVisible="False">
+    <ui:WaitUiElementAppear DisplayName="Find Element 'H3'" FoundElement="[UiElement_CreatedNodePopupTitle]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_11" WaitActive="False" WaitVisible="False">
       <ui:WaitUiElementAppear.Target>
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="05705e04ce2a5790ab36e9b896e6e2c4" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' parentid='app' tag='H3' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:WaitUiElementAppear.Target>
@@ -645,10 +652,11 @@
         <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Trace" Message="[&quot;FAILED: Failed to edit the newly created node. The error message recieved from UI is: &quot;+Get_SuccessOrErrorMsg]" />
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="675,60" />
       <sap2010:ViewStateData Id="Click_6" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="Hover_1" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="Click_7" sap:VirtualizedContainerService.HintSize="675,106" />
@@ -696,7 +704,6 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_6" sap:VirtualizedContainerService.HintSize="314,93" />
       <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="675,621" />
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="675,60" />
       <sap2010:ViewStateData Id="TypeInto_2" sap:VirtualizedContainerService.HintSize="675,96" />
       <sap2010:ViewStateData Id="TypeInto_3" sap:VirtualizedContainerService.HintSize="675,96" />
       <sap2010:ViewStateData Id="Click_15" sap:VirtualizedContainerService.HintSize="675,68" />
@@ -750,7 +757,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="dragdrop_1" sap:VirtualizedContainerService.HintSize="737,9379" />
+      <sap2010:ViewStateData Id="dragdrop_1" sap:VirtualizedContainerService.HintSize="737,9019" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
