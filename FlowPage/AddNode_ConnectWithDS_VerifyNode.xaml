@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="dragdrop" mva:VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="dragdrop_1"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="dragdrop"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -9,6 +9,13 @@
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:ui="http://schemas.uipath.com/workflow/activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="NodeName" Type="OutArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>dragdrop_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -70,9 +77,17 @@
       <Variable x:TypeArguments="x:Boolean" Name="Is_NodePopup_DescriptionDisplayed" />
       <Variable x:TypeArguments="x:String" Name="Get_SuccessOrErrorMsg" />
       <Variable x:TypeArguments="x:String" Default="[new Random().Next(1,9999).ToString]" Name="RandomNo" />
-      <Variable x:TypeArguments="x:String" Name="NodeName" />
+      <Variable x:TypeArguments="ui:UiElement" Name="UiElement_CreatedNodePopupTitle" />
     </Sequence.Variables>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_DOWN" DisplayName="Click 'RECT'" sap2010:WorkflowViewState.IdRef="Click_6" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <Assign DisplayName="Assign Node name" sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[NodeName]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">["AutoNode_"+RandomNo]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_DOWN" DisplayName="Click and hold the newly added DS" sap2010:WorkflowViewState.IdRef="Click_6" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -87,7 +102,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="3365a15426eb48f176030bfa178f651a" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='node0' tag='rect' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:Hover DelayBefore="{x:Null}" DelayMS="{x:Null}" DisplayName="Hover 'SVG  svg-id'" sap2010:WorkflowViewState.IdRef="Hover_1" SendWindowMessages="False" SimulateHover="False">
+    <ui:Hover DelayBefore="{x:Null}" DelayMS="{x:Null}" DisplayName="Hover to the region where DS needs to be dragged" sap2010:WorkflowViewState.IdRef="Hover_1" SendWindowMessages="False" SimulateHover="False">
       <ui:Hover.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -106,7 +121,7 @@
         </ui:Target>
       </ui:Hover.Target>
     </ui:Hover>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_UP" DisplayName="Click 'FLOW-CHART  canvasapp'" sap2010:WorkflowViewState.IdRef="Click_7" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_UP" DisplayName="Release the DS at the desired location" sap2010:WorkflowViewState.IdRef="Click_7" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -121,7 +136,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="3365a15426eb48f176030bfa178f651a" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='node0' tag='rect' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:Click DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="4000" DisplayName="Click 'DIV'" sap2010:WorkflowViewState.IdRef="Click_9" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:Click DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="4000" DisplayName="Click Process dropdown" sap2010:WorkflowViewState.IdRef="Click_9" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -136,7 +151,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="9d16e42ab6aabcdab5f78e6c6b085916" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div' idx='4' parentid='topCanvas' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:Click DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="3000" DisplayName="Click 'A  javascript:;'" sap2010:WorkflowViewState.IdRef="Click_10" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:Click DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="3000" DisplayName="Click Sort option" sap2010:WorkflowViewState.IdRef="Click_10" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -151,259 +166,12 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fb0e763422b8f48f4bfcf52d36d2c793" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='processapp' tag='A' idx='7' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:WaitUiElementAppear DisplayName="Find Element 'H3'" FoundElement="[UiElement_NodePopupTitle]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_1" WaitActive="False" WaitVisible="False">
-      <ui:WaitUiElementAppear.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8d9a3ad7459561f1a743aa1760f0ed81" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='H3' /&gt;" WaitForReady="INTERACTIVE" />
-      </ui:WaitUiElementAppear.Target>
-    </ui:WaitUiElementAppear>
-    <ui:WaitUiElementAppear DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_NodePopupSaveBtn]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_2" WaitActive="False" WaitVisible="False">
-      <ui:WaitUiElementAppear.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="3a3d5443620f933b079e7280635a4eb7" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='BUTTON' type='submit' /&gt;" WaitForReady="INTERACTIVE" />
-      </ui:WaitUiElementAppear.Target>
-    </ui:WaitUiElementAppear>
-    <ui:WaitUiElementAppear DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_NodePopupCancelBtn]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_3" WaitActive="False" WaitVisible="False">
-      <ui:WaitUiElementAppear.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="f3ae1b2e50c2b162c76e199f39039df0" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
-      </ui:WaitUiElementAppear.Target>
-    </ui:WaitUiElementAppear>
-    <ui:WaitUiElementAppear DisplayName="Find Element 'INPUT'" FoundElement="[UiElement_NodePopup_NameField]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_4" WaitActive="False" WaitVisible="False">
-      <ui:WaitUiElementAppear.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="4f3e4dbf3444bb74227b0e67583eb8b0" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='INPUT' type='text' /&gt;" WaitForReady="INTERACTIVE" />
-      </ui:WaitUiElementAppear.Target>
-    </ui:WaitUiElementAppear>
-    <ui:WaitUiElementAppear DisplayName="Find Element 'TEXTAREA'" FoundElement="[UiElement_NodePopup_Description]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_5" WaitActive="False" WaitVisible="False">
-      <ui:WaitUiElementAppear.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="5586d76d0556465451078b368e8134cc" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='TEXTAREA' /&gt;" WaitForReady="INTERACTIVE" />
-      </ui:WaitUiElementAppear.Target>
-    </ui:WaitUiElementAppear>
-    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text" sap2010:WorkflowViewState.IdRef="GetValue_2">
-      <ui:GetValue.Target>
-        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_NodePopupTitle]" WaitForReady="INTERACTIVE" />
-      </ui:GetValue.Target>
-      <ui:GetValue.Value>
-        <OutArgument x:TypeArguments="x:String">[Get_NodePopupTitle]</OutArgument>
-      </ui:GetValue.Value>
-    </ui:GetValue>
-    <ui:UiElementExists DisplayName="Element Exists" Exists="[Is_NodePopup_NameFieldDisplayed]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
-      <ui:UiElementExists.Target>
-        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[UiElement_NodePopup_NameField]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
-      </ui:UiElementExists.Target>
-    </ui:UiElementExists>
-    <ui:UiElementExists DisplayName="Element Exists" Exists="[Is_NodePopup_DescriptionDisplayed]" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
-      <ui:UiElementExists.Target>
-        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[UiElement_NodePopup_Description]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
-      </ui:UiElementExists.Target>
-    </ui:UiElementExists>
-    <ui:UiElementExists DisplayName="Element Exists" Exists="[Is_NodePopup_SaveBtnDisplayed]" sap2010:WorkflowViewState.IdRef="UiElementExists_3">
-      <ui:UiElementExists.Target>
-        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[UiElement_NodePopupSaveBtn]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
-      </ui:UiElementExists.Target>
-    </ui:UiElementExists>
-    <ui:UiElementExists DisplayName="Element Exists" Exists="[Is_NodePopup_CancelBtnDisplayed]" sap2010:WorkflowViewState.IdRef="UiElementExists_4">
-      <ui:UiElementExists.Target>
-        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[UiElement_NodePopupCancelBtn]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
-      </ui:UiElementExists.Target>
-    </ui:UiElementExists>
-    <If Condition="[Get_NodePopupTitle.Contains(&quot;Add node name&quot;) and Is_NodePopup_NameFieldDisplayed and Is_NodePopup_DescriptionDisplayed and Is_NodePopup_SaveBtnDisplayed and Is_NodePopup_CancelBtnDisplayed]" sap2010:WorkflowViewState.IdRef="If_1">
-      <If.Then>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;SUCCESS: Add a new node popup verified successfully&quot;+vbNewLine+&#xD;&#xA;&quot;Found new node popup title as &quot;+Get_NodePopupTitle +vbNewLine+&#xD;&#xA;&quot;Status of Node Name Field on UI is: &quot;+Is_NodePopup_NameFieldDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Description field on UI is: &quot;+Is_NodePopup_DescriptionDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Save button on UI is: &quot;+Is_NodePopup_SaveBtnDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Cancel button on UI is: &quot;+Is_NodePopup_CancelBtnDisplayed.ToString]" />
-      </If.Then>
-      <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[&quot;FAILED: Add a new node popup verification failed due to one of the below reasons&quot;+vbNewLine+&#xD;&#xA;&quot;Found new node popup title as &quot;+Get_NodePopupTitle.Trim +&quot;While the expected title is 'Add node name'&quot;+vbNewLine+&#xD;&#xA;&quot;Status of Node Name Field on UI is: &quot;+Is_NodePopup_NameFieldDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Description field on UI is: &quot;+Is_NodePopup_DescriptionDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Save button on UI is: &quot;+Is_NodePopup_SaveBtnDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Cancel button on UI is: &quot;+Is_NodePopup_CancelBtnDisplayed.ToString]" />
-      </If.Else>
-    </If>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_11" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
-      <ui:Click.CursorPosition>
-        <ui:CursorPosition Position="Center">
-          <ui:CursorPosition.OffsetX>
-            <InArgument x:TypeArguments="x:Int32" />
-          </ui:CursorPosition.OffsetX>
-          <ui:CursorPosition.OffsetY>
-            <InArgument x:TypeArguments="x:Int32" />
-          </ui:CursorPosition.OffsetY>
-        </ui:CursorPosition>
-      </ui:Click.CursorPosition>
-      <ui:Click.Target>
-        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_NodePopupSaveBtn]" WaitForReady="INTERACTIVE" />
-      </ui:Click.Target>
-    </ui:Click>
-    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'DIV  topTipMaxiqId0'" sap2010:WorkflowViewState.IdRef="GetValue_3">
-      <ui:GetValue.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e4307f591440e60fb2a7d34639cab528" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='topTipMaxiqId*' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
-      </ui:GetValue.Target>
-      <ui:GetValue.Value>
-        <OutArgument x:TypeArguments="x:String">[Get_SuccessOrErrorMsg]</OutArgument>
-      </ui:GetValue.Value>
-    </ui:GetValue>
-    <If Condition="[Get_SuccessOrErrorMsg.trim.Contains(&quot;Node name should not start with numeric value.Also it should not contain white space or special characters&quot;)]" sap2010:WorkflowViewState.IdRef="If_2">
-      <If.Then>
-        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
-          <Sequence.Variables>
-            <Variable x:TypeArguments="ui:UiElement" Name="UiElement_PopupCloseBtn" />
-          </Sequence.Variables>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="SUCCESS: Error message verified if user clicks on Save button without entering Node name and Description" />
-          <ui:WaitUiElementAppear DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_PopupCloseBtn]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_6" WaitActive="False" WaitVisible="False">
-            <ui:WaitUiElementAppear.Target>
-              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="286af41f1829d64e92879015ca469823" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='topTipMaxiqId*' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
-            </ui:WaitUiElementAppear.Target>
-          </ui:WaitUiElementAppear>
-          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_12" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
-            <ui:Click.CursorPosition>
-              <ui:CursorPosition Position="Center">
-                <ui:CursorPosition.OffsetX>
-                  <InArgument x:TypeArguments="x:Int32" />
-                </ui:CursorPosition.OffsetX>
-                <ui:CursorPosition.OffsetY>
-                  <InArgument x:TypeArguments="x:Int32" />
-                </ui:CursorPosition.OffsetY>
-              </ui:CursorPosition>
-            </ui:Click.CursorPosition>
-            <ui:Click.Target>
-              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_PopupCloseBtn]" WaitForReady="INTERACTIVE" />
-            </ui:Click.Target>
-          </ui:Click>
-        </Sequence>
-      </If.Then>
-      <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Trace" Message="[&quot;FAILED: Failed to verify the error message when user clicks on save button without entering node name and desciption. The error message recieved from UI is: &quot;+Get_SuccessOrErrorMsg]" />
-      </If.Else>
-    </If>
-    <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DisplayName="Type into" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="Auto Node Description ">
-      <ui:TypeInto.Target>
-        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_NodePopup_Description]" WaitForReady="INTERACTIVE" />
-      </ui:TypeInto.Target>
-    </ui:TypeInto>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_14" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
-      <ui:Click.CursorPosition>
-        <ui:CursorPosition Position="Center">
-          <ui:CursorPosition.OffsetX>
-            <InArgument x:TypeArguments="x:Int32" />
-          </ui:CursorPosition.OffsetX>
-          <ui:CursorPosition.OffsetY>
-            <InArgument x:TypeArguments="x:Int32" />
-          </ui:CursorPosition.OffsetY>
-        </ui:CursorPosition>
-      </ui:Click.CursorPosition>
-      <ui:Click.Target>
-        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_NodePopupSaveBtn]" WaitForReady="INTERACTIVE" />
-      </ui:Click.Target>
-    </ui:Click>
-    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'DIV  topTipMaxiqId0'" sap2010:WorkflowViewState.IdRef="GetValue_4">
-      <ui:GetValue.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e4307f591440e60fb2a7d34639cab528" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='topTipMaxiqId*' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
-      </ui:GetValue.Target>
-      <ui:GetValue.Value>
-        <OutArgument x:TypeArguments="x:String">[Get_SuccessOrErrorMsg]</OutArgument>
-      </ui:GetValue.Value>
-    </ui:GetValue>
-    <If Condition="[Get_SuccessOrErrorMsg.trim.Contains(&quot;Node name should not start with numeric value.Also it should not contain white space or special characters&quot;)]" sap2010:WorkflowViewState.IdRef="If_3">
-      <If.Then>
-        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
-          <Sequence.Variables>
-            <Variable x:TypeArguments="ui:UiElement" Name="UiElement_PopupCloseBtn" />
-          </Sequence.Variables>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="SUCCESS: Error message verified if user clicks on Save button without entering Node name" />
-          <ui:WaitUiElementAppear DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_PopupCloseBtn]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_9" WaitActive="False" WaitVisible="False">
-            <ui:WaitUiElementAppear.Target>
-              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="286af41f1829d64e92879015ca469823" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='topTipMaxiqId*' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
-            </ui:WaitUiElementAppear.Target>
-          </ui:WaitUiElementAppear>
-          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_13" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
-            <ui:Click.CursorPosition>
-              <ui:CursorPosition Position="Center">
-                <ui:CursorPosition.OffsetX>
-                  <InArgument x:TypeArguments="x:Int32" />
-                </ui:CursorPosition.OffsetX>
-                <ui:CursorPosition.OffsetY>
-                  <InArgument x:TypeArguments="x:Int32" />
-                </ui:CursorPosition.OffsetY>
-              </ui:CursorPosition>
-            </ui:Click.CursorPosition>
-            <ui:Click.Target>
-              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_PopupCloseBtn]" WaitForReady="INTERACTIVE" />
-            </ui:Click.Target>
-          </ui:Click>
-        </Sequence>
-      </If.Then>
-      <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Trace" Message="[&quot;FAILED: Failed to verify the error message when user clicks on save button without entering node name. The error message recieved from UI is: &quot;+Get_SuccessOrErrorMsg]" />
-      </If.Else>
-    </If>
-    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
-      <Assign.To>
-        <OutArgument x:TypeArguments="x:String">[NodeName]</OutArgument>
-      </Assign.To>
-      <Assign.Value>
-        <InArgument x:TypeArguments="x:String">["NewAutoNode_"+RandomNo]</InArgument>
-      </Assign.Value>
-    </Assign>
-    <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type into" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_2" SendWindowMessages="False" SimulateType="False" Text="[NodeName]">
-      <ui:TypeInto.Target>
-        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_NodePopup_NameField]" WaitForReady="INTERACTIVE" />
-      </ui:TypeInto.Target>
-    </ui:TypeInto>
-    <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DisplayName="Type into" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_3" SendWindowMessages="False" SimulateType="False" Text="Auto Node Description ">
-      <ui:TypeInto.Target>
-        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_NodePopup_Description]" WaitForReady="INTERACTIVE" />
-      </ui:TypeInto.Target>
-    </ui:TypeInto>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_15" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
-      <ui:Click.CursorPosition>
-        <ui:CursorPosition Position="Center">
-          <ui:CursorPosition.OffsetX>
-            <InArgument x:TypeArguments="x:Int32" />
-          </ui:CursorPosition.OffsetX>
-          <ui:CursorPosition.OffsetY>
-            <InArgument x:TypeArguments="x:Int32" />
-          </ui:CursorPosition.OffsetY>
-        </ui:CursorPosition>
-      </ui:Click.CursorPosition>
-      <ui:Click.Target>
-        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_NodePopupSaveBtn]" WaitForReady="INTERACTIVE" />
-      </ui:Click.Target>
-    </ui:Click>
-    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'DIV  topTipMaxiqId0'" sap2010:WorkflowViewState.IdRef="GetValue_5">
-      <ui:GetValue.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="70d4eaa9f6c7c38b9784d23136623ec5" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='topTipMaxiqId*' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
-      </ui:GetValue.Target>
-      <ui:GetValue.Value>
-        <OutArgument x:TypeArguments="x:String">[Get_SuccessOrErrorMsg]</OutArgument>
-      </ui:GetValue.Value>
-    </ui:GetValue>
-    <If Condition="[Get_SuccessOrErrorMsg.trim.Contains(&quot;Node is created successfully&quot;)]" sap2010:WorkflowViewState.IdRef="If_4">
-      <If.Then>
-        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
-          <Sequence.Variables>
-            <Variable x:TypeArguments="ui:UiElement" Name="UiElement_PopupCloseBtn" />
-          </Sequence.Variables>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="SUCCESS: Node created successfully and success message verified" />
-          <ui:WaitUiElementAppear DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_PopupCloseBtn]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_10" WaitActive="False" WaitVisible="False">
-            <ui:WaitUiElementAppear.Target>
-              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="286af41f1829d64e92879015ca469823" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='topTipMaxiqId*' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
-            </ui:WaitUiElementAppear.Target>
-          </ui:WaitUiElementAppear>
-          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_16" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
-            <ui:Click.CursorPosition>
-              <ui:CursorPosition Position="Center">
-                <ui:CursorPosition.OffsetX>
-                  <InArgument x:TypeArguments="x:Int32" />
-                </ui:CursorPosition.OffsetX>
-                <ui:CursorPosition.OffsetY>
-                  <InArgument x:TypeArguments="x:Int32" />
-                </ui:CursorPosition.OffsetY>
-              </ui:CursorPosition>
-            </ui:Click.CursorPosition>
-            <ui:Click.Target>
-              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_PopupCloseBtn]" WaitForReady="INTERACTIVE" />
-            </ui:Click.Target>
-          </ui:Click>
-        </Sequence>
-      </If.Then>
-      <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Trace" Message="[&quot;FAILED: Failed to create new node. The error message recieved from UI is: &quot;+Get_SuccessOrErrorMsg]" />
-      </If.Else>
-    </If>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_DOWN" DisplayName="Click 'RECT'" sap2010:WorkflowViewState.IdRef="Click_17" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke AddNewNode_ScreenVerification workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="AddNewNode_ScreenVerification.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="NodeName">SortNode</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_DOWN" DisplayName="Click and hold newly created sort node" sap2010:WorkflowViewState.IdRef="Click_17" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -418,7 +186,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="16d6458116f869a7133f152396a564ef" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='node1' tag='rect' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:Hover DelayBefore="{x:Null}" DelayMS="{x:Null}" DisplayName="Hover 'chrome.exe  MOSAIC'" sap2010:WorkflowViewState.IdRef="Hover_2" SendWindowMessages="False" SimulateHover="False">
+    <ui:Hover DelayBefore="{x:Null}" DelayMS="{x:Null}" DisplayName="Hover to the region where node needs to be dropped" sap2010:WorkflowViewState.IdRef="Hover_2" SendWindowMessages="False" SimulateHover="False">
       <ui:Hover.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -437,7 +205,7 @@
         </ui:Target>
       </ui:Hover.Target>
     </ui:Hover>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_UP" DisplayName="Click 'RECT'" sap2010:WorkflowViewState.IdRef="Click_18" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_UP" DisplayName="Release node at the desired location" sap2010:WorkflowViewState.IdRef="Click_18" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -453,7 +221,7 @@
       </ui:Click.Target>
     </ui:Click>
     <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="SUCCESS: Node positioned successfully" />
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_DOWN" DisplayName="Click 'CIRCLE'" sap2010:WorkflowViewState.IdRef="Click_19" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_DOWN" DisplayName="Click and hold DS connector circle" sap2010:WorkflowViewState.IdRef="Click_19" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -468,7 +236,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="92bcb119efb854a52ebf04cea7c62372" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='2' tag='circle' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_UP" DisplayName="Click 'CIRCLE'" sap2010:WorkflowViewState.IdRef="Click_20" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_UP" DisplayName="drag the mouse till sort node connector and release it" sap2010:WorkflowViewState.IdRef="Click_20" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -484,7 +252,7 @@
       </ui:Click.Target>
     </ui:Click>
     <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Info" Message="SUCCESS: Node joined with DS successfully" />
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_DOUBLE" DisplayName="Double Click" sap2010:WorkflowViewState.IdRef="Click_21" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_DOUBLE" DisplayName="Double Click on sort node" sap2010:WorkflowViewState.IdRef="Click_21" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -499,22 +267,22 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="a2d1b54e8d9ad95ce6db6a9b2c2771f9" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='node1' tag='rect' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:WaitUiElementAppear FoundElement="{x:Null}" DisplayName="Find Element 'H3'" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_11" WaitActive="False" WaitVisible="False">
+    <ui:WaitUiElementAppear DisplayName="Find UIElement for node popup title" FoundElement="[UiElement_CreatedNodePopupTitle]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_11" WaitActive="False" WaitVisible="False">
       <ui:WaitUiElementAppear.Target>
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="05705e04ce2a5790ab36e9b896e6e2c4" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' parentid='app' tag='H3' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:WaitUiElementAppear.Target>
     </ui:WaitUiElementAppear>
-    <ui:WaitUiElementAppear FoundElement="{x:Null}" DisplayName="Find Element 'A'" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_12" WaitActive="False" WaitVisible="False">
+    <ui:WaitUiElementAppear FoundElement="{x:Null}" DisplayName="Find Uielement for Design tab" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_12" WaitActive="False" WaitVisible="False">
       <ui:WaitUiElementAppear.Target>
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8a49237acc58900f22648d1c72d4d48a" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Design' parentid='tabs' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:WaitUiElementAppear.Target>
     </ui:WaitUiElementAppear>
-    <ui:WaitUiElementAppear FoundElement="{x:Null}" DisplayName="Find Element 'A'" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_13" WaitActive="False" WaitVisible="False">
+    <ui:WaitUiElementAppear FoundElement="{x:Null}" DisplayName="Find UIElement for settings tab" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_13" WaitActive="False" WaitVisible="False">
       <ui:WaitUiElementAppear.Target>
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fe39ed0030e8ee0123dd175da16425c7" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Settings' parentid='tabs' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:WaitUiElementAppear.Target>
     </ui:WaitUiElementAppear>
-    <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="3000" DisplayName="Select item 'SELECT'" sap2010:WorkflowViewState.IdRef="SelectItem_1" Item="Ascending">
+    <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="3000" DisplayName="Select Ascending in sorting" sap2010:WorkflowViewState.IdRef="SelectItem_1" Item="Ascending">
       <ui:SelectItem.Items>
         <scg:List x:TypeArguments="x:String" Capacity="4">
           <x:String>Select order of sorting</x:String>
@@ -526,7 +294,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="12003fa8dd37a1255529fc171e986006" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' parentid='dateTimePickerRemoveScrollNode' parentname='newSortingForm' tag='SELECT' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:SelectItem.Target>
     </ui:SelectItem>
-    <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Select item 'SELECT'" sap2010:WorkflowViewState.IdRef="SelectItem_2" Item="ENAME">
+    <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Select ENAME in field name" sap2010:WorkflowViewState.IdRef="SelectItem_2" Item="ENAME">
       <ui:SelectItem.Items>
         <scg:List x:TypeArguments="x:String" Capacity="16">
           <x:String>Field name</x:String>
@@ -544,7 +312,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="44631b04822f780033939692e2e59a1b" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='2' parentid='dateTimePickerRemoveScrollNode' parentname='newSortingForm' tag='SELECT' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:SelectItem.Target>
     </ui:SelectItem>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_22" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Plus button" sap2010:WorkflowViewState.IdRef="Click_22" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -559,7 +327,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="61eeef0c163c70628c23e7b0e8abe170" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='dateTimePickerRemoveScrollNode' parentname='newSortingForm' tag='BUTTON' type='submit' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'A'" sap2010:WorkflowViewState.IdRef="Click_24" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Settings tab" sap2010:WorkflowViewState.IdRef="Click_24" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -574,7 +342,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fe39ed0030e8ee0123dd175da16425c7" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Settings' parentid='tabs' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'SPAN'" sap2010:WorkflowViewState.IdRef="Click_25" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Save for exploration checkbox" sap2010:WorkflowViewState.IdRef="Click_25" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -589,7 +357,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="5ab11f325d36a23be74733182c3b4e83" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;fieldset&amp;gt;fieldset&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;label&amp;gt;span' isleaf='1' parentid='app' tag='SPAN' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_23" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Save and exit button" sap2010:WorkflowViewState.IdRef="Click_23" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -604,7 +372,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="50ebba5a9d7bfac4b909a023079eee0d" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Save &amp;amp; Exit' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'DIV  topTipMaxiqId0'" sap2010:WorkflowViewState.IdRef="GetValue_6">
+    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Success/Error message text" sap2010:WorkflowViewState.IdRef="GetValue_6">
       <ui:GetValue.Target>
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="1cded710213b2a5580632842bd7964d7" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='topTipMaxiqId*' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:GetValue.Target>
@@ -612,7 +380,7 @@
         <OutArgument x:TypeArguments="x:String">[Get_SuccessOrErrorMsg]</OutArgument>
       </ui:GetValue.Value>
     </ui:GetValue>
-    <If Condition="[Get_SuccessOrErrorMsg.trim.Contains(&quot;App status is Inactive please publish app&quot;)]" sap2010:WorkflowViewState.IdRef="If_5">
+    <If Condition="[Get_SuccessOrErrorMsg.trim.Contains(&quot;App status is Inactive please publish app&quot;)]" DisplayName="If (verify success / error message)" sap2010:WorkflowViewState.IdRef="If_5">
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
           <Sequence.Variables>
@@ -624,7 +392,7 @@
               <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="286af41f1829d64e92879015ca469823" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='topTipMaxiqId*' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
             </ui:WaitUiElementAppear.Target>
           </ui:WaitUiElementAppear>
-          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_26" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click message close button" sap2010:WorkflowViewState.IdRef="Click_26" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
             <ui:Click.CursorPosition>
               <ui:CursorPosition Position="Center">
                 <ui:CursorPosition.OffsetX>
@@ -645,81 +413,24 @@
         <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Trace" Message="[&quot;FAILED: Failed to edit the newly created node. The error message recieved from UI is: &quot;+Get_SuccessOrErrorMsg]" />
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1ZEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQWRkTm9kZV9Db25uZWN0V2l0aERTX1ZlcmlmeU5vZGUueGFtbElCA6EDDgIBAU80T1oCAQJSBVkOAgFNWgVoEAIBS2kFexACAUl8BYoBEAIBR4sBBZkBEAIBRJoBBagBEAIBQakBBa0BHQIBPq4BBbwBEAIBPL0BBc8BEAIBOtABBd4BEAIBON8BBd8BnAECATbgAQXuARACATTvAQX9ARACATL+AQX+AaEBAgEw/wEFjQIQAgEujgIFkgIeAgEqkwIFlwIeAgEomAIFnAIeAgEmnQIFqAIVAgEiqQIFugIVAgEfuwIFyQIQAgEdygIF2AIQAgEb2QIF5wIQAgEZ6AIF9gIQAgEX9wIF/gITAgET/wIFnwMKAgEDVzBXRgIBUFQxVDsCAU5mmAFm9QECAUx1fnXJAQIBSogBmAGIAfUBAgFIlwGYAZcB+wICAUaLAUeLAU0CAUWmAZgBpgH/AQIBQ5oBR5oBTQIBQqsBQasBSQIBQKkBygGpAe4BAgE/ugGYAboB9QECAT3JAX7JAdABAgE73AGYAdwB9QECATnfAXLfAZkBAgE37AGYAewB7gECATX7AZgB+wH/AQIBM/4Bc/4BngECATGLApgBiwL1AQIBL44CXI4CfwIBLJACmAGQAvkBAgErlQKYAZUCgQICASmaApgBmgKDAgIBJ50CUZ0CVwIBJJ0CtgGdAsEBAgEjpgKYAaYCtAICASWpArkBqQLAAQIBILgCmAG4ArQCAgEhxwKYAccCugICAR7WApgB1gKDAgIBHOUCmAHlAqgDAgEa9AKYAfQCkgICARj8AjH8AkgCART5ApgB+QL3AQIBFv8CE/8CcQIBBIEDCZoDFAIBCZ0DCZ0D9wECAQaFAwuFA6cBAgERhgMLigMkAgENiwMLmQMWAgEKnQN4nQP0AQIBB4UDeYUDpAECARKGA1SGA28CAQ+IA54BiAOGAgIBDpcDZZcDgAECAQs=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="675,60" />
       <sap2010:ViewStateData Id="Click_6" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="Hover_1" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="Click_7" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="Click_9" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="Click_10" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_2" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_3" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_4" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_5" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="GetValue_2" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="UiElementExists_3" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="UiElementExists_4" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,93" />
-      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,93" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="675,243" />
-      <sap2010:ViewStateData Id="Click_11" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="GetValue_3" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,93" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_6" sap:VirtualizedContainerService.HintSize="314,106" />
-      <sap2010:ViewStateData Id="Click_12" sap:VirtualizedContainerService.HintSize="314,68" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="336,471">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,93" />
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="675,621" />
-      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="675,96" />
-      <sap2010:ViewStateData Id="Click_14" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="GetValue_4" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="314,93" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_9" sap:VirtualizedContainerService.HintSize="314,106" />
-      <sap2010:ViewStateData Id="Click_13" sap:VirtualizedContainerService.HintSize="314,68" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,471">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_6" sap:VirtualizedContainerService.HintSize="314,93" />
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="675,621" />
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="675,60" />
-      <sap2010:ViewStateData Id="TypeInto_2" sap:VirtualizedContainerService.HintSize="675,96" />
-      <sap2010:ViewStateData Id="TypeInto_3" sap:VirtualizedContainerService.HintSize="675,96" />
-      <sap2010:ViewStateData Id="Click_15" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="GetValue_5" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="LogMessage_7" sap:VirtualizedContainerService.HintSize="314,93" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_10" sap:VirtualizedContainerService.HintSize="314,106" />
-      <sap2010:ViewStateData Id="Click_16" sap:VirtualizedContainerService.HintSize="314,68" />
-      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="336,471">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_8" sap:VirtualizedContainerService.HintSize="314,93" />
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="675,621" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="675,87" />
       <sap2010:ViewStateData Id="Click_17" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="Hover_2" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="Click_18" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="LogMessage_9" sap:VirtualizedContainerService.HintSize="675,93" />
+      <sap2010:ViewStateData Id="LogMessage_9" sap:VirtualizedContainerService.HintSize="675,91" />
       <sap2010:ViewStateData Id="Click_19" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="Click_20" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="LogMessage_10" sap:VirtualizedContainerService.HintSize="675,93" />
+      <sap2010:ViewStateData Id="LogMessage_10" sap:VirtualizedContainerService.HintSize="675,91" />
       <sap2010:ViewStateData Id="Click_21" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="WaitUiElementAppear_11" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="WaitUiElementAppear_12" sap:VirtualizedContainerService.HintSize="675,106" />
@@ -731,26 +442,26 @@
       <sap2010:ViewStateData Id="Click_25" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="Click_23" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="GetValue_6" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="LogMessage_11" sap:VirtualizedContainerService.HintSize="314,93" />
+      <sap2010:ViewStateData Id="LogMessage_11" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="WaitUiElementAppear_14" sap:VirtualizedContainerService.HintSize="314,106" />
       <sap2010:ViewStateData Id="Click_26" sap:VirtualizedContainerService.HintSize="314,68" />
-      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="336,471">
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="336,469">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_12" sap:VirtualizedContainerService.HintSize="314,93" />
-      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="675,621" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="697,8939">
+      <sap2010:ViewStateData Id="LogMessage_12" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="675,617" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="697,4352">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="dragdrop_1" sap:VirtualizedContainerService.HintSize="737,9379" />
+      <sap2010:ViewStateData Id="dragdrop_1" sap:VirtualizedContainerService.HintSize="737,4552" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
