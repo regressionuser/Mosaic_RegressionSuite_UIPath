@@ -1,0 +1,947 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="API_MLModelPage" this:API_MLModelPage.randomNo="[new Random().Next(100,999999).ToString]"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:this="clr-namespace:"
+ xmlns:ui="http://schemas.uipath.com/workflow/activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="randomNo" Type="InArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>API_MLModelPage_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.Core</AssemblyReference>
+      <AssemblyReference>UiPath.Core.Activities</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="ML Models" sap2010:WorkflowViewState.IdRef="Sequence_10">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="ui:UiElement" Name="element_MLModelTab" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_FilterBox" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_RegisterNewModelButton" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_DataTable" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_EntriesPerPage" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_First" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_Last" />
+      <Variable x:TypeArguments="scg:IEnumerable(ui:UiElement)" Name="enterisePerPageList" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_RegisterNewModelPopup" />
+      <Variable x:TypeArguments="scg:IEnumerable(x:String)" Name="setExpected_SelectType" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_CloseButton" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_CancelButton" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_SaveExitButton" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_PathOfModel" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_SelectType" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_ModelDescription" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_ModelName" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_RegiterNewPopupHeader" />
+      <Variable x:TypeArguments="ui:GenericValue" Name="registerNewPopupHeader" />
+      <Variable x:TypeArguments="x:String" Default="Test_MLSparkR" Name="modelName" />
+      <Variable x:TypeArguments="x:String" Default="Test_Description" Name="modelDescription" />
+      <Variable x:TypeArguments="x:String" Name="modelPath_SparkR">
+        <Variable.Default>
+          <Literal x:TypeArguments="x:String" Value="" />
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="x:String" Default="/maxiqTeam/machinelearning/2791/models/1513601567182/2316735" Name="modelPath_SparkMLlib" />
+      <Variable x:TypeArguments="ui:GenericValue" Name="algorithmValue" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_PredicatedTable" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_DataType" />
+      <Variable x:TypeArguments="scg:IEnumerable(x:String)" Name="expected_DataTypeList" />
+      <Variable x:TypeArguments="x:Boolean" Name="tablePresent" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_PredictedValue" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_AlgorithmField" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_GenerateFieldMapping" />
+    </Sequence.Variables>
+    <Sequence DisplayName="API_MLModelPage" sap2010:WorkflowViewState.IdRef="Sequence_1">
+      <ui:WaitUiElementAppear DisplayName="element_MLModelTab" FoundElement="[element_MLModelTab]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_1" WaitActive="True" WaitVisible="True">
+        <ui:WaitUiElementAppear.Target>
+          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="00b96d42069254807fd6bf3e5d37dd1e" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='A' href='#/modelsView' parentclass='padding-For-tab ng-scope' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+        </ui:WaitUiElementAppear.Target>
+      </ui:WaitUiElementAppear>
+      <ui:Click ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="500" DisplayName="click ML Model Tab" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+        <ui:Click.CursorPosition>
+          <ui:CursorPosition Position="Center">
+            <ui:CursorPosition.OffsetX>
+              <InArgument x:TypeArguments="x:Int32" />
+            </ui:CursorPosition.OffsetX>
+            <ui:CursorPosition.OffsetY>
+              <InArgument x:TypeArguments="x:Int32" />
+            </ui:CursorPosition.OffsetY>
+          </ui:CursorPosition>
+        </ui:Click.CursorPosition>
+        <ui:Click.Target>
+          <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_MLModelTab]" WaitForReady="INTERACTIVE" />
+        </ui:Click.Target>
+      </ui:Click>
+      <ui:WaitUiElementAppear DisplayName="element_FilterBox" FoundElement="[element_FilterBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_2" WaitActive="True" WaitVisible="True">
+        <ui:WaitUiElementAppear.Target>
+          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="14208dc001d9b69b6b55f06ea17a5349" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='INPUT' type='text' parentid='content' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+        </ui:WaitUiElementAppear.Target>
+      </ui:WaitUiElementAppear>
+      <ui:WaitUiElementAppear DisplayName="element_RegisterNewModelButton" FoundElement="[element_RegisterNewModelButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_5" WaitActive="True" WaitVisible="True">
+        <ui:WaitUiElementAppear.Target>
+          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="6f58ba4c0efc9667932a29953629dc2f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='BUTTON' type='button' aaname='Register a New Model' parentid='content' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+        </ui:WaitUiElementAppear.Target>
+      </ui:WaitUiElementAppear>
+      <ui:WaitUiElementAppear DisplayName="element_DataTable" FoundElement="[element_DataTable]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_6" WaitActive="True" WaitVisible="True">
+        <ui:WaitUiElementAppear.Target>
+          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="f5c4cf871246c7c09c6f280989311d1a" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TABLE' class='table table-bordered table-striped table-responsive table-repo marginSearch' parentclass='modal-body' parentid='content' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+        </ui:WaitUiElementAppear.Target>
+      </ui:WaitUiElementAppear>
+      <ui:WaitUiElementAppear DisplayName="element_EntriesPerPage" FoundElement="[element_EntriesPerPage]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_7" WaitActive="True" WaitVisible="True">
+        <ui:WaitUiElementAppear.Target>
+          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="eae1b8115ea1df3db4e30a612678e686" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='SELECT' parentid='content' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+        </ui:WaitUiElementAppear.Target>
+      </ui:WaitUiElementAppear>
+      <ui:WaitUiElementAppear DisplayName="element_First" FoundElement="[element_First]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_3" WaitActive="True" WaitVisible="True">
+        <ui:WaitUiElementAppear.Target>
+          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="742b2159486cfe0f18c2ed882e53f436" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='First' parentid='content' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
+        </ui:WaitUiElementAppear.Target>
+      </ui:WaitUiElementAppear>
+      <ui:WaitUiElementAppear DisplayName="element_Last" FoundElement="[element_Last]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_4" WaitActive="True" WaitVisible="True">
+        <ui:WaitUiElementAppear.Target>
+          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="2e9255061dd1efb5d6fde27ca98e5012" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Last' parentid='content' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
+        </ui:WaitUiElementAppear.Target>
+      </ui:WaitUiElementAppear>
+      <If Condition="[element_MLModelTab.IsVisible And element_FilterBox.IsVisible And element_RegisterNewModelButton.IsVisible And element_DataTable.IsVisible And element_EntriesPerPage.IsVisible And element_First.IsVisible And element_Last.IsVisible]" DisplayName="Verify All ML model page elements are visible" sap2010:WorkflowViewState.IdRef="If_1">
+        <If.Then>
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+            <Sequence.Variables>
+              <Variable x:TypeArguments="scg:IEnumerable(x:String)" Name="setExpected_List" />
+            </Sequence.Variables>
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="All Elements on ML Model tab are present" />
+            <ui:FindChildren Children="[enterisePerPageList]" DisplayName="Find children" Filter="&lt;webctrl /&gt;" sap2010:WorkflowViewState.IdRef="FindChildren_1" Scope="FIND_CHILDREN">
+              <ui:FindChildren.Target>
+                <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_EntriesPerPage]" WaitForReady="INTERACTIVE" />
+              </ui:FindChildren.Target>
+            </ui:FindChildren>
+            <Assign DisplayName="ExpectedList" sap2010:WorkflowViewState.IdRef="Assign_1">
+              <Assign.To>
+                <OutArgument x:TypeArguments="scg:IEnumerable(x:String)">[setExpected_List]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="scg:IEnumerable(x:String)">[{"3","5","10","15","20"}]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Verify Dropdown" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="FlowPage\Generic_VerifyDropdownList.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="scg:IEnumerable(ui:UiElement)" x:Key="ListItems">[enterisePerPageList]</InArgument>
+                <InArgument x:TypeArguments="scg:IEnumerable(x:String)" x:Key="Expected_DropDownList">[setExpected_List]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+          </Sequence>
+        </If.Then>
+        <If.Else>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[&quot;1. ML Model Tab : &quot; +element_MLModelTab.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;2. API_Filter Box : &quot;  +element_FilterBox.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;3. Register New Button : &quot; +element_RegisterNewModelButton.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;4. Entries Per page : &quot; +element_EntriesPerPage.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;5. Data Table : &quot; +element_DataTable.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;6. First : &quot; +element_First.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;7. Last : &quot; +element_Last.IsVisible.ToString]" />
+        </If.Else>
+      </If>
+      <ui:Click ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="500" DisplayName="click Register New Model button" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+        <ui:Click.CursorPosition>
+          <ui:CursorPosition Position="Center">
+            <ui:CursorPosition.OffsetX>
+              <InArgument x:TypeArguments="x:Int32" />
+            </ui:CursorPosition.OffsetX>
+            <ui:CursorPosition.OffsetY>
+              <InArgument x:TypeArguments="x:Int32" />
+            </ui:CursorPosition.OffsetY>
+          </ui:CursorPosition>
+        </ui:Click.CursorPosition>
+        <ui:Click.Target>
+          <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_RegisterNewModelButton]" WaitForReady="INTERACTIVE" />
+        </ui:Click.Target>
+      </ui:Click>
+      <ui:WaitUiElementAppear DisplayName="element_RegisterNewModelPopup" FoundElement="[element_RegisterNewModelPopup]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_8" WaitActive="True" WaitVisible="True">
+        <ui:WaitUiElementAppear.Target>
+          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e4eeec9e2b8050900bc7f1e93d13cd66" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div' parentid='app' tag='DIV' parentclass='modal-dialog modal-lg' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+        </ui:WaitUiElementAppear.Target>
+      </ui:WaitUiElementAppear>
+      <If Condition="[element_RegisterNewModelPopup.IsVisible]" DisplayName="verify Register New Model Popup is open" sap2010:WorkflowViewState.IdRef="If_2">
+        <If.Then>
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="RegisterNewModel Popup is open" />
+            <ui:WaitUiElementAppear DisplayName="element_RegiterNewPopupHeader" FoundElement="[element_RegiterNewPopupHeader]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_13" WaitActive="True" WaitVisible="True">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="be6afe914364bf16434656050e048f27" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='H3' aaname='Register a New Model' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:GetValue ContinueOnError="{x:Null}" DisplayName="get Register New popup header" sap2010:WorkflowViewState.IdRef="GetValue_1">
+              <ui:GetValue.Target>
+                <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_RegiterNewPopupHeader]" WaitForReady="INTERACTIVE" />
+              </ui:GetValue.Target>
+              <ui:GetValue.Value>
+                <OutArgument x:TypeArguments="ui:GenericValue">[registerNewPopupHeader]</OutArgument>
+              </ui:GetValue.Value>
+            </ui:GetValue>
+            <ui:WaitUiElementAppear DisplayName="element_ModelName" FoundElement="[element_ModelName]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_14" WaitActive="True" WaitVisible="True">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="18847bd8ed9524512fa2051ecc32b06f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='componentName' tag='INPUT' parentid='app' parentname='createCompnentForm' title='MOSAIC' type='text' idx='1' /&gt;" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:WaitUiElementAppear DisplayName="element_ModelDescription" FoundElement="[element_ModelDescription]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_9" WaitActive="True" WaitVisible="True">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="384f16a006f4d55819f586d2cac72a6e" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TEXTAREA' parentid='app' parentname='createCompnentForm' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:WaitUiElementAppear DisplayName="element_SelectType" FoundElement="[element_SelectType]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_10" WaitActive="True" WaitVisible="True">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="bbfd6fac512eec8c3e1d015ee94bfb12" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='SELECT' parentclass='ui-select' parentname='createCompnentForm' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:WaitUiElementAppear DisplayName="element_PathOfModel" FoundElement="[element_PathOfModel]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_11" WaitActive="True" WaitVisible="True">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="27d2ee2cc69ca452eefaf14c8b8d3181" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='componentName' tag='INPUT' parentid='app' parentname='createCompnentForm' title='MOSAIC' type='text' idx='2' /&gt;" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:WaitUiElementAppear DisplayName="element_SaveExitButton" FoundElement="[element_SaveExitButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_12" WaitActive="True" WaitVisible="True">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fdbca6ecb05acdca5de3640572a62a5f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Save*' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:WaitUiElementAppear DisplayName="element_CancelButton" FoundElement="[element_CancelButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_15" WaitActive="True" WaitVisible="True">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d5415c956715777b11bf8e6cd2481f8a" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:WaitUiElementAppear DisplayName="element_CloseButton" FoundElement="[element_CloseButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_16" WaitActive="True" WaitVisible="True">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e74824fbd4317dcc9e01579ceee5aa7c" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='I' parentclass='closePopUp' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <If Condition="[element_RegiterNewPopupHeader.IsVisible And element_ModelName.IsVisible And element_ModelDescription.IsVisible And element_SelectType.IsVisible And element_PathOfModel.IsVisible And element_SaveExitButton.IsVisible And element_CancelButton.IsVisible And element_CloseButton.IsVisible And registerNewPopupHeader.Equals(&quot;Register a New Model&quot;)]" DisplayName="verify all Elements on Register New Model popup is present if header is Register a New Model" sap2010:WorkflowViewState.IdRef="If_3">
+              <If.Then>
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+                  <Sequence.Variables>
+                    <Variable x:TypeArguments="scg:IEnumerable(ui:UiElement)" Name="listSelectType" />
+                  </Sequence.Variables>
+                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[&quot;All elements on Register New model popup present with header : &quot;+registerNewPopupHeader]" />
+                  <ui:FindChildren Children="[listSelectType]" DisplayName="Find children" Filter="&lt;webctrl /&gt;" sap2010:WorkflowViewState.IdRef="FindChildren_2" Scope="FIND_CHILDREN">
+                    <ui:FindChildren.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_SelectType]" WaitForReady="INTERACTIVE" />
+                    </ui:FindChildren.Target>
+                  </ui:FindChildren>
+                  <Assign DisplayName="ExpectedList" sap2010:WorkflowViewState.IdRef="Assign_2">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="scg:IEnumerable(x:String)">[setExpected_SelectType]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="scg:IEnumerable(x:String)">[{"Select type","ML With SparkR","ML With SparkMLlib"}]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                  <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call verify Select type dropdown" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="FlowPage\Generic_VerifyDropdownList.xaml">
+                    <ui:InvokeWorkflowFile.Arguments>
+                      <InArgument x:TypeArguments="scg:IEnumerable(ui:UiElement)" x:Key="ListItems">[listSelectType]</InArgument>
+                      <InArgument x:TypeArguments="scg:IEnumerable(x:String)" x:Key="Expected_DropDownList">[setExpected_SelectType]</InArgument>
+                    </ui:InvokeWorkflowFile.Arguments>
+                  </ui:InvokeWorkflowFile>
+                </Sequence>
+              </If.Then>
+              <If.Else>
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="[&quot;1. RegiterNewPopupHeader :  &quot; +element_RegiterNewPopupHeader.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;2. ModelName : &quot;+element_ModelName.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;3. Model Description : &quot; +element_ModelDescription.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;4. Select Type : &quot; +element_SelectType.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;5. Path Of Model : &quot; +element_PathOfModel.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;6. Save Exit Button : &quot; +element_SaveExitButton.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;7. Cancel Button : &quot; +element_CancelButton.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;8. Close Button : &quot; +element_CloseButton.IsVisible.ToString]" />
+              </If.Else>
+            </If>
+          </Sequence>
+        </If.Then>
+        <If.Else>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="[&quot;Register New Model pop up is not open &quot; +element_RegisterNewModelPopup.IsVisible.ToString]" />
+        </If.Else>
+      </If>
+      <ui:Click ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="500" DisplayName="click Close button" sap2010:WorkflowViewState.IdRef="Click_3" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+        <ui:Click.CursorPosition>
+          <ui:CursorPosition Position="Center">
+            <ui:CursorPosition.OffsetX>
+              <InArgument x:TypeArguments="x:Int32" />
+            </ui:CursorPosition.OffsetX>
+            <ui:CursorPosition.OffsetY>
+              <InArgument x:TypeArguments="x:Int32" />
+            </ui:CursorPosition.OffsetY>
+          </ui:CursorPosition>
+        </ui:Click.CursorPosition>
+        <ui:Click.Target>
+          <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_CloseButton]" WaitForReady="INTERACTIVE" />
+        </ui:Click.Target>
+      </ui:Click>
+      <If Condition="[element_RegisterNewModelPopup.IsVisible.ToString.Equals(&quot;False&quot;)]" DisplayName="After click on Close Pop up should be closed" sap2010:WorkflowViewState.IdRef="If_4">
+        <If.Then>
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="Register new Model popup closed" />
+            <ui:Click ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="1000" DisplayName="Click Register New model button" sap2010:WorkflowViewState.IdRef="Click_4" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_RegisterNewModelButton]" WaitForReady="INTERACTIVE" />
+              </ui:Click.Target>
+            </ui:Click>
+            <If Condition="[element_RegisterNewModelPopup.IsValid]" DisplayName="After Click On RegisterNewModel pop up should get open" sap2010:WorkflowViewState.IdRef="If_5">
+              <If.Then>
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+                  <ui:Click ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="500" DisplayName="Click Cancel button" sap2010:WorkflowViewState.IdRef="Click_5" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                    <ui:Click.CursorPosition>
+                      <ui:CursorPosition Position="Center">
+                        <ui:CursorPosition.OffsetX>
+                          <InArgument x:TypeArguments="x:Int32" />
+                        </ui:CursorPosition.OffsetX>
+                        <ui:CursorPosition.OffsetY>
+                          <InArgument x:TypeArguments="x:Int32" />
+                        </ui:CursorPosition.OffsetY>
+                      </ui:CursorPosition>
+                    </ui:Click.CursorPosition>
+                    <ui:Click.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="1dcafddfd578bb922b6e1db1d37c40af" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+                    </ui:Click.Target>
+                  </ui:Click>
+                  <If Condition="[element_RegisterNewModelPopup.IsVisible.ToString.Equals(&quot;False&quot;)]" DisplayName="After click on Cancel Popup should get closed" sap2010:WorkflowViewState.IdRef="If_6">
+                    <If.Then>
+                      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
+                        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="Register new Model popup closed" />
+                        <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Register New Model button" sap2010:WorkflowViewState.IdRef="Click_6" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                          <ui:Click.CursorPosition>
+                            <ui:CursorPosition Position="Center">
+                              <ui:CursorPosition.OffsetX>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetX>
+                              <ui:CursorPosition.OffsetY>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetY>
+                            </ui:CursorPosition>
+                          </ui:Click.CursorPosition>
+                          <ui:Click.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_RegisterNewModelButton]" WaitForReady="INTERACTIVE" />
+                          </ui:Click.Target>
+                        </ui:Click>
+                      </Sequence>
+                    </If.Then>
+                    <If.Else>
+                      <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Error" Message="Register new Model popup not closed" />
+                    </If.Else>
+                  </If>
+                </Sequence>
+              </If.Then>
+              <If.Else>
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Error" Message="Register new Model popup not closed" />
+              </If.Else>
+            </If>
+          </Sequence>
+        </If.Then>
+        <If.Else>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="Register new Model popup not closed" />
+        </If.Else>
+      </If>
+    </Sequence>
+    <Sequence DisplayName="Enter MLSparkR data" sap2010:WorkflowViewState.IdRef="Sequence_8">
+      <ui:WaitUiElementAppear DisplayName="Find Element 'DIV'" FoundElement="[element_RegisterNewModelPopup]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_18" WaitActive="True" WaitVisible="True">
+        <ui:WaitUiElementAppear.Target>
+          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e4eeec9e2b8050900bc7f1e93d13cd66" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div' parentid='app' tag='DIV' class='modal-content' parentclass='modal-dialog modal-lg' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+        </ui:WaitUiElementAppear.Target>
+      </ui:WaitUiElementAppear>
+      <If Condition="[element_RegisterNewModelPopup.IsVisible.ToString.Equals(&quot;True&quot;)]" DisplayName="If Register New model pop up is open" sap2010:WorkflowViewState.IdRef="If_7">
+        <If.Then>
+          <Sequence DisplayName="Enter Valid and Invalid data and verify" sap2010:WorkflowViewState.IdRef="Sequence_15">
+            <Sequence DisplayName="Enter Blank and Click Save" sap2010:WorkflowViewState.IdRef="Sequence_13">
+              <ui:Click ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="1000" DisplayName="Click Save&amp;Exit" sap2010:WorkflowViewState.IdRef="Click_7" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                <ui:Click.CursorPosition>
+                  <ui:CursorPosition Position="Center">
+                    <ui:CursorPosition.OffsetX>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetX>
+                    <ui:CursorPosition.OffsetY>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetY>
+                  </ui:CursorPosition>
+                </ui:Click.CursorPosition>
+                <ui:Click.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fdbca6ecb05acdca5de3640572a62a5f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Save*' parentid='app' tag='BUTTON' class='btn btn-primary ng-scope' parentclass='modal-footer ng-scope' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:Click.Target>
+              </ui:Click>
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call Handle and Verify Message Box" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="DataSourcePage\HandleMessageBox.xaml">
+                <ui:InvokeWorkflowFile.Arguments>
+                  <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Required Model name</InArgument>
+                </ui:InvokeWorkflowFile.Arguments>
+              </ui:InvokeWorkflowFile>
+            </Sequence>
+            <Sequence DisplayName="Enter Model name and Save" sap2010:WorkflowViewState.IdRef="Sequence_12">
+              <ui:TypeInto Activate="True" ClickBeforeTyping="True" DelayBefore="500" DelayBetweenKeys="100" DelayMS="500" DisplayName="Type Model Name" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_2" SendWindowMessages="False" SimulateType="False" Text="[modelName+randomNo]">
+                <ui:TypeInto.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="18847bd8ed9524512fa2051ecc32b06f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='componentName' tag='INPUT' parentid='app' title='MOSAIC' type='text' idx='1' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:TypeInto.Target>
+              </ui:TypeInto>
+              <ui:Click ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="1000" DisplayName="Click Save&amp;Exit" sap2010:WorkflowViewState.IdRef="Click_8" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                <ui:Click.CursorPosition>
+                  <ui:CursorPosition Position="Center">
+                    <ui:CursorPosition.OffsetX>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetX>
+                    <ui:CursorPosition.OffsetY>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetY>
+                  </ui:CursorPosition>
+                </ui:Click.CursorPosition>
+                <ui:Click.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fdbca6ecb05acdca5de3640572a62a5f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Save*' parentid='app' tag='BUTTON' class='btn btn-primary ng-scope' parentclass='modal-footer ng-scope' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:Click.Target>
+              </ui:Click>
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call Handle and Verify Message Box" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="DataSourcePage\HandleMessageBox.xaml">
+                <ui:InvokeWorkflowFile.Arguments>
+                  <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Required Model Type</InArgument>
+                </ui:InvokeWorkflowFile.Arguments>
+              </ui:InvokeWorkflowFile>
+            </Sequence>
+            <Sequence DisplayName="Enter Model name, Model description , model type and Save" sap2010:WorkflowViewState.IdRef="Sequence_19">
+              <ui:TypeInto Activate="True" ClickBeforeTyping="True" DelayBefore="500" DelayBetweenKeys="100" DelayMS="500" DisplayName="Type Model Name" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_3" SendWindowMessages="False" SimulateType="False" Text="[modelName+randomNo]">
+                <ui:TypeInto.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="18847bd8ed9524512fa2051ecc32b06f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='componentName' tag='INPUT' parentid='app' title='MOSAIC' type='text' idx='1' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:TypeInto.Target>
+              </ui:TypeInto>
+              <ui:TypeInto Activate="True" ClickBeforeTyping="True" DelayBefore="500" DelayBetweenKeys="100" DelayMS="500" DisplayName="Type Model Description" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_4" SendWindowMessages="False" SimulateType="False" Text="[modelDescription+randomNo]">
+                <ui:TypeInto.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="384f16a006f4d55819f586d2cac72a6e" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TEXTAREA' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:TypeInto.Target>
+              </ui:TypeInto>
+              <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="500" DelayBefore="500" DisplayName="Select item 'SELECT'" sap2010:WorkflowViewState.IdRef="SelectItem_2" Item="ML With SparkR">
+                <ui:SelectItem.Items>
+                  <scg:List x:TypeArguments="x:String" Capacity="4">
+                    <x:String>Select type</x:String>
+                    <x:String>ML With SparkR</x:String>
+                    <x:String>ML With SparkMLlib</x:String>
+                  </scg:List>
+                </ui:SelectItem.Items>
+                <ui:SelectItem.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="bbfd6fac512eec8c3e1d015ee94bfb12" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='SELECT' parentclass='ui-select' parentname='createCompnentForm' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:SelectItem.Target>
+              </ui:SelectItem>
+              <ui:Click ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="1000" DisplayName="Click Save&amp;Exit" sap2010:WorkflowViewState.IdRef="Click_9" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                <ui:Click.CursorPosition>
+                  <ui:CursorPosition Position="Center">
+                    <ui:CursorPosition.OffsetX>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetX>
+                    <ui:CursorPosition.OffsetY>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetY>
+                  </ui:CursorPosition>
+                </ui:Click.CursorPosition>
+                <ui:Click.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fdbca6ecb05acdca5de3640572a62a5f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Save*' parentid='app' tag='BUTTON' class='btn btn-primary ng-scope' parentclass='modal-footer ng-scope' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:Click.Target>
+              </ui:Click>
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call Handle and Verify Message Box" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="DataSourcePage\HandleMessageBox.xaml">
+                <ui:InvokeWorkflowFile.Arguments>
+                  <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Required Model Path</InArgument>
+                </ui:InvokeWorkflowFile.Arguments>
+              </ui:InvokeWorkflowFile>
+            </Sequence>
+            <Sequence DisplayName="Enter Model name, Model description , model type and Save" sap2010:WorkflowViewState.IdRef="Sequence_20">
+              <ui:TypeInto Activate="True" ClickBeforeTyping="True" DelayBefore="500" DelayBetweenKeys="100" DelayMS="500" DisplayName="Type Model Name" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_5" SendWindowMessages="False" SimulateType="False" Text="[modelName+randomNo]">
+                <ui:TypeInto.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="18847bd8ed9524512fa2051ecc32b06f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='componentName' tag='INPUT' parentid='app' title='MOSAIC' type='text' idx='1' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:TypeInto.Target>
+              </ui:TypeInto>
+              <ui:TypeInto Activate="True" ClickBeforeTyping="True" DelayBefore="500" DelayBetweenKeys="100" DelayMS="500" DisplayName="Type Model Description" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_6" SendWindowMessages="False" SimulateType="False" Text="[modelDescription+randomNo]">
+                <ui:TypeInto.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="384f16a006f4d55819f586d2cac72a6e" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TEXTAREA' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:TypeInto.Target>
+              </ui:TypeInto>
+              <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="500" DelayBefore="500" DisplayName="Select item 'SELECT'" sap2010:WorkflowViewState.IdRef="SelectItem_3" Item="ML With SparkMLlib">
+                <ui:SelectItem.Items>
+                  <scg:List x:TypeArguments="x:String" Capacity="4">
+                    <x:String>Select type</x:String>
+                    <x:String>ML With SparkR</x:String>
+                    <x:String>ML With SparkMLlib</x:String>
+                  </scg:List>
+                </ui:SelectItem.Items>
+                <ui:SelectItem.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="bbfd6fac512eec8c3e1d015ee94bfb12" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='SELECT' parentclass='ui-select' parentname='createCompnentForm' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:SelectItem.Target>
+              </ui:SelectItem>
+              <ui:WaitUiElementAppear DisplayName="element_GenerateFieldMapping" FoundElement="[element_GenerateFieldMapping]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_19" WaitActive="True" WaitVisible="True">
+                <ui:WaitUiElementAppear.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="14c39bdacb59009b153a82fd8d8668d3" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createCompnentForm' tag='BUTTON' class='btn btn-primary fa fa-exchange ng-scope' parentclass='col-sm-2 pad-zero row' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:WaitUiElementAppear.Target>
+              </ui:WaitUiElementAppear>
+              <ui:WaitUiElementAppear DisplayName="element_AlgorithmField" FoundElement="[element_AlgorithmField]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_20" WaitActive="True" WaitVisible="True">
+                <ui:WaitUiElementAppear.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="776cc7aae933fa21c215288a7efbb35e" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='componentName' tag='INPUT' parentclass='col-md-6' parentid='app' parentname='createCompnentForm' title='MOSAIC' type='text' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:WaitUiElementAppear.Target>
+              </ui:WaitUiElementAppear>
+              <ui:WaitUiElementAppear DisplayName="element_PredictedValue" FoundElement="[element_PredictedValue]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_21" WaitActive="True" WaitVisible="True">
+                <ui:WaitUiElementAppear.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="a573bb9d244913135a3c63aadc28548a" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='SELECT' class='dropdown-width' parentclass='ui-select mgNone' parentname='createCompnentForm' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:WaitUiElementAppear.Target>
+              </ui:WaitUiElementAppear>
+              <If Condition="[element_GenerateFieldMapping.IsVisible And element_AlgorithmField.IsVisible And element_PredictedValue.IsVisible]" sap2010:WorkflowViewState.IdRef="If_8">
+                <If.Then>
+                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_21">
+                    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="500" DisplayName="Click Generate field mapping" sap2010:WorkflowViewState.IdRef="Click_11" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                      <ui:Click.CursorPosition>
+                        <ui:CursorPosition Position="Center">
+                          <ui:CursorPosition.OffsetX>
+                            <InArgument x:TypeArguments="x:Int32" />
+                          </ui:CursorPosition.OffsetX>
+                          <ui:CursorPosition.OffsetY>
+                            <InArgument x:TypeArguments="x:Int32" />
+                          </ui:CursorPosition.OffsetY>
+                        </ui:CursorPosition>
+                      </ui:Click.CursorPosition>
+                      <ui:Click.Target>
+                        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_GenerateFieldMapping]" InformativeScreenshot="14c39bdacb59009b153a82fd8d8668d3" WaitForReady="INTERACTIVE" />
+                      </ui:Click.Target>
+                    </ui:Click>
+                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call Handle and Verify Message Box" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="DataSourcePage\HandleMessageBox.xaml">
+                      <ui:InvokeWorkflowFile.Arguments>
+                        <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Required path</InArgument>
+                      </ui:InvokeWorkflowFile.Arguments>
+                    </ui:InvokeWorkflowFile>
+                  </Sequence>
+                </If.Then>
+                <If.Else>
+                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Error" Message="[&quot;1.Generate field mapping : &quot; + element_GenerateFieldMapping.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;2. Algorithm : &quot; + element_AlgorithmField.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;3. Predicted Value : &quot; + element_PredictedValue.IsVisible.ToString]" />
+                </If.Else>
+              </If>
+              <ui:Click ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="1000" DisplayName="Click Save&amp;Exit" sap2010:WorkflowViewState.IdRef="Click_10" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                <ui:Click.CursorPosition>
+                  <ui:CursorPosition Position="Center">
+                    <ui:CursorPosition.OffsetX>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetX>
+                    <ui:CursorPosition.OffsetY>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetY>
+                  </ui:CursorPosition>
+                </ui:Click.CursorPosition>
+                <ui:Click.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fdbca6ecb05acdca5de3640572a62a5f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Save*' parentid='app' tag='BUTTON' class='btn btn-primary ng-scope' parentclass='modal-footer ng-scope' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:Click.Target>
+              </ui:Click>
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call Handle and Verify Message Box" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="DataSourcePage\HandleMessageBox.xaml">
+                <ui:InvokeWorkflowFile.Arguments>
+                  <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Required Model Path</InArgument>
+                </ui:InvokeWorkflowFile.Arguments>
+              </ui:InvokeWorkflowFile>
+              <ui:TypeInto Activate="True" ClickBeforeTyping="True" DelayBefore="500" DelayBetweenKeys="50" DelayMS="500" DisplayName="enter SparkMLlib path" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_7" SendWindowMessages="False" SimulateType="False" Text="[modelPath_SparkMLlib]">
+                <ui:TypeInto.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="bec900b1e5ecd5cb4882628a7dccf1c8" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='componentName' tag='INPUT' parentclass='col-sm-6' parentid='app' parentname='createCompnentForm' title='MOSAIC' type='text' idx='2' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:TypeInto.Target>
+              </ui:TypeInto>
+              <ui:Click ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="20000" DisplayName="Click Generate field mapping" sap2010:WorkflowViewState.IdRef="Click_12" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                <ui:Click.CursorPosition>
+                  <ui:CursorPosition Position="Center">
+                    <ui:CursorPosition.OffsetX>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetX>
+                    <ui:CursorPosition.OffsetY>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetY>
+                  </ui:CursorPosition>
+                </ui:Click.CursorPosition>
+                <ui:Click.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_GenerateFieldMapping]" InformativeScreenshot="14c39bdacb59009b153a82fd8d8668d3" WaitForReady="INTERACTIVE" />
+                </ui:Click.Target>
+              </ui:Click>
+              <ui:GetValue ContinueOnError="{x:Null}" DisplayName="get_Algorithm text" sap2010:WorkflowViewState.IdRef="GetValue_2">
+                <ui:GetValue.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_AlgorithmField]" WaitForReady="INTERACTIVE" />
+                </ui:GetValue.Target>
+                <ui:GetValue.Value>
+                  <OutArgument x:TypeArguments="ui:GenericValue">[algorithmValue]</OutArgument>
+                </ui:GetValue.Value>
+              </ui:GetValue>
+              <If Condition="[algorithmValue.ToString.Trim.Equals(&quot;DecisionTreeClassificationModel&quot;)]" DisplayName="verify Algorithm text" sap2010:WorkflowViewState.IdRef="If_9">
+                <If.Then>
+                  <ui:UiElementExists DisplayName="Element Exists 'TABLE'" Exists="[tablePresent]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
+                    <ui:UiElementExists.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="eef23451ea18f989c0b4d974ac2e4878" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='TABLE' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+                    </ui:UiElementExists.Target>
+                  </ui:UiElementExists>
+                </If.Then>
+                <If.Else>
+                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Error" Message="[&quot;Algorithm text is not as expected : &quot;+algorithmValue]" />
+                </If.Else>
+              </If>
+              <If Condition="[tablePresent.ToString.Equals(&quot;True&quot;)]" DisplayName="verify is Predicate table present" sap2010:WorkflowViewState.IdRef="If_10">
+                <If.Then>
+                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_24">
+                    <Sequence.Variables>
+                      <Variable x:TypeArguments="scg:IEnumerable(ui:UiElement)" Name="get_DataTypeList" />
+                    </Sequence.Variables>
+                    <ui:WaitUiElementAppear DisplayName="element_DataType" FoundElement="[element_DataType]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_23" WaitActive="False" WaitVisible="False">
+                      <ui:WaitUiElementAppear.Target>
+                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="56a5ac4e0793d58205b96af6bd9624c4" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;form&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;table&amp;gt;tbody&amp;gt;tr&amp;gt;td&amp;gt;span&amp;gt;select' parentid='app' tableRow='2' tag='SELECT' class='dropdown*' colName='Data type' parentclass='ui-select' parentname='createCompnentForm' tableCol='3' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                      </ui:WaitUiElementAppear.Target>
+                    </ui:WaitUiElementAppear>
+                    <If Condition="[element_DataType.IsVisible.ToString.Equals(&quot;True&quot;)]" sap2010:WorkflowViewState.IdRef="If_11">
+                      <If.Then>
+                        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_25">
+                          <ui:FindChildren Children="[get_DataTypeList]" DisplayName="Find children" Filter="&lt;webctrl /&gt;" sap2010:WorkflowViewState.IdRef="FindChildren_3" Scope="FIND_CHILDREN">
+                            <ui:FindChildren.Target>
+                              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_DataType]" WaitForReady="INTERACTIVE" />
+                            </ui:FindChildren.Target>
+                          </ui:FindChildren>
+                          <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="scg:IEnumerable(x:String)">[expected_DataTypeList]</OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="scg:IEnumerable(x:String)">[{"Select data type","STRING","INTEGER","LONG","DECIMAL","DATE","BOOLEAN","DOUBLE","TIMESTAMP"}]</InArgument>
+                            </Assign.Value>
+                          </Assign>
+                          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call Verify Drop Down" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_8" UnSafe="False" WorkflowFileName="FlowPage\Generic_VerifyDropdownList.xaml">
+                            <ui:InvokeWorkflowFile.Arguments>
+                              <InArgument x:TypeArguments="scg:IEnumerable(ui:UiElement)" x:Key="ListItems">[get_DataTypeList]</InArgument>
+                              <InArgument x:TypeArguments="scg:IEnumerable(x:String)" x:Key="Expected_DropDownList">[expected_DataTypeList]</InArgument>
+                            </ui:InvokeWorkflowFile.Arguments>
+                          </ui:InvokeWorkflowFile>
+                        </Sequence>
+                      </If.Then>
+                      <If.Else>
+                        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_16" Level="Error" Message="Data type drop down is not visible" />
+                      </If.Else>
+                    </If>
+                  </Sequence>
+                </If.Then>
+                <If.Else>
+                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_15" Level="Error" Message="Predicate table is not present" />
+                </If.Else>
+              </If>
+            </Sequence>
+          </Sequence>
+        </If.Then>
+      </If>
+    </Sequence>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="1397,106" />
+      <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="1397,68" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_2" sap:VirtualizedContainerService.HintSize="1397,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_5" sap:VirtualizedContainerService.HintSize="1397,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_6" sap:VirtualizedContainerService.HintSize="1397,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_7" sap:VirtualizedContainerService.HintSize="1397,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_3" sap:VirtualizedContainerService.HintSize="1397,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_4" sap:VirtualizedContainerService.HintSize="1397,106" />
+      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="FindChildren_1" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,550">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1397,698">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_2" sap:VirtualizedContainerService.HintSize="1397,68" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_8" sap:VirtualizedContainerService.HintSize="1397,106" />
+      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_13" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="GetValue_1" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_14" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_9" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_10" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_11" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_12" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_15" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_16" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="FindChildren_2" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="336,550">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_6" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="336,1582">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="1397,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_3" sap:VirtualizedContainerService.HintSize="1397,68">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_7" sap:VirtualizedContainerService.HintSize="1036,91" />
+      <sap2010:ViewStateData Id="Click_4" sap:VirtualizedContainerService.HintSize="1036,68" />
+      <sap2010:ViewStateData Id="Click_5" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="LogMessage_9" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Click_6" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="336,323">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_10" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="675,471">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="697,741">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_11" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="1036,889">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="1058,1252">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_8" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="1397,1400">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1419,3845">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_18" sap:VirtualizedContainerService.HintSize="1205,106" />
+      <sap2010:ViewStateData Id="Click_7" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_13" sap:VirtualizedContainerService.HintSize="1058,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TypeInto_2" sap:VirtualizedContainerService.HintSize="314,134" />
+      <sap2010:ViewStateData Id="Click_8" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_4" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="1058,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TypeInto_3" sap:VirtualizedContainerService.HintSize="314,134" />
+      <sap2010:ViewStateData Id="TypeInto_4" sap:VirtualizedContainerService.HintSize="314,134" />
+      <sap2010:ViewStateData Id="SelectItem_2" sap:VirtualizedContainerService.HintSize="314,134" />
+      <sap2010:ViewStateData Id="Click_9" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_19" sap:VirtualizedContainerService.HintSize="1058,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TypeInto_5" sap:VirtualizedContainerService.HintSize="1036,134" />
+      <sap2010:ViewStateData Id="TypeInto_6" sap:VirtualizedContainerService.HintSize="1036,134" />
+      <sap2010:ViewStateData Id="SelectItem_3" sap:VirtualizedContainerService.HintSize="1036,134" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_19" sap:VirtualizedContainerService.HintSize="1036,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_20" sap:VirtualizedContainerService.HintSize="1036,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_21" sap:VirtualizedContainerService.HintSize="1036,106" />
+      <sap2010:ViewStateData Id="Click_11" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_6" sap:VirtualizedContainerService.HintSize="314,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_21" sap:VirtualizedContainerService.HintSize="336,357">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_13" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_8" sap:VirtualizedContainerService.HintSize="1036,505" />
+      <sap2010:ViewStateData Id="Click_10" sap:VirtualizedContainerService.HintSize="1036,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_7" sap:VirtualizedContainerService.HintSize="1036,87" />
+      <sap2010:ViewStateData Id="TypeInto_7" sap:VirtualizedContainerService.HintSize="1036,134" />
+      <sap2010:ViewStateData Id="Click_12" sap:VirtualizedContainerService.HintSize="1036,106" />
+      <sap2010:ViewStateData Id="GetValue_2" sap:VirtualizedContainerService.HintSize="1036,68" />
+      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="LogMessage_14" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="1036,254" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_23" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="FindChildren_3" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_8" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_25" sap:VirtualizedContainerService.HintSize="336,419">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_16" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_11" sap:VirtualizedContainerService.HintSize="675,567" />
+      <sap2010:ViewStateData Id="Sequence_24" sap:VirtualizedContainerService.HintSize="697,837">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_15" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_10" sap:VirtualizedContainerService.HintSize="1036,985" />
+      <sap2010:ViewStateData Id="Sequence_20" sap:VirtualizedContainerService.HintSize="1058,3609">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_15" sap:VirtualizedContainerService.HintSize="1080,4006">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_7" sap:VirtualizedContainerService.HintSize="1205,4154">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="1419,4424">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="1441,8433">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="API_MLModelPage_1" sap:VirtualizedContainerService.HintSize="1481,8673" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
