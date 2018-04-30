@@ -1,0 +1,2212 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="UserManagement" this:UserManagement.UserStatus="Active" this:UserManagement.randomNo="[new Random().Next(1000,9999).ToString]"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:this="clr-namespace:"
+ xmlns:ui="http://schemas.uipath.com/workflow/activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="validationForUserManagement" Type="InArgument(x:Boolean)" />
+    <x:Property Name="functionalityForUserManagement" Type="InArgument(x:Boolean)" />
+    <x:Property Name="UserStatus" Type="InArgument(x:String)" />
+    <x:Property Name="Persona" Type="InArgument(x:String)" />
+    <x:Property Name="UserLockStatus" Type="InArgument(x:String)" />
+    <x:Property Name="functionalityForDeleteUser" Type="InArgument(x:Boolean)" />
+    <x:Property Name="EmailID" Type="OutArgument(x:String)" />
+    <x:Property Name="Password" Type="OutArgument(x:String)" />
+    <x:Property Name="GroupName" Type="InArgument(x:String)" />
+    <x:Property Name="SubGroupName" Type="InArgument(x:String)" />
+    <x:Property Name="RoleName" Type="InArgument(x:String)" />
+    <x:Property Name="randomNo" Type="InArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>UserManagement_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.Core</AssemblyReference>
+      <AssemblyReference>UiPath.Core.Activities</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="UserManagement" sap2010:WorkflowViewState.IdRef="Sequence_2">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="ui:UiElement" Name="element_ConfigureNewUserButton" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_FirstNameTextBox" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_LastNameTextBox" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_EmailIDTextBox" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_PasswordCheckbox" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_PasswordTextBox" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_UserStatusDropDown" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_UserStatusDropDownList" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_PersonaDropDown" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_PersonaDropDownList" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_UserLockStatusDropDown" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_UserLockStatusDropDownList" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_MaxiqSolutionCheckbox" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_SelectGroupDropDown" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_SelectGroupDropDownList" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_SelectSubGroupDropDown" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_SelectSubGroupDropDownList" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_SelectRoleDropDown" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_SelectRoleDropDownList" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_CreateButton" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_CancelButton" />
+      <Variable x:TypeArguments="x:String" Name="FirstName" />
+      <Variable x:TypeArguments="x:String" Name="LastName" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_GroupNameTextBox" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_SubGroupNameTextBox" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_RoleNameTextBox" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_FilterBox" />
+    </Sequence.Variables>
+    <Sequence DisplayName="Prerequesite" sap2010:WorkflowViewState.IdRef="Sequence_1">
+      <Sequence.Variables>
+        <Variable x:TypeArguments="ui:UiElement" Name="element_AdminTab" />
+        <Variable x:TypeArguments="ui:UiElement" Name="element_UsersTab" />
+        <Variable x:TypeArguments="ui:UiElement" Name="element_UserManagementTab" />
+      </Sequence.Variables>
+      <ui:WaitUiElementAppear DisplayName="element_AdminTab" FoundElement="[element_AdminTab]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_1" WaitActive="False" WaitVisible="False">
+        <ui:WaitUiElementAppear.Target>
+          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="0cd29f8228fafaec43ffcffa72089351" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Admin' tag='A' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+        </ui:WaitUiElementAppear.Target>
+      </ui:WaitUiElementAppear>
+      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+        <ui:InvokeWorkflowFile.Arguments>
+          <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_AdminTab]</InArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="elementName">element_AdminTab</InArgument>
+        </ui:InvokeWorkflowFile.Arguments>
+      </ui:InvokeWorkflowFile>
+      <ui:WaitUiElementAppear DisplayName="element_UsersTab" FoundElement="[element_UsersTab]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_2" WaitActive="False" WaitVisible="False">
+        <ui:WaitUiElementAppear.Target>
+          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="3d5580e73fc010d2c5bf02898166ce96" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='sidebar' tag='A' class='navigation-bar-border sidebar-element addCursor ' href='#/groupConfig' parentclass='sidebar-ul' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+        </ui:WaitUiElementAppear.Target>
+      </ui:WaitUiElementAppear>
+      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+        <ui:InvokeWorkflowFile.Arguments>
+          <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_UsersTab]</InArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="elementName">element_UsersTab</InArgument>
+        </ui:InvokeWorkflowFile.Arguments>
+      </ui:InvokeWorkflowFile>
+      <ui:WaitUiElementAppear DisplayName="element_UserManagementTab" FoundElement="[element_UserManagementTab]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_3" WaitActive="False" WaitVisible="False">
+        <ui:WaitUiElementAppear.Target>
+          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="cc943a8d9b0ae122baf0df8324967af0" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='A' href='#/userManagement' parentclass='padding-For-tab ng-scope' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+        </ui:WaitUiElementAppear.Target>
+      </ui:WaitUiElementAppear>
+      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+        <ui:InvokeWorkflowFile.Arguments>
+          <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_UserManagementTab]</InArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="elementName">element_UserManagementTab</InArgument>
+        </ui:InvokeWorkflowFile.Arguments>
+      </ui:InvokeWorkflowFile>
+    </Sequence>
+    <Sequence DisplayName="Generate Data" sap2010:WorkflowViewState.IdRef="Sequence_9">
+      <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:String">[FirstName]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:String">["TestFirstName_"+randomNo]</InArgument>
+        </Assign.Value>
+      </Assign>
+      <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:String">[LastName]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:String">["TestLastName_"+randomNo]</InArgument>
+        </Assign.Value>
+      </Assign>
+      <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:String">[EmailID]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:String">["TestEmailID"+randomNo+"@TestEmail.com"]</InArgument>
+        </Assign.Value>
+      </Assign>
+      <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:String">[Password]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:String">Newuser@12345678</InArgument>
+        </Assign.Value>
+      </Assign>
+    </Sequence>
+    <Sequence DisplayName="Validation For User Management" sap2010:WorkflowViewState.IdRef="Sequence_4">
+      <Sequence.Variables>
+        <Variable x:TypeArguments="ui:UiElement" Name="element_ConfigureNewUserPopUp" />
+        <Variable x:TypeArguments="x:Boolean" Name="is_element_ConfigureNewUserPopUpExist" />
+        <Variable x:TypeArguments="ui:UiElement" Name="element_ConfigureNewPopupHeader" />
+      </Sequence.Variables>
+      <If Condition="[validationForUserManagement]" DisplayName="Validation For User Management" sap2010:WorkflowViewState.IdRef="If_1">
+        <If.Then>
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+            <ui:WaitUiElementAppear DisplayName="element_ConfigureNewUserButton" FoundElement="[element_ConfigureNewUserButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_4" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="825c0b262aa1db26202800affaf1d1af" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='configureNewGroup' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_ConfigureNewUserButton]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewUserButton</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_ConfigureNewUserPopUp" FoundElement="[element_ConfigureNewUserPopUp]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_5" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="031920adb2128aecb6fbed06cc599d60" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='DIV' class='modal-content' parentclass='modal-dialog modal-lg' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_ConfigureNewUserPopUp]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewUserPopUp</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_ConfigureNewPopupHeader" FoundElement="[element_ConfigureNewPopupHeader]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_6" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="65e7f5c79904b6306a1a1036884bc9c4" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='H3' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_ConfigureNewPopupHeader]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewPopupHeader</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_FirstNameTextBox" FoundElement="[element_FirstNameTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_16" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="79ff49348cf98377f74869b8bc064a5f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='2' parentid='app' tag='INPUT' type='text' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_33" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_FirstNameTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_FirstNameTextBox</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_LastNameTextBox" FoundElement="[element_LastNameTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_17" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="8ee1880ec4f23698a9fc6247541bc1ed" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='3' parentid='app' tag='INPUT' type='text' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_34" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_LastNameTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_LastNameTextBox</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_EmailIDTextBox" FoundElement="[element_EmailIDTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_18" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="9e76fc2d8ee8e71c6573965a1256cff3" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl name='email' tag='INPUT' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_35" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_EmailIDTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_EmailIDTextBox</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_PasswordCheckbox" FoundElement="[element_PasswordCheckbox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_19" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="47df23970ebde7ce0b507160f9fb82a0" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='SPAN' parentclass='ui-checkbox' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_36" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_PasswordCheckbox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_PasswordCheckbox</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_37" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_PasswordCheckbox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_PasswordCheckbox</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_PasswordTextBox" FoundElement="[element_PasswordTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_20" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="b7aa6cb35f1d78fdfb4e912b3fb76bf6" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl name='userPwd' tag='INPUT' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_38" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_PasswordTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_PasswordTextBox</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_UserStatusDropDown" FoundElement="[element_UserStatusDropDown]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_22" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="cb30d7fa69bd900e3c0886c4b1594967" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='SPAN' parentclass='ui-select-match' idx='1' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_43" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_UserStatusDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_UserStatusDropDown</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_44" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_UserStatusDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_UserStatusDropDown</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_UserStatusDropDownList" FoundElement="[element_UserStatusDropDownList]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_23" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="1e6cefcdcbe174d815bb95f0224bffa1" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='LI' class='ui-select-choices-group' parentclass='ui-select-choices ui-select-choices-content dropdown-menu ng-scope' idx='1' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_45" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_UserStatusDropDownList]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_UserStatusDropDownLiset</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_46" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_ConfigureNewPopupHeader]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewPopupHeader</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_PersonaDropDown" FoundElement="[element_PersonaDropDown]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_24" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="9266a87a00ac2b5c60024e3c528c9f22" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='DIV' parentclass='ui-select-container ui-select-multiple ui-select-bootstrap dropdown form-control ng-pristine ng-valid' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_47" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_PersonaDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_PersonaDropDown</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_48" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_PersonaDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_PersonaDropDown</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_PersonaDropDownList" FoundElement="[element_PersonaDropDownList]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_25" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="fec78826033b7cb44472c0722beafe26" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='LI' class='ui-select-choices-group' parentclass='ui-select-choices ui-select-choices-content dropdown-menu ng-scope' parentname='createUser' idx='2' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_49" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_PersonaDropDownList]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_PersonaDropDownList</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_50" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_ConfigureNewPopupHeader]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewPopupHeader</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_UserLockStatusDropDown" FoundElement="[element_UserLockStatusDropDown]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_26" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="ad9105440a7c9e6105141b81d763a873" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='SPAN' parentclass='ui-select-match' idx='2' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_51" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_UserLockStatusDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_UserLockStatusDropDown</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_52" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_UserLockStatusDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_UserLockStatusDropDown</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_UserLockStatusDropDownList" FoundElement="[element_UserLockStatusDropDownList]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_27" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="a93d7c701d6df938edea0b29893aaa98" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='LI' class='ui-select-choices-group' parentclass='ui-select-choices ui-select-choices-content dropdown-menu ng-scope' idx='3' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_53" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_UserLockStatusDropDownList]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_UserLockStatusDropDownList</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_54" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_ConfigureNewPopupHeader]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewPopupHeader</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_MaxiqSolutionCheckbox" FoundElement="[element_MaxiqSolutionCheckbox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_28" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="1ac754f90f88d2539326302328110093" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='SPAN' parentclass='ui-checkbox ng-binding' idx='1' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_55" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_MaxiqSolutionCheckbox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_MaxiqSolutionCheckbox</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_56" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_MaxiqSolutionCheckbox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_MaxiqSolutionCheckbox</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_SelectGroupDropDown" FoundElement="[element_SelectGroupDropDown]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_29" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="cf8ec2caa925f143609edb18bf850880" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='DIV' parentclass='select-formatter ui-select-container ui-select-multiple ui-select-bootstrap dropdown form-control ng-pristine ng-animate ng-invalid-remove ng-valid-add ng-invalid-required-remove ng-invalid-remove-active ng-valid ng-valid-add-active ng-invalid-required-remove-active ng-valid-required' idx='1' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_57" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SelectGroupDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SelectGroupDropDown</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_58" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SelectGroupDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SelectGroupDropDown</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_SelectGroupDropDownList" FoundElement="[element_UserLockStatusDropDownList]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_30" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="42929e591efaf67cf031f63e5f91637d" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='LI' class='ui-select-choices-group' parentclass='ui-select-choices ui-select-choices-content dropdown-menu ng-scope' idx='4' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_59" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SelectGroupDropDownList]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SelectGroupDropDownList</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" DisplayName="Click on solution label" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="f848e9e875f5669ccd9b36e7d738c0ea" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Solutions' tag='LABEL' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:Click.Target>
+            </ui:Click>
+            <ui:WaitUiElementAppear DisplayName="element_SelectSubGroupDropDown" FoundElement="[element_SelectSubGroupDropDown]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_31" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="fa280c8dc667fe7d661171564914d360" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='DIV' parentclass='select-formatter ui-select-container ui-select-multiple ui-select-bootstrap dropdown form-control ng-pristine ng-animate ng-invalid-remove ng-valid-add ng-invalid-required-remove ng-invalid-remove-active ng-valid ng-valid-add-active ng-invalid-required-remove-active ng-valid-required' idx='2' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_61" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SelectSubGroupDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SelectSubGroupDropDown</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_62" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SelectSubGroupDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SelectSubGroupDropDown</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_SelectSubGroupDropDownList" FoundElement="[element_SelectSubGroupDropDownList]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_32" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="8d3a24cc939bf1af31abac2fda766cc0" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='LI' class='ui-select-choices-group' parentclass='ui-select-choices ui-select-choices-content dropdown-menu ng-scope' idx='5' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_63" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SelectSubGroupDropDownList]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SelectSubGroupDropDownList</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" DisplayName="Click on solution label" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="f848e9e875f5669ccd9b36e7d738c0ea" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Solutions' tag='LABEL' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:Click.Target>
+            </ui:Click>
+            <ui:WaitUiElementAppear DisplayName="element_SelectRoleDropDown" FoundElement="[element_SelectRoleDropDown]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_33" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="2338a39ea98b6cf29b4fbe45f149cec9" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='DIV' parentclass='select-formatter ui-select-container ui-select-multiple ui-select-bootstrap dropdown form-control ng-pristine ng-animate ng-invalid-remove ng-valid-add ng-invalid-required-remove ng-invalid-remove-active ng-valid ng-valid-add-active ng-invalid-required-remove-active ng-valid-required' idx='3' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_64" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SelectRoleDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SelectRoleDropDown</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_65" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SelectRoleDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SelectRoleDropDown</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_SelectRoleDropDownList" FoundElement="[element_SelectRoleDropDownList]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_34" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="db6eb4907febcca7c1ddee86f2a766d8" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='LI' class='ui-select-choices-group' parentclass='ui-select-choices ui-select-choices-content dropdown-menu ng-scope' parentid='app' parentname='createUser' idx='6' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_66" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SelectRoleDropDownList]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SelectRoleDropDownList</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" DisplayName="Click on solution label" sap2010:WorkflowViewState.IdRef="Click_3" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="f848e9e875f5669ccd9b36e7d738c0ea" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Solutions' tag='LABEL' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:Click.Target>
+            </ui:Click>
+            <ui:WaitUiElementAppear DisplayName="element_CreateButton" FoundElement="[element_CreateButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_35" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="990077a408e9e5e047f94cbab099dde2" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='BUTTON' type='submit' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_67" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_CreateButton]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_CreateButton</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_CancelButton" FoundElement="[element_CancelButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_36" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="0ddde43403b1dab6fe02c93b22a0c691" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' parentid='app' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_68" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_CancelButton]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_CancelButton</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+          </Sequence>
+        </If.Then>
+        <If.Else>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Trace" Message="[&quot;Validation for user management condition - &quot; +validationForUserManagement.ToString]" />
+        </If.Else>
+      </If>
+    </Sequence>
+    <Sequence DisplayName="Funtionality For User Management" sap2010:WorkflowViewState.IdRef="Sequence_6">
+      <Sequence.Variables>
+        <Variable x:TypeArguments="ui:UiElement" Name="element_ConfigureNewUserPopUp" />
+        <Variable x:TypeArguments="x:Boolean" Name="is_element_ConfigureNewUserPopUpExist" />
+        <Variable x:TypeArguments="ui:UiElement" Name="element_ConfigureNewPopupHeader" />
+      </Sequence.Variables>
+      <If Condition="[functionalityForUserManagement]" DisplayName="Funtionality For User Management" sap2010:WorkflowViewState.IdRef="If_2">
+        <If.Then>
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+            <ui:WaitUiElementAppear DisplayName="element_ConfigureNewUserButton" FoundElement="[element_ConfigureNewUserButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_37" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="825c0b262aa1db26202800affaf1d1af" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='configureNewGroup' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_69" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_ConfigureNewUserButton]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewUserButton</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_FirstNameTextBox" FoundElement="[element_FirstNameTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_40" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="79ff49348cf98377f74869b8bc064a5f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='2' parentid='app' tag='INPUT' type='text' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_EnterText_InTextBox" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_103" UnSafe="False" WorkflowFileName="Generic\EnterText_InTextBox.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_FirstNameTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_FirstNameTextBox</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[FirstName]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_LastNameTextBox" FoundElement="[element_LastNameTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_41" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="8ee1880ec4f23698a9fc6247541bc1ed" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='3' parentid='app' tag='INPUT' type='text' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_EnterText_InTextBox" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_104" UnSafe="False" WorkflowFileName="Generic\EnterText_InTextBox.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_LastNameTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_LastNameTextBox</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[LastName]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_EmailIDTextBox" FoundElement="[element_EmailIDTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_42" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="9e76fc2d8ee8e71c6573965a1256cff3" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl name='email' tag='INPUT' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_EnterText_InTextBox" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_105" UnSafe="False" WorkflowFileName="Generic\EnterText_InTextBox.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_EmailIDTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_EmailIDTextBox</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[EmailID]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_PasswordCheckbox" FoundElement="[element_PasswordCheckbox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_43" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="47df23970ebde7ce0b507160f9fb82a0" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='SPAN' parentclass='ui-checkbox' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_76" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_PasswordCheckbox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_PasswordCheckbox</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_PasswordTextBox" FoundElement="[element_PasswordTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_44" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="b7aa6cb35f1d78fdfb4e912b3fb76bf6" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl name='userPwd' tag='INPUT' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_EnterText_InTextBox" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_106" UnSafe="False" WorkflowFileName="Generic\EnterText_InTextBox.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_PasswordTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_PasswordTextBox</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[Password]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_UserStatusDropDown" FoundElement="[element_UserStatusDropDown]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_45" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="cb30d7fa69bd900e3c0886c4b1594967" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='SPAN' parentclass='ui-select-match' idx='1' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_79" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_UserStatusDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_UserStatusDropDown</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_UserStatusDropDownList" FoundElement="[element_UserStatusDropDownList]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_46" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="1e6cefcdcbe174d815bb95f0224bffa1" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='LI' class='ui-select-choices-group' parentclass='ui-select-choices ui-select-choices-content dropdown-menu ng-scope' idx='1' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_SelectValue_FromDropDownList" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_107" UnSafe="False" WorkflowFileName="Generic\SelectValue_FromDropDownList.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element_DropDown">[element_UserStatusDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="dropDownName">element_UserStatusDropDown</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element_DropDownList">[element_UserStatusDropDownList]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="valueToSelect">[UserStatus]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_PersonaDropDown" FoundElement="[element_PersonaDropDown]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_47" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="9266a87a00ac2b5c60024e3c528c9f22" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='DIV' parentclass='ui-select-container ui-select-multiple ui-select-bootstrap dropdown form-control ng-pristine ng-valid' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_83" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_PersonaDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_PersonaDropDown</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_PersonaDropDownList" FoundElement="[element_PersonaDropDownList]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_48" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="fec78826033b7cb44472c0722beafe26" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='LI' class='ui-select-choices-group' parentclass='ui-select-choices ui-select-choices-content dropdown-menu ng-scope' parentname='createUser' idx='2' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_SelectValue_FromDropDownList" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_108" UnSafe="False" WorkflowFileName="Generic\SelectValue_FromDropDownList.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element_DropDown">[element_PersonaDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="dropDownName">element_PersonaDropDown</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element_DropDownList">[element_PersonaDropDownList]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="valueToSelect">[Persona]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_UserLockStatusDropDown" FoundElement="[element_UserLockStatusDropDown]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_49" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="ad9105440a7c9e6105141b81d763a873" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='SPAN' parentclass='ui-select-match' idx='2' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_87" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_UserLockStatusDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_UserLockStatusDropDown</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_UserLockStatusDropDownList" FoundElement="[element_UserLockStatusDropDownList]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_50" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="a93d7c701d6df938edea0b29893aaa98" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='LI' class='ui-select-choices-group' parentclass='ui-select-choices ui-select-choices-content dropdown-menu ng-scope' idx='3' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_SelectValue_FromDropDownList" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_109" UnSafe="False" WorkflowFileName="Generic\SelectValue_FromDropDownList.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element_DropDown">[element_UserLockStatusDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="dropDownName">element_UserLockStatusDropDown</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element_DropDownList">[element_UserLockStatusDropDownList]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="valueToSelect">[UserLockStatus]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_MaxiqSolutionCheckbox" FoundElement="[element_MaxiqSolutionCheckbox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_51" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="1ac754f90f88d2539326302328110093" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='SPAN' parentclass='ui-checkbox ng-binding' idx='1' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_91" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_MaxiqSolutionCheckbox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_MaxiqSolutionCheckbox</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_SelectGroupDropDown" FoundElement="[element_SelectGroupDropDown]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_52" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="cf8ec2caa925f143609edb18bf850880" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='DIV' parentclass='select-formatter ui-select-container ui-select-multiple ui-select-bootstrap dropdown form-control ng-pristine ng-animate ng-invalid-remove ng-valid-add ng-invalid-required-remove ng-invalid-remove-active ng-valid ng-valid-add-active ng-invalid-required-remove-active ng-valid-required' idx='1' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_93" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SelectGroupDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SelectGroupDropDown</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_GroupNameTextBox" FoundElement="[element_GroupNameTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_60" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_EnterText_InTextBox" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_111" UnSafe="False" WorkflowFileName="Generic\EnterText_InTextBox.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_GroupNameTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_GroupNameTextBox</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[GroupName]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_SelectGroupDropDownList" FoundElement="[element_UserLockStatusDropDownList]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_53" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="42929e591efaf67cf031f63e5f91637d" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='LI' class='ui-select-choices-group' parentclass='ui-select-choices ui-select-choices-content dropdown-menu ng-scope' idx='4' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_SelectValue_FromDropDownList" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_110" UnSafe="False" WorkflowFileName="Generic\SelectValue_FromDropDownList.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element_DropDown">[element_SelectGroupDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="dropDownName">element_SelectGroupDropDown</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element_DropDownList">[element_SelectGroupDropDownList]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="valueToSelect">[GroupName]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_SelectSubGroupDropDown" FoundElement="[element_SelectSubGroupDropDown]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_54" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="fa280c8dc667fe7d661171564914d360" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='DIV' parentclass='select-formatter ui-select-container ui-select-multiple ui-select-bootstrap dropdown form-control ng-pristine ng-animate ng-invalid-remove ng-valid-add ng-invalid-required-remove ng-invalid-remove-active ng-valid ng-valid-add-active ng-invalid-required-remove-active ng-valid-required' idx='2' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_96" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SelectSubGroupDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SelectSubGroupDropDown</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_SubGroupNameTextBox" FoundElement="[element_SubGroupNameTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_61" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_EnterText_InTextBox" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_112" UnSafe="False" WorkflowFileName="Generic\EnterText_InTextBox.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SubGroupNameTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SubGroupNameTextBox</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[SubGroupName]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_SelectSubGroupDropDownList" FoundElement="[element_SelectSubGroupDropDownList]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_55" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="8d3a24cc939bf1af31abac2fda766cc0" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='LI' class='ui-select-choices-group' parentclass='ui-select-choices ui-select-choices-content dropdown-menu ng-scope' idx='5' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_SelectValue_FromDropDownList" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_113" UnSafe="False" WorkflowFileName="Generic\SelectValue_FromDropDownList.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element_DropDown">[element_SelectSubGroupDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="dropDownName">element_SelectSubGroupDropDown</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element_DropDownList">[element_SelectSubGroupDropDownList]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="valueToSelect">[SubGroupName]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_SelectRoleDropDown" FoundElement="[element_SelectRoleDropDown]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_56" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="2338a39ea98b6cf29b4fbe45f149cec9" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' parentname='createUser' tag='DIV' parentclass='select-formatter ui-select-container ui-select-multiple ui-select-bootstrap dropdown form-control ng-pristine ng-animate ng-invalid-remove ng-valid-add ng-invalid-required-remove ng-invalid-remove-active ng-valid ng-valid-add-active ng-invalid-required-remove-active ng-valid-required' idx='3' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_99" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SelectRoleDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SelectRoleDropDown</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_RoleNameTextBox" FoundElement="[element_RoleNameTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_62" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_EnterText_InTextBox" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_114" UnSafe="False" WorkflowFileName="Generic\EnterText_InTextBox.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_RoleNameTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_RoleNameTextBox</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[RoleName]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_SelectRoleDropDownList" FoundElement="[element_SelectRoleDropDownList]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_57" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="db6eb4907febcca7c1ddee86f2a766d8" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='LI' class='ui-select-choices-group' parentclass='ui-select-choices ui-select-choices-content dropdown-menu ng-scope' parentid='app' parentname='createUser' idx='6' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_SelectValue_FromDropDownList" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_115" UnSafe="False" WorkflowFileName="Generic\SelectValue_FromDropDownList.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element_DropDown">[element_SelectRoleDropDown]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="dropDownName">element_SelectRoleDropDown</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element_DropDownList">[element_SelectRoleDropDownList]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="valueToSelect">[RoleName]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_CreateButton" FoundElement="[element_CreateButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_58" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="990077a408e9e5e047f94cbab099dde2" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='BUTTON' type='submit' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Click_OnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_116" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_CreateButton]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_CreateButton</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Verify_Message" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_117" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">User has been created successfully</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_FilterBox" FoundElement="[element_FilterBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_63" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="8948f3541c846c4763ff52a441a76f12" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' parentid='top' tag='INPUT' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_EnterText_InTextBox" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_118" UnSafe="False" WorkflowFileName="Generic\EnterText_InTextBox.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_FilterBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_FilterBox</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[RoleName]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+          </Sequence>
+        </If.Then>
+        <If.Else>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Trace" Message="[&quot;Functionality for user management condition - &quot; +functionalityForUserManagement.ToString]" />
+        </If.Else>
+      </If>
+    </Sequence>
+    <Sequence DisplayName="Delete User" sap2010:WorkflowViewState.IdRef="Sequence_11">
+      <Sequence.Variables>
+        <Variable x:TypeArguments="ui:UiElement" Name="element_DeleteConfirmationPopup" />
+        <Variable x:TypeArguments="ui:UiElement" Name="element_DeleteTextBox" />
+        <Variable x:TypeArguments="ui:UiElement" Name="element_OkayButtonDeletePopup" />
+        <Variable x:TypeArguments="ui:UiElement" Name="element_CancelButtonDeletePopup" />
+        <Variable x:TypeArguments="x:Boolean" Name="is_element_DeleteConfirmationPopupExist" />
+        <Variable x:TypeArguments="ui:UiElement" Name="element_DeleteUserButton" />
+      </Sequence.Variables>
+      <If Condition="[functionalityForDeleteUser]" DisplayName="Delete User" sap2010:WorkflowViewState.IdRef="If_4">
+        <If.Then>
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_10">
+            <ui:WaitUiElementAppear DisplayName="element_FilterBox" FoundElement="[element_FilterBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_64" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="8948f3541c846c4763ff52a441a76f12" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' parentid='top' tag='INPUT' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_EnterText_InTextBox" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_119" UnSafe="False" WorkflowFileName="Generic\EnterText_InTextBox.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_FilterBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_FilterBox</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[RoleName]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_DeleteUserButton" FoundElement="[element_DeleteUserButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_65" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="e8c62370e1317262de7bc02349e93a6e" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='selectdsclick' tag='LI' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_120" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_DeleteUserButton]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_DeleteGroupButton</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_DeleteConfirmationPopup" FoundElement="[element_DeleteConfirmationPopup]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_66" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="5e6f08644237b8c35ef6295afc2749b1" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='DIV' class='modal-content' parentclass='modal-dialog' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_121" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_DeleteConfirmationPopup]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_DeleteConfirmationPopup</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_DeleteTextBox" FoundElement="[element_DeleteTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_67" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="af710118fe21f8a3c9ca4f7d57eea5ec" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='INPUT' type='text' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_122" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_DeleteTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_DeleteTextBox</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_OkayButtonDeletePopup" FoundElement="[element_OkayButtonDeletePopup]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_68" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="3f33bf6438ea27acf2cad03434882cf5" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Okay' parentid='app' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_123" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_OkayButtonDeletePopup]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_OkayButtonDeletePopup</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_CancelButtonDeletePopup" FoundElement="[element_CancelButtonDeletePopup]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_69" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="535e3886e4ed5032d29023d17fcd75ad" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' parentid='app' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_124" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_CancelButtonDeletePopup]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_CancelButtonDeletePopup</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_125" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_CancelButtonDeletePopup]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_CancelButtonDeletePopup</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:UiElementExists DisplayName="is_element_DeleteConfirmationPopupExist" Exists="[is_element_DeleteConfirmationPopupExist]" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
+              <ui:UiElementExists.Target>
+                <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[element_DeleteConfirmationPopup]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:UiElementExists.Target>
+            </ui:UiElementExists>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_126" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="condition">False</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_DeleteConfirmationPopup]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_DeleteConfirmationPopup</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition">[is_element_DeleteConfirmationPopupExist]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_127" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_DeleteUserButton]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_DeleteGroupButton</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_DeleteTextBox" FoundElement="[element_DeleteTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_70" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="fbd49a6fc062898dd98dd20da44fb063" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='INPUT' type='text' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_EnterText_InTextBox" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_128" UnSafe="False" WorkflowFileName="Generic\EnterText_InTextBox.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_DeleteTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_DeleteTextBox</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">Delete</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:WaitUiElementAppear DisplayName="element_OkayButtonDeletePopup" FoundElement="[element_OkayButtonDeletePopup]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_71" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="67169458b5e76d2e038e1a566861f314" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Okay' parentid='app' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_129" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_OkayButtonDeletePopup]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_OkayButtonDeletePopup</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Verify_Message" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_130" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">User has been deleted successfully</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+          </Sequence>
+        </If.Then>
+        <If.Else>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Trace" Message="[&quot;Delete user functionality is - &quot; +functionalityForDeleteUser.ToString]" />
+        </If.Else>
+      </If>
+    </Sequence>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_2" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_3" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_4" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_4" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_5" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_6" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_6" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_16" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_33" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_17" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_34" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_18" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_35" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_19" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_36" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_37" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_20" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_38" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_22" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_43" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_44" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_23" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_45" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_46" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_24" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_47" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_48" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_25" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_49" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_50" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_26" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_51" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_52" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_27" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_53" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_54" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_28" sap:VirtualizedContainerService.HintSize="314,106">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_55" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_56" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_29" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_57" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_58" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_30" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_59" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_31" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_61" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_62" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_32" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_63" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_2" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_33" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_64" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_65" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_34" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_66" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_3" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_35" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_67" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_36" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_68" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,208" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_37" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_69" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_40" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_103" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_41" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_104" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_42" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_105" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_43" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_76" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_44" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_106" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_45" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_79" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_46" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_107" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_47" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_83" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_48" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_108" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_49" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_87" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_50" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_109" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_51" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_91" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_52" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_93" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_60" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_111" sap:VirtualizedContainerService.HintSize="314,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_53" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_110" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_54" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_96" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_61" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_112" sap:VirtualizedContainerService.HintSize="314,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_55" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_113" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_56" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_99" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_62" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_114" sap:VirtualizedContainerService.HintSize="314,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_57" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_115" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_58" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_116" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_117" sap:VirtualizedContainerService.HintSize="314,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_63" sap:VirtualizedContainerService.HintSize="314,106">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_118" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,208" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_64" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_119" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_65" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_120" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_66" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_121" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_67" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_122" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_68" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_123" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_69" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_124" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_125" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_126" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_127" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_70" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_128" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_71" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_129" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_130" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="464,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,539">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="UserManagement_1" sap:VirtualizedContainerService.HintSize="262,699" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

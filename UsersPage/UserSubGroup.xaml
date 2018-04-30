@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="UserGroup" this:UserGroup.randomNo="[new Random().Next(1000,9999).ToString]" this:UserGroup.validationForUserGroup="True" this:UserGroup.functionalityForUserGroup="True" this:UserGroup.deleteUserGroup="True" this:UserGroup.SolutionName="Maxiq" this:UserGroup.loggedInUsersName="Suyog Talathi"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="UserSubGroup" this:UserSubGroup.randomNo="[new Random().Next(1000,9999).ToString]" this:UserSubGroup.SolutionName="Maxiq" this:UserSubGroup.loggedInUsersName="Suyog Talathi" this:UserSubGroup.validationForUserSubGroup="True" this:UserSubGroup.functionalityForUserSubGroup="True" this:UserSubGroup.deleteUserSubGroup="True"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -13,13 +13,13 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="randomNo" Type="InArgument(x:String)" />
-    <x:Property Name="validationForUserGroup" Type="InArgument(x:Boolean)" />
-    <x:Property Name="functionalityForUserGroup" Type="InArgument(x:Boolean)" />
-    <x:Property Name="updateFunctionalityForUserGroup" Type="InArgument(x:Boolean)" />
-    <x:Property Name="deleteUserGroup" Type="InArgument(x:Boolean)" />
     <x:Property Name="SolutionName" Type="InArgument(x:String)" />
-    <x:Property Name="GroupName" Type="InArgument(x:String)" />
     <x:Property Name="loggedInUsersName" Type="InArgument(x:String)" />
+    <x:Property Name="validationForUserSubGroup" Type="InArgument(x:Boolean)" />
+    <x:Property Name="functionalityForUserSubGroup" Type="InArgument(x:Boolean)" />
+    <x:Property Name="updateFunctionalityForUserSubGroup" Type="InArgument(x:Boolean)" />
+    <x:Property Name="deleteUserSubGroup" Type="InArgument(x:Boolean)" />
+    <x:Property Name="SubGroupName" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -48,6 +48,7 @@
       <x:String>UiPath.Core</x:String>
       <x:String>UiPath.Core.Activities</x:String>
       <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Xml.Serialization</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -70,13 +71,14 @@
       <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
       <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="UserGroup" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="UserSubGroup" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="ui:UiElement" Name="element_ConfigureNewGroupButton" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_ConfigureNewSubGroupButton" />
       <Variable x:TypeArguments="ui:UiElement" Name="element_SolutionNameDropDown" />
-      <Variable x:TypeArguments="ui:UiElement" Name="element_GroupNameTextBox" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_SubGroupNameTextBox" />
       <Variable x:TypeArguments="ui:UiElement" Name="element_SolutionNameTextBox" />
       <Variable x:TypeArguments="ui:UiElement" Name="element_DescriptionTextBox" />
       <Variable x:TypeArguments="ui:UiElement" Name="element_SolutionDropDwonList" />
@@ -84,7 +86,7 @@
       <Variable x:TypeArguments="ui:UiElement" Name="element_CancelButton" />
       <Variable x:TypeArguments="x:String" Default="[&quot;TestDescription_&quot;+randomNo]" Name="Description" />
       <Variable x:TypeArguments="ui:UiElement" Name="element_FilterBox" />
-      <Variable x:TypeArguments="sd:DataTable" Default="[New System.Data.DataTable]" Name="ExtractDataTable_ForAddedGroup" />
+      <Variable x:TypeArguments="sd:DataTable" Default="[New System.Data.DataTable]" Name="ExtractDataTable_ForAddedSubGroup" />
       <Variable x:TypeArguments="ui:UiElement" Name="element_ConfigureNewPopupHeader" />
     </Sequence.Variables>
     <Sequence DisplayName="Prerequesite" sap2010:WorkflowViewState.IdRef="Sequence_4">
@@ -127,26 +129,26 @@
         </ui:InvokeWorkflowFile.Arguments>
       </ui:InvokeWorkflowFile>
     </Sequence>
-    <Sequence DisplayName="Validation For User Group" sap2010:WorkflowViewState.IdRef="Sequence_2">
+    <Sequence DisplayName="Validation For User Sub Group" sap2010:WorkflowViewState.IdRef="Sequence_2">
       <Sequence.Variables>
-        <Variable x:TypeArguments="ui:UiElement" Name="element_ConfigureNewGroupPopUp" />
-        <Variable x:TypeArguments="x:Boolean" Name="is_element_ConfigureNewGroupPopUpExist" />
+        <Variable x:TypeArguments="ui:UiElement" Name="element_ConfigureNewSubGroupPopUp" />
+        <Variable x:TypeArguments="x:Boolean" Name="is_element_ConfigureNewSubGroupPopUpExist" />
       </Sequence.Variables>
-      <If Condition="[validationForUserGroup]" DisplayName="Validaton For User Group" sap2010:WorkflowViewState.IdRef="If_2">
+      <If Condition="[validationForUserSubGroup]" DisplayName="Validaton For User Sub Group" sap2010:WorkflowViewState.IdRef="If_2">
         <If.Then>
           <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
-            <ui:WaitUiElementAppear DisplayName="element_ConfigureNewGroupButton" FoundElement="[element_ConfigureNewGroupButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_4" WaitActive="False" WaitVisible="False">
+            <ui:WaitUiElementAppear DisplayName="element_ConfigureNewSubGroupButton" FoundElement="[element_ConfigureNewSubGroupButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_4" WaitActive="False" WaitVisible="False">
               <ui:WaitUiElementAppear.Target>
                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="fe9f71e58f8653b4b606190800544e69" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='configureNewGroup' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
               </ui:WaitUiElementAppear.Target>
             </ui:WaitUiElementAppear>
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
               <ui:InvokeWorkflowFile.Arguments>
-                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_ConfigureNewGroupButton]</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewGroupButton</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_ConfigureNewSubGroupButton]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewSubGroupPopUp</InArgument>
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
-            <ui:WaitUiElementAppear DisplayName="element_ConfigureNewGroupPopUp" FoundElement="[element_ConfigureNewGroupPopUp]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_5" WaitActive="False" WaitVisible="False">
+            <ui:WaitUiElementAppear DisplayName="element_ConfigureNewSubGroupPopUp" FoundElement="[element_ConfigureNewSubGroupPopUp]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_5" WaitActive="False" WaitVisible="False">
               <ui:WaitUiElementAppear.Target>
                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="18bf035416c45515e20a7392996a267c" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='DIV' class='modal-content' parentclass='modal-dialog' /&gt;" WaitForReady="INTERACTIVE" />
               </ui:WaitUiElementAppear.Target>
@@ -154,8 +156,8 @@
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
               <ui:InvokeWorkflowFile.Arguments>
                 <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
-                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_ConfigureNewGroupPopUp]</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewGroupPopUp</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_ConfigureNewSubGroupPopUp]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewSubGroupPopUp</InArgument>
                 <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
@@ -223,7 +225,7 @@
                 <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewPopupHeader</InArgument>
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
-            <ui:WaitUiElementAppear DisplayName="element_GroupNameTextBox" FoundElement="[element_GroupNameTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_7" WaitActive="False" WaitVisible="False">
+            <ui:WaitUiElementAppear DisplayName="element_SubGroupNameTextBox" FoundElement="[element_SubGroupNameTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_7" WaitActive="False" WaitVisible="False">
               <ui:WaitUiElementAppear.Target>
                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="9352f94433534bfee4e3225f362a411e" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='INPUT' type='text' parentname='createGroup' idx='3' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
               </ui:WaitUiElementAppear.Target>
@@ -231,8 +233,8 @@
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
               <ui:InvokeWorkflowFile.Arguments>
                 <InArgument x:TypeArguments="x:Boolean" x:Key="condition">True</InArgument>
-                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_GroupNameTextBox]</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_GroupNameTextBox</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SubGroupNameTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SubGroupNameTextBox</InArgument>
                 <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition" />
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
@@ -306,17 +308,17 @@
             </ui:InvokeWorkflowFile>
             <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
               <Assign.To>
-                <OutArgument x:TypeArguments="x:String">[GroupName]</OutArgument>
+                <OutArgument x:TypeArguments="x:String">[SubGroupName]</OutArgument>
               </Assign.To>
               <Assign.Value>
-                <InArgument x:TypeArguments="x:String">["TestGroup_"+randomNo]</InArgument>
+                <InArgument x:TypeArguments="x:String">["TestSubGroup_"+randomNo]</InArgument>
               </Assign.Value>
             </Assign>
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_EnterText_InTextBox" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_14" UnSafe="False" WorkflowFileName="Generic\EnterText_InTextBox.xaml">
               <ui:InvokeWorkflowFile.Arguments>
-                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_GroupNameTextBox]</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_GroupNameTextBox</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[GroupName]</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SubGroupNameTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SubGroupNameTextBox</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[SubGroupName]</InArgument>
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_31" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
@@ -354,39 +356,39 @@
                 <InArgument x:TypeArguments="x:String" x:Key="elementName">element_CancelButton</InArgument>
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
-            <ui:UiElementExists DisplayName="is_element_ConfigureNewGroupPopUpExist" Exists="[is_element_ConfigureNewGroupPopUpExist]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
+            <ui:UiElementExists DisplayName="is_element_ConfigureNewSubGroupPopUpExist" Exists="[is_element_ConfigureNewSubGroupPopUpExist]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
               <ui:UiElementExists.Target>
-                <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[element_ConfigureNewGroupPopUp]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+                <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[element_ConfigureNewSubGroupPopUp]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
               </ui:UiElementExists.Target>
             </ui:UiElementExists>
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_VerifyElement_OnPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_22" UnSafe="False" WorkflowFileName="Generic\VerifyElement_OnPage.xaml">
               <ui:InvokeWorkflowFile.Arguments>
                 <InArgument x:TypeArguments="x:Boolean" x:Key="condition">False</InArgument>
-                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_ConfigureNewGroupPopUp]</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewGroupPopUp</InArgument>
-                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition">[is_element_ConfigureNewGroupPopUpExist]</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_ConfigureNewSubGroupPopUp]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewSubGroupPopUp</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="isElementExistCondition">[is_element_ConfigureNewSubGroupPopUpExist]</InArgument>
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
           </Sequence>
         </If.Then>
         <If.Else>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Trace" Message="[&quot;Validation for user group condition - &quot; +validationForUserGroup.ToString]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Trace" Message="[&quot;Validation for user sub group condition - &quot; +validationForUserSubGroup.ToString]" />
         </If.Else>
       </If>
     </Sequence>
-    <Sequence DisplayName="Functionality For Group" sap2010:WorkflowViewState.IdRef="Sequence_9">
-      <If Condition="[functionalityForUserGroup]" DisplayName="Functionality For Group" sap2010:WorkflowViewState.IdRef="If_4">
+    <Sequence DisplayName="Functionality For Sub Group" sap2010:WorkflowViewState.IdRef="Sequence_9">
+      <If Condition="[functionalityForUserSubGroup]" DisplayName="Functionality For Sub Group" sap2010:WorkflowViewState.IdRef="If_4">
         <If.Then>
           <Sequence sap2010:WorkflowViewState.IdRef="Sequence_10">
-            <ui:WaitUiElementAppear DisplayName="element_ConfigureNewGroupButton" FoundElement="[element_ConfigureNewGroupButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_21" WaitActive="False" WaitVisible="False">
+            <ui:WaitUiElementAppear DisplayName="element_ConfigureNewSubGroupButton" FoundElement="[element_ConfigureNewSubGroupButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_21" WaitActive="False" WaitVisible="False">
               <ui:WaitUiElementAppear.Target>
                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="fe9f71e58f8653b4b606190800544e69" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='configureNewGroup' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
               </ui:WaitUiElementAppear.Target>
             </ui:WaitUiElementAppear>
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_40" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
               <ui:InvokeWorkflowFile.Arguments>
-                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_ConfigureNewGroupButton]</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewGroupButton</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_ConfigureNewSubGroupButton]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_ConfigureNewSubGroupButton</InArgument>
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
             <ui:WaitUiElementAppear DisplayName="element_SolutionNameDropDown" FoundElement="[element_SolutionNameDropDown]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_24" WaitActive="False" WaitVisible="False">
@@ -423,17 +425,17 @@
                 <InArgument x:TypeArguments="x:String" x:Key="valueToSelect">[SolutionName]</InArgument>
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
-            <ui:WaitUiElementAppear DisplayName="element_GroupNameTextBox" FoundElement="[element_GroupNameTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_35" WaitActive="False" WaitVisible="False">
+            <ui:WaitUiElementAppear DisplayName="element_SubGroupNameTextBox" FoundElement="[element_SubGroupNameTextBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_35" WaitActive="False" WaitVisible="False">
               <ui:WaitUiElementAppear.Target>
                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="0621a77ec62bf7d098d519b094dfe4ab" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='INPUT' type='text' idx='3' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
               </ui:WaitUiElementAppear.Target>
             </ui:WaitUiElementAppear>
             <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
               <Assign.To>
-                <OutArgument x:TypeArguments="x:String">[GroupName]</OutArgument>
+                <OutArgument x:TypeArguments="x:String">[SubGroupName]</OutArgument>
               </Assign.To>
               <Assign.Value>
-                <InArgument x:TypeArguments="x:String">["TestGroup-"+randomNo]</InArgument>
+                <InArgument x:TypeArguments="x:String">["TestSubGroup-"+randomNo]</InArgument>
               </Assign.Value>
             </Assign>
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_EnterText_InTextBox" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_60" UnSafe="False" WorkflowFileName="Generic\EnterText_InTextBox.xaml">
@@ -445,20 +447,15 @@
             </ui:InvokeWorkflowFile>
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_EnterText_InTextBox" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_57" UnSafe="False" WorkflowFileName="Generic\EnterText_InTextBox.xaml">
               <ui:InvokeWorkflowFile.Arguments>
-                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_GroupNameTextBox]</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_GroupNameTextBox</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[GroupName]</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_SubGroupNameTextBox]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_SubGroupNameTextBox</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[SubGroupName]</InArgument>
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_61" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
               <ui:InvokeWorkflowFile.Arguments>
                 <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_CreateButton]</InArgument>
                 <InArgument x:TypeArguments="x:String" x:Key="elementName">element_CreateButton</InArgument>
-              </ui:InvokeWorkflowFile.Arguments>
-            </ui:InvokeWorkflowFile>
-            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Verify_Message" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_63" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
-              <ui:InvokeWorkflowFile.Arguments>
-                <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Group has been created successfully</InArgument>
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Verify_Message" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_65" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
@@ -475,7 +472,7 @@
               <ui:InvokeWorkflowFile.Arguments>
                 <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_FilterBox]</InArgument>
                 <InArgument x:TypeArguments="x:String" x:Key="elementName">element_FilterBox</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[GroupName]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[SubGroupName]</InArgument>
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
             <Sequence DisplayName="Data scraping for added group" sap2010:WorkflowViewState.IdRef="Sequence_14">
@@ -486,7 +483,7 @@
                       <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
                     </ActivityAction.Argument>
                     <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_13">
-                      <ui:ExtractData NextLinkSelector="{x:Null}" ContinueOnError="True" DataTable="[ExtractDataTable_ForAddedGroup]" DelayBetweenPagesMS="300" DisplayName="Extract Structured Data 'TABLE'" ExtractMetadata="&lt;extract-table get_columns_name='1' get_empty_columns='1' /&gt;" sap2010:WorkflowViewState.IdRef="ExtractData_3" MaxNumberOfResults="100">
+                      <ui:ExtractData NextLinkSelector="{x:Null}" ContinueOnError="True" DataTable="[ExtractDataTable_ForAddedSubGroup]" DelayBetweenPagesMS="300" DisplayName="Extract Structured Data 'TABLE'" ExtractMetadata="&lt;extract-table get_columns_name='1' get_empty_columns='1' /&gt;" sap2010:WorkflowViewState.IdRef="ExtractData_3" MaxNumberOfResults="100">
                         <ui:ExtractData.Target>
                           <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="ce0811ec4a55638a05317df828b7e025" Selector="&lt;webctrl aaname='# Solution Group Created by Created on Updated by Update on Acti*' tag='TABLE' /&gt;" WaitForReady="COMPLETE" />
                         </ui:ExtractData.Target>
@@ -496,49 +493,49 @@
                 </ui:BrowserScope.Body>
               </ui:BrowserScope>
             </Sequence>
-            <If Condition="[ExtractDataTable_ForAddedGroup.Rows(0).Item(1).ToString.Contains(SolutionName) And&#xA;ExtractDataTable_ForAddedGroup.Rows(0).Item(2).ToString.Contains(GroupName) And&#xA;ExtractDataTable_ForAddedGroup.Rows(0).Item(3).ToString.Contains(loggedInUsersName)]" DisplayName="Verify created group on page" sap2010:WorkflowViewState.IdRef="If_5">
+            <If Condition="[ExtractDataTable_ForAddedSubGroup.Rows(0).Item(1).ToString.Contains(SolutionName) And&#xD;&#xA;ExtractDataTable_ForAddedSubGroup.Rows(0).Item(2).ToString.Contains(SubGroupName) And&#xD;&#xA;ExtractDataTable_ForAddedSubGroup.Rows(0).Item(3).ToString.Contains(loggedInUsersName)]" DisplayName="Verify created group on page" sap2010:WorkflowViewState.IdRef="If_5">
               <If.Then>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="1.Solution name, Group name, Group owner verified successfully in table." />
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="1.Solution name, Sub Group name, Sub Group owner verified successfully in table." />
               </If.Then>
               <If.Else>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="[&quot;1.Created group solution name does not verified successfully. Actual &quot; +ExtractDataTable_ForAddedGroup.Rows(0).Item(1).ToString+ &quot; || Expected - &quot; +SolutionName+vbNewLine+&#xA;&quot;2.Created group name does not verified successfully. Actual &quot; +ExtractDataTable_ForAddedGroup.Rows(0).Item(2).ToString+ &quot; || Expected - &quot; +GroupName+vbNewLine+&#xA;&quot;3.Created group owner name does not verified successfully. Actual &quot; +ExtractDataTable_ForAddedGroup.Rows(0).Item(3).ToString+ &quot; || Expected - &quot; +loggedInUsersName]" />
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="[&quot;1.Created sub group solution name does not verified successfully. Actual &quot; +ExtractDataTable_ForAddedSubGroup.Rows(0).Item(1).ToString+ &quot; || Expected - &quot; +SolutionName+vbNewLine+&#xD;&#xA;&quot;2.Created sub group name does not verified successfully. Actual &quot; +ExtractDataTable_ForAddedSubGroup.Rows(0).Item(2).ToString+ &quot; || Expected - &quot; +SolutionName+vbNewLine+&#xD;&#xA;&quot;3.Created sub group owner name does not verified successfully. Actual &quot; +ExtractDataTable_ForAddedSubGroup.Rows(0).Item(3).ToString+ &quot; || Expected - &quot; +loggedInUsersName]" />
               </If.Else>
             </If>
           </Sequence>
         </If.Then>
         <If.Else>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Trace" Message="[&quot;Functionality for group condition - &quot; +functionalityForUserGroup.ToString]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Trace" Message="[&quot;Functionality for sub group condition - &quot; +functionalityForUserSubGroup.ToString]" />
         </If.Else>
       </If>
     </Sequence>
-    <Sequence DisplayName="Delete Group" sap2010:WorkflowViewState.IdRef="Sequence_23">
+    <Sequence DisplayName="Delete Sub Group" sap2010:WorkflowViewState.IdRef="Sequence_23">
       <Sequence.Variables>
         <Variable x:TypeArguments="ui:UiElement" Name="element_DeleteConfirmationPopup" />
         <Variable x:TypeArguments="ui:UiElement" Name="element_DeleteTextBox" />
         <Variable x:TypeArguments="ui:UiElement" Name="element_OkayButtonDeletePopup" />
         <Variable x:TypeArguments="ui:UiElement" Name="element_CancelButtonDeletePopup" />
         <Variable x:TypeArguments="x:Boolean" Name="is_element_DeleteConfirmationPopupExist" />
-        <Variable x:TypeArguments="ui:UiElement" Name="element_DeleteGroupButton" />
+        <Variable x:TypeArguments="ui:UiElement" Name="element_DeleteSubGroupButton" />
       </Sequence.Variables>
-      <If Condition="[deleteUserGroup]" DisplayName="Delete Group" sap2010:WorkflowViewState.IdRef="If_6">
+      <If Condition="[deleteUserSubGroup]" DisplayName="Delete Sub Group" sap2010:WorkflowViewState.IdRef="If_6">
         <If.Then>
           <Sequence sap2010:WorkflowViewState.IdRef="Sequence_22">
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_EnterText_InTextBox" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_70" UnSafe="False" WorkflowFileName="Generic\EnterText_InTextBox.xaml">
               <ui:InvokeWorkflowFile.Arguments>
                 <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_FilterBox]</InArgument>
                 <InArgument x:TypeArguments="x:String" x:Key="elementName">element_FilterBox</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[GroupName]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[SubGroupName]</InArgument>
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
-            <ui:WaitUiElementAppear DisplayName="element_DeleteGroupButton" FoundElement="[element_DeleteGroupButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_37" WaitActive="False" WaitVisible="False">
+            <ui:WaitUiElementAppear DisplayName="element_DeleteSubGroupButton" FoundElement="[element_DeleteSubGroupButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_37" WaitActive="False" WaitVisible="False">
               <ui:WaitUiElementAppear.Target>
                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="9343eefcb3dccc997754b2a083191cda" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='selectdsclick' tableCol='8' tag='A' class='actionMenu' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
               </ui:WaitUiElementAppear.Target>
             </ui:WaitUiElementAppear>
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_71" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
               <ui:InvokeWorkflowFile.Arguments>
-                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_DeleteGroupButton]</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_DeleteGroupButton</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_DeleteSubGroupButton]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="elementName">element_DeleteSubGroupButton</InArgument>
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
             <ui:WaitUiElementAppear DisplayName="element_DeleteConfirmationPopup" FoundElement="[element_DeleteConfirmationPopup]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_38" WaitActive="False" WaitVisible="False">
@@ -614,7 +611,7 @@
             </ui:InvokeWorkflowFile>
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ClickOnElement" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_78" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
               <ui:InvokeWorkflowFile.Arguments>
-                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_DeleteGroupButton]</InArgument>
+                <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[element_DeleteSubGroupButton]</InArgument>
                 <InArgument x:TypeArguments="x:String" x:Key="elementName">element_DeleteGroupButton</InArgument>
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
@@ -643,17 +640,17 @@
             </ui:InvokeWorkflowFile>
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Verify_Message" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_81" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
               <ui:InvokeWorkflowFile.Arguments>
-                <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Group has been deleted successfully</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Sub Group has been deleted successfully</InArgument>
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
           </Sequence>
         </If.Then>
         <If.Else>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Trace" Message="[&quot;Delete group functionality is - &quot; +deleteUserGroup.ToString]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Trace" Message="[&quot;Delete sub group functionality is - &quot; +deleteUserSubGroup.ToString]" />
         </If.Else>
       </If>
     </Sequence>
-    <sads:DebugSymbol.Symbol>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AwHwAuQBiwHkAZQCAwHvAuQBnwLkAaUCAwHuAuoBTOoBZgMB6wLpAUvpAU8DAeoC6wFM6wFkAwHpAucBxwHnAeoBAwHoAu8BW+8BeQMB5QLxAYsB8QHbAQMB5ALxAeYB8QHsAQMB4wL3AUz3AWgDAeAC9gFL9gFPAwHfAvgBTPgBZgMB3gL0AccB9AHqAQMB3QL8AVX8AW0DAdoC/gGLAf4B5wEDAdkC/gHyAf4B+AEDAdgChAJMhAJiAwHVAoMCS4MCTwMB1AKFAkyFAmADAdMCgQLIAYEC6wEDAdICiQJViQJtAwHPAosCiwGLAvgBAwHOAosCgwKLAokCAwHNApECTJECYgMBygKQAkuQAk8DAckCkgJMkgJgAwHIAo4CyAGOAusBAwHHApcCTJcCYgMBxAKYAkyYAmADAcMClQK5AZUC1wEDAcICnQJQnQJoAwHAApsCuQGbAtYBAwG/AqMCTaMCaQMBvQKiAlWiAnMDAbsCpAJZpAJ3AwG5AqUCTqUCXAMBtwKgAscBoALyAQMBtgKqAkyqAmIDAbMCqwJMqwJgAwGyAqgCuQGoAtcBAwGxArACULACaAMBrwKuArkBrgLWAQMBrgK4Aji4Ak8DAasCtQI5tQJEAwGpAr0CTL0CZgMBpgK/Aky/AlcDAaQCvgJMvgJkAwGjArsCvgG7AuABAwGiAsQCTMQCYgMBnwLFAkzFAmADAZ4CwgK5AcIC1wEDAZ0CygJQygJoAwGbAsgCuQHIAtYBAwGaAs8CTM8CaAMBlwLRAkzRAlkDAZUC0AJM0AJmAwGUAs0CvgHNAuABAwGTAtYCTNYCYgMBkALXAkzXAmADAY8C1AK5AdQC1wEDAY4C3AJQ3AJ7AwGMAtoCuQHaAtYBAwGLAuECTOECYgMBiALiAkziAmADAYcC3wK5Ad8C1wEDAYYC5wJ/5wKFAQMBhALlAl3lAocBAwGCAucCUucCdAMBgALtAkztAmwDAf0B7AJL7AJQAwH8Ae4CTO4CagMB+wHvAlnvAoEBAwH5AeoCyAHqAusBAwH4Af0CYP0CgwEDAe0B/wKLAf8C8AEDAewB/wL7Af8CgQIDAesBhANMhANtAwHoAYUDTIUDawMB5wGCA7kBggPXAQMB5gGIA12IA30DAeMBigOLAYoDnQIDAeIBigOoAooDrgIDAeEBjwNMjwNqAwHeAZADTJADaAMB3QGNA7oBjQPYAQMB3AGTA12TA30DAdkBlQOLAZUDvwIDAdgBlQPKApUD0AIDAdcBmANbmAN5AwHUAZoDiwGaA9sBAwHTAZoD5gGaA+wBAwHSAZ0DVZ0DbQMBzwGfA4sBnwPnAQMBzgGfA/IBnwP4AQMBzQGlA02lA2kDAcsBpANVpANzAwHJAaYDWaYDdwMBxwGnA06nA1wDAcUBogPHAaID8gEDAcQBqgNZqgN1AwHBAawDiwGsA/sBAwHAAawDhgKsA4wCAwG/AbQDOLQDTwMBvAGxAzmxA0QDAboBuQNMuQNoAwG3AbsDTLsDWQMBtQG6A0y6A2YDAbQBtwO+AbcD4AEDAbMBwANMwANmAwGwAcIDTMIDVwMBrgHBA0zBA2QDAa0BvgO+Ab4D4AEDAawBxwNMxwNiAwGpAcgDTMgDYAMBqAHFA7kBxQPXAQMBpwHNA1DNA3MDAaUBywO5AcsD1gEDAaQB0gNQ0gN+AwGiAdADuQHQA9YBAwGhAdUDUtUDZwMBngHXA4sB1wPvAQMBnQHXA/oB1wOAAgMBnAHcA0zcA18DAZkB3gNM3gNXAwGXAd0DTN0DXQMBlgHaA74B2gPgAQMBlQHiAw/xAyEDAYkB8wMb8wOdAgMBgwH1AxH1A8sBAwGGAfgDEfgDuwUDAYQBkARMkARfAgF4kgRMkgRXAgF2kQRMkQRdAgF1jgS+AY4E4AECAXSVBFqVBHcCAXGXBIsBlwSNAgIBcJcEmAKXBJ4CAgFvnARMnARnAgFsnQRMnQRlAgFrmgS5AZoE1wECAWqgBGCgBIMBAgFnogSLAaIElgICAWaiBKECogSnAgIBZagETKgEbQIBYqcES6cETwIBYakETKkEawIBYKUEyAGlBOsBAgFfrQRWrQRvAgFcrwSLAa8E8wECAVuvBP4BrwSEAgIBWrUETLUEYwIBV7QES7QETwIBVrYETLYEYQIBVbIEyAGyBOsBAgFUugReugR/AgFRvASLAbwE9gECAVC8BIECvASHAgIBT8IETMIEawIBTMEES8EETwIBS8METMMEaQIBSr8EyAG/BOsBAgFJxwRgxwSDAQIBRskEiwHJBPgBAgFFyQSDAskEiQICAUTPBEzPBG0CAUHOBEvOBE8CAUDQBEzQBGsCAT/MBMgBzATrAQIBPtYETNYEbQIBO9cETNcEawIBOtQEuQHUBNcBAgE53ASAAdwEhgECATfaBF7aBIkBAgE13ARS3AR1AgEz4gRM4gRtAgEw4QRL4QRQAgEv4wRM4wRrAgEu5ARZ5ASCAQIBLN8EyAHfBOsBAgEr6QRM6QRnAgEo6gRM6gRlAgEn5wS5AecE1wECASbtBFbtBG8CASPvBIsB7wTzAQIBIu8E/gHvBIQCAgEh9ARM9ARjAgEe9gRM9gRSAgEd9QRM9QRhAgEc8gS+AfIE4AECARv5BF75BH8CARj7BIsB+wT2AQIBF/sEgQL7BIcCAgEWgAVMgAVrAgETgQVMgQVpAgES/gS5Af4E1wECARGGBVCGBXMCAQ+EBbkBhAXWAQIBDuIDpwLiA9cCAwGTAegDFe4DIAMBigH1A371A8gBAwGHAfgDf/gDuAUDAYUB6QMX7QMoAwGLAekD5wLpA+wCAwGSAesDqgHrA5QCAwGRAekDmwHpA6ABAwGQAekDU+kDWQMBjwHpA2TpA4YBAwGNAekD3wHpA6MCAwGMAQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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aAMB2gGPA7oBjwPYAQMB2QGVA12VA30DAdYBlwOLAZcDvwIDAdUBlwPKApcD0AIDAdQBmgNbmgN5AwHRAZwDiwGcA9sBAwHQAZwD5gGcA+wBAwHPAZ8DVZ8DbQMBzAGhA4sBoQPnAQMBywGhA/IBoQP4AQMBygGnA02nA2kDAcgBpgNVpgNzAwHGAagDWagDdwMBxAGpA06pA1wDAcIBpAPHAaQD8gEDAcEBrANcrAN7AwG+Aa4DiwGuA/sBAwG9Aa4DhgKuA4wCAwG8AbYDOLYDUgMBuQGzAzmzA0cDAbcBuwNMuwNoAwG0Ab0DTL0DWQMBsgG8A0y8A2YDAbEBuQO+AbkD4AEDAbABwgNMwgNpAwGtAcQDTMQDWgMBqwHDA0zDA2cDAaoBwAO+AcAD4AEDAakByQNMyQNiAwGmAcoDTMoDYAMBpQHHA7kBxwPXAQMBpAHPA1DPA34DAaIBzQO5Ac0D1gEDAaEB0gNS0gNnAwGeAdQDiwHUA+8BAwGdAdQD+gHUA4ACAwGcAdkDTNkDXwMBmQHbA0zbA1oDAZcB2gNM2gNdAwGWAdcDvgHXA+ABAwGVAd8DD+4DIQMBiQHwAxvwA7MCAwGDAfIDEfID0wEDAYYB9QMR9QPdBQMBhAGNBEyNBF8CAXiPBEyPBFoCAXaOBEyOBF0CAXWLBL4BiwTgAQIBdJIEXZIEfQIBcZQEiwGUBI0CAgFwlASYApQEngICAW+ZBEyZBGoCAWyaBEyaBGgCAWuXBLkBlwTXAQIBap0EYJ0EgwECAWefBIsBnwSWAgIBZp8EoQKfBKcCAgFlpQRMpQRtAgFipARLpARPAgFhpgRMpgRrAgFgogTIAaIE6wECAV+qBFaqBG8CAVysBIsBrATzAQIBW6wE/gGsBIQCAgFasgRMsgRjAgFXsQRLsQRPAgFWswRMswRhAgFVrwTIAa8E6wECAVS3BF63BH8CAVG5BIsBuQT2AQIBULkEgQK5BIcCAgFPvwRMvwRrAgFMvgRLvgRPAgFLwARMwARpAgFKvATIAbwE6wECAUnEBGDEBIMBAgFGxgSLAcYE+AECAUXGBIMCxgSJAgIBRMwETMwEbQIBQcsES8sETwIBQM0ETM0EawIBP8kEyAHJBOsBAgE+0wRM0wRtAgE71ARM1ARrAgE60QS5AdEE1wECATnZBIAB2QSGAQIBN9cEXtcEiQECATXZBFLZBHUCATPfBEzfBG0CATDeBEveBFACAS/gBEzgBGsCAS7hBFnhBIIBAgEs3ATIAdwE6wECASvmBEzmBGoCASjnBEznBGUCASfkBLkB5ATXAQIBJuoEVuoEbwIBI+wEiwHsBPMBAgEi7AT+AewEhAICASHxBEzxBGMCAR7zBEzzBFICAR3yBEzyBGECARzvBL4B7wTgAQIBG/YEXvYEfwIBGPgEiwH4BPYBAgEX+ASBAvgEhwICARb9BEz9BGsCARP+BEz+BGkCARL7BLkB+wTXAQIBEYMFUIMFdwIBD4EFuQGBBdYBAgEO3wOnAt8D1wIDAZMB5QMV6wMgAwGKAfIDfvID0AEDAYcB9QN/9QPaBQMBhQHmAxfqAygDAYsB5gPqAuYD7wIDAZIB6AOqAegDlAIDAZEB5gOeAeYDowEDAZAB5gNT5gNZAwGPAeYDZOYDiQEDAY0B5gPiAeYDpgIDAYwB</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -705,7 +702,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="583,51">
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1002,7 +999,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="264,3460">
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1018,8 +1015,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,208" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="583,332">
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1027,7 +1023,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_21" sap:VirtualizedContainerService.HintSize="314,51">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1035,15 +1031,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_40" sap:VirtualizedContainerService.HintSize="314,87">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_24" sap:VirtualizedContainerService.HintSize="314,51">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_21" sap:VirtualizedContainerService.HintSize="242,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1051,7 +1039,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_44" sap:VirtualizedContainerService.HintSize="314,51">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_40" sap:VirtualizedContainerService.HintSize="242,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1059,7 +1047,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_26" sap:VirtualizedContainerService.HintSize="314,51">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_24" sap:VirtualizedContainerService.HintSize="242,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1067,7 +1055,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_28" sap:VirtualizedContainerService.HintSize="314,51">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_44" sap:VirtualizedContainerService.HintSize="242,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1075,7 +1063,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_29" sap:VirtualizedContainerService.HintSize="314,51">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_26" sap:VirtualizedContainerService.HintSize="242,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1083,7 +1071,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_54" sap:VirtualizedContainerService.HintSize="314,51">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_28" sap:VirtualizedContainerService.HintSize="242,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1091,7 +1079,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_35" sap:VirtualizedContainerService.HintSize="314,51">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_29" sap:VirtualizedContainerService.HintSize="242,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1099,8 +1087,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="314,60" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_60" sap:VirtualizedContainerService.HintSize="314,51">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_54" sap:VirtualizedContainerService.HintSize="242,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1108,7 +1095,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_57" sap:VirtualizedContainerService.HintSize="314,51">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_35" sap:VirtualizedContainerService.HintSize="242,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1116,7 +1103,8 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_61" sap:VirtualizedContainerService.HintSize="314,51">
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_60" sap:VirtualizedContainerService.HintSize="242,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1124,7 +1112,15 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_63" sap:VirtualizedContainerService.HintSize="242,51">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_57" sap:VirtualizedContainerService.HintSize="242,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_61" sap:VirtualizedContainerService.HintSize="242,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1212,10 +1208,10 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="336,1858">
+      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
@@ -1228,7 +1224,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="561,2006">
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="464,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1236,10 +1232,10 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="583,2130">
+      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
@@ -1428,7 +1424,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_23" sap:VirtualizedContainerService.HintSize="583,51">
+      <sap2010:ViewStateData Id="Sequence_23" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1436,14 +1432,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="605,2808">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,448">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="UserGroup_1" sap:VirtualizedContainerService.HintSize="645,2888" />
+      <sap2010:ViewStateData Id="UserGroup_1" sap:VirtualizedContainerService.HintSize="548,809" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
