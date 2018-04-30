@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="AddExistingDStoFlow" mva:VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="AddExistingDStoFlow_1"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="AddExistingDStoFlow" this:AddExistingDStoFlow.DSNameToSearch="Excel_Auto_Reg1"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -9,8 +9,16 @@
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:swa="clr-namespace:System.Windows.Automation;assembly=UIAutomationTypes"
+ xmlns:this="clr-namespace:"
  xmlns:ui="http://schemas.uipath.com/workflow/activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="DSNameToSearch" Type="InArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>AddExistingDStoFlow_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -76,7 +84,6 @@
       <Variable x:TypeArguments="ui:UiElement" Name="UiElement_PopupCancelBtn" />
       <Variable x:TypeArguments="x:Boolean" Name="is_ActionCheckBoxDisplayed" />
       <Variable x:TypeArguments="x:String" Name="get_searchedDSName" />
-      <Variable x:TypeArguments="x:String" Name="DSNameToSearch" />
       <Variable x:TypeArguments="ui:UiElement" Name="UiElement_ForActionCheckBox" />
       <Variable x:TypeArguments="swa:ElementNotAvailableException" Name="elementNotFoundException" />
     </Sequence.Variables>
@@ -85,7 +92,7 @@
         <OutArgument x:TypeArguments="x:String">[DSNameToSearch]</OutArgument>
       </Assign.To>
       <Assign.Value>
-        <InArgument x:TypeArguments="x:String">Excel_Auto_Reg1</InArgument>
+        <InArgument x:TypeArguments="x:String">[DSNameToSearch]</InArgument>
       </Assign.Value>
     </Assign>
     <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click data dropdown" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
@@ -302,7 +309,7 @@
         <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_PopupOkayBtn]" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <sads:DebugSymbol.Symbol>d0lEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQWRkRXhpc3RpbmdEU3RvRmxvdy54YW1sZ0EDsgIOAgEBUwVaDgMBggFbBWkQAwGAAWoFexUCAXx8BYMBEwIBd4QBBYgBHgIBc4kBBY0BHgIBb44BBZIBHgIBa5MBBZcBGgIBZZgBBZ8BCgIBXaABBaQBFwIBWaUBBawBDgIBVa0BBcABEgIBSMEBBcgBDgIBRMkBBdABDgIBQNEBBe4BCgIBKe8BBfMBEwIBI/QBBfsBEwIBH/wBBYACHgIBG4ECBYUCGgIBFYYCBaECCgIBBaICBbACEAIBAlgwWD8DAYUBVTFVQQMBgwFnmAFn+wIDAYEBamdqbQIBfXlfeY8BAgF/djN2OAIBfoEBMYEBSwIBeH6DAX7NAQIBe37YAX7eAQIBeoQBXoQBfAIBdYYBmAGGAYgCAgF0iQFViQFvAgFxiwGYAYsBgwICAXCOAVWOAXECAW2QAZgBkAGFAgIBbJUBc5UBeQIBapMBZpMBiQECAWiVAUqVAWgCAWaYAROYAYsBAgFemgEJmgHvAgIBY50BCZ0B1wMCAWGiAZgBogHyAQIBXKABggGgAZUBAgFboAEfoAErAgFaqgE6qgFQAgFYpwE7pwFUAgFWrQG3Aa0BwwECAVSzAQu9ARYCAUnGATLGAcIBAgFHwwFCwwFQAgFFzgEvzgEwAgFDywEwywFBAgFB0QET0QFJAgEq0wEJ6QEUAgEt7AEJ7AHuAgIBK+8Bdu8BfAIBKO8BigLvAZwCAgEm8QFf8QF9AgEk+QEx+QFFAgEg9gGYAfYB+gECASL8AVn8AXgCAR3+AZgB/gH9AQIBHIMCdIMCegIBGoECV4ECdQIBGIMCSoMCaQIBFoYCE4YCYQIBBogCCZkCFAIBD5wCCZ8CFAIBCq4CX64CeQIBA5oBdpoB7AICAWSdAXedAdQDAgFitAENuwEfAgFOvAENvAHjAQIBStQBC9QB7QICAT7VAQvoARMCAS7sAXfsAesCAgEsiQILiQLnAgIBE4oCC5gCFgIBEJ0CC50CwAMCAQ2eAgueAp4BAgELtAFDtAFLAgFRtgFAtgFPAgFPuQFnuQFvAgFSvAFEvAFfAgFMvAHPAbwB4AECAUvUAXjUAeoCAgE/1gEN5wEYAgEy1QGLAdUBvwECAS+JAniJAuQCAgEUlgJllgKEAQIBEZ0CeZ0CvQMCAQ6eAkmeAmUCAQzXAQ/eARQCATjfAQ/mARgCATPXAR3XAYsBAgE52QET2QHHAgIBPNwBE9wByAICATrkATnkAUwCATbhATrhAUsCATTZAYEB2QHEAgIBPdwBgQHcAcUCAgE7</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQWRkRXhpc3RpbmdEU3RvRmxvdy54YW1saAFxAYEBAQJJA7kCDgIBAVoFYQ4DAYIBYgVwEAMBgAFxBYIBFQIBfIMBBYoBEwIBd4sBBY8BHgIBc5ABBZQBHgIBb5UBBZkBHgIBa5oBBZ4BGgIBZZ8BBaYBCgIBXacBBasBFwIBWawBBbMBDgIBVbQBBccBEgIBSMgBBc8BDgIBRNABBdcBDgIBQNgBBfUBCgIBKfYBBfoBEwIBI/sBBYICEwIBH4MCBYcCHgIBG4gCBYwCGgIBFY0CBagCCgIBBakCBbcCEAIBAl8wX0ADAYUBXDFcQQMBgwFumAFu+wIDAYEBcWdxbQIBfYABX4ABjwECAX99M304AgF+iAExiAFLAgF4hQGDAYUBzQECAXuFAdgBhQHeAQIBeosBXosBfAIBdY0BmAGNAYgCAgF0kAFVkAFvAgFxkgGYAZIBgwICAXCVAVWVAXECAW2XAZgBlwGFAgIBbJwBc5wBeQIBapoBZpoBiQECAWicAUqcAWgCAWafAROfAYsBAgFeoQEJoQHvAgIBY6QBCaQB1wMCAWGpAZgBqQHyAQIBXKcBggGnAZUBAgFbpwEfpwErAgFasQE6sQFQAgFYrgE7rgFUAgFWtAG3AbQBwwECAVS6AQvEARYCAUnNATLNAcIBAgFHygFCygFQAgFF1QEv1QEwAgFD0gEw0gFBAgFB2AET2AFJAgEq2gEJ8AEUAgEt8wEJ8wHuAgIBK/YBdvYBfAIBKPYBigL2AZwCAgEm+AFf+AF9AgEkgAIxgAJFAgEg/QGYAf0B+gECASKDAlmDAngCAR2FApgBhQL9AQIBHIoCdIoCegIBGogCV4gCdQIBGIoCSooCaQIBFo0CE40CYQIBBo8CCaACFAIBD6MCCaYCFAIBCrUCX7UCeQIBA6EBdqEB7AICAWSkAXekAdQDAgFiuwENwgEfAgFOwwENwwHjAQIBStsBC9sB7QICAT7cAQvvARMCAS7zAXfzAesCAgEskAILkALnAgIBE5ECC58CFgIBEKQCC6QCwAMCAQ2lAgulAp4BAgELuwFDuwFLAgFRvQFAvQFPAgFPwAFnwAFvAgFSwwFEwwFfAgFMwwHPAcMB4AECAUvbAXjbAeoCAgE/3QEN7gEYAgEy3AGLAdwBvwECAS+QAniQAuQCAgEUnQJlnQKEAQIBEaQCeaQCvQMCAQ6lAkmlAmUCAQzeAQ/lARQCATjmAQ/tARgCATPeAR3eAYsBAgE54AET4AHHAgIBPOMBE+MByAICATrrATnrAUwCATboATroAUsCATTgAYEB4AHEAgIBPeMBgQHjAcUCAgE7</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -391,7 +398,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="AddExistingDStoFlow_1" sap:VirtualizedContainerService.HintSize="1124,5022" />
+      <sap2010:ViewStateData Id="AddExistingDStoFlow_1" sap:VirtualizedContainerService.HintSize="1124,4648" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
