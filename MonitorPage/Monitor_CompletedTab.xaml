@@ -13,6 +13,7 @@
     <x:Property Name="FilteredDSName" Type="InArgument(x:String)" />
     <x:Property Name="RunningTabFilteredResult" Type="InArgument(x:String)" />
     <x:Property Name="CompletedTabFilteredResultStatus" Type="OutArgument(x:String)" />
+    <x:Property Name="JobStatus" Type="OutArgument(x:Boolean)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -70,7 +71,15 @@
       <Variable x:TypeArguments="x:Boolean" Name="is_PageNoDisplayed" />
       <Variable x:TypeArguments="x:Boolean" Name="is_FiteredTableRow1Displayed" />
     </Sequence.Variables>
-    <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Completed Tab MOSAIC'" sap2010:WorkflowViewState.IdRef="ClickImage_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Boolean">[JobStatus]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:ClickImage DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" ContinueOnError="True" DisplayName="Click Completed Tab MOSAIC'" sap2010:WorkflowViewState.IdRef="ClickImage_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
       <ui:ClickImage.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -88,7 +97,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:ClickImage.Target>
     </ui:ClickImage>
-    <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="10000" DisplayName="Completed tab Select Dropdown" sap2010:WorkflowViewState.IdRef="SelectItem_1" Item="All">
+    <ui:SelectItem DelayAfter="{x:Null}" ContinueOnError="True" DelayBefore="10000" DisplayName="Completed tab Select Dropdown" sap2010:WorkflowViewState.IdRef="SelectItem_1" Item="All">
       <ui:SelectItem.Items>
         <scg:List x:TypeArguments="x:String" Capacity="8">
           <x:String>Last 24 hours</x:String>
@@ -147,17 +156,17 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" TimeoutMS="3000" WaitForReady="COMPLETE" />
       </ui:ImageFound.Target>
     </ui:ImageFound>
-    <ui:TypeInto Activate="True" ClickBeforeTyping="True" DelayBefore="6000" DelayBetweenKeys="100" DelayMS="2000" DisplayName="Type into 'FilterBox' Running Tab" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="[FilteredDSName]">
+    <ui:TypeInto Activate="True" ClickBeforeTyping="True" ContinueOnError="True" DelayBefore="6000" DelayBetweenKeys="100" DelayMS="2000" DisplayName="Type into 'FilterBox' Running Tab" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="[FilteredDSName]">
       <ui:TypeInto.Target>
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="f04d21bd05e6e0cffd5340530d02a3e7" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='content' tag='INPUT' /&gt;" WaitForReady="COMPLETE" />
       </ui:TypeInto.Target>
     </ui:TypeInto>
     <ui:UiElementExists DisplayName="IsFilteredRow for DS/Flow displayed - Running Tab" Exists="[is_FiteredTableRow1Displayed]" sap2010:WorkflowViewState.IdRef="UiElementExists_4">
       <ui:UiElementExists.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="911959210555cf3d1f83adc02743a33d" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TABLE' /&gt;&lt;webctrl tableCol='2' tag='TD' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="e7b0a2aa9035a88a2ed2dc9f12ed8f26" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TABLE' /&gt;&lt;webctrl isleaf='1' tableCol='6' tag='TD' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
       </ui:UiElementExists.Target>
     </ui:UiElementExists>
-    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Completed Tab: Get Filtered Row text" sap2010:WorkflowViewState.IdRef="GetValue_1">
+    <ui:GetValue ContinueOnError="True" DisplayName="Completed Tab: Get Filtered Row text" sap2010:WorkflowViewState.IdRef="GetValue_1">
       <ui:GetValue.Target>
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e6486326b53009952986ef9dadde5a6d" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TABLE' /&gt;&lt;webctrl idx='1' isleaf='1' tableCol='6' tag='TD' /&gt;" WaitForReady="COMPLETE" />
       </ui:GetValue.Target>
@@ -169,15 +178,24 @@
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
           <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[&quot;SUCCESS: Complted Tab Status for Ds &quot;+FilteredDSName +&quot;  is :&quot;+CompletedTabFilteredResultStatus.ToString]" />
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Boolean">[JobStatus]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+            </Assign.Value>
+          </Assign>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[&quot;Job Status Is:&quot;+JobStatus.ToString]" />
         </Sequence>
       </If.Then>
       <If.Else>
         <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Error" Message="[&quot;ERROR: Complted Tab Status for Ds &quot;+FilteredDSName +&quot;  is :&quot;+CompletedTabFilteredResultStatus.ToString]" />
       </If.Else>
     </If>
-    <ui:CommentOut DisplayName="Comment out">
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_2">
       <ui:CommentOut.Body>
-        <Sequence DisplayName="Ignored Activities">
+        <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_6">
           <ui:ClickImage ContinueOnError="{x:Null}" ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="500" DisplayName="Download Button Click" sap2010:WorkflowViewState.IdRef="ClickImage_3" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
             <ui:ClickImage.CursorPosition>
               <ui:CursorPosition Position="Center">
@@ -196,15 +214,14 @@
               <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
             </ui:ClickImage.Target>
           </ui:ClickImage>
-          <sap2010:WorkflowViewState.IdRef>Sequence_6</sap2010:WorkflowViewState.IdRef>
         </Sequence>
       </ui:CommentOut.Body>
-      <sap2010:WorkflowViewState.IdRef>CommentOut_2</sap2010:WorkflowViewState.IdRef>
     </ui:CommentOut>
-    <sads:DebugSymbol.Symbol>d0ZEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxNb25pdG9yUGFnZVxNb25pdG9yX0NvbXBsZXRlZFRhYi54YW1sMkMDzQEOAgEBSQVaFQIBP1sFaBUCATtpBW0aAgE2bgVyGgIBMXMFjQEKAgEljgEFlQEVAgEflgEFmgETAgEYmwEFnwEaAgEToAEFpwETAgEPqAEFsQEKAgEDsgEFywEVAgECWF9YjwECAUFVM1U4AgFAW1FbWAIBPVu5AVu+AQIBPGaYAWb0AQIBPmuDAWvjAQIBOmvuAWv0AQIBOWlDaVwCATdwgwFw7gECATVw+QFw/wECATRuRG5aAgEycxNzQwIBJnUJiAEUAgEtiwEJiwGFAgIBKZMBSpMBegIBJJMBhQGTAYsBAgEjjgE+jgFUAgEhkAEzkAE4AgEgmAGYAZgB+AECAR6WAW2WAXMCAR2WAZgClgGqAgIBG5YBX5YBZAIBGpYBR5YBTQIBGZ0BgwGdAfcBAgEXnQGCAp0BiAICARabAWCbAYABAgEUpQExpQFTAgEQogGYAaIBnwICARKoAROoAV8CAQSqAQmsARQCAQqvAQmvAfkBAgEGdgt2ogECAS93C4cBGwIBLosBd4sBggICASqrAQurAfwBAgELrwF3rwH2AQIBB3Z4dp8BAgEwqwF4qwH5AQIBDA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0ZEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxNb25pdG9yUGFnZVxNb25pdG9yX0NvbXBsZXRlZFRhYi54YW1sPkQD3QEOAgEBSgVRDgIBTVIFYxUCAUlkBXEVAgFEcgV2GgIBP3cFexoCATp8BZYBCgIBLpcBBZ4BFQIBKJ8BBaMBEwIBIKQBBagBGgIBG6kBBbABEwIBFrEBBcMBCgIBA8QBBdsBFQIBAk8xTzYCAVBMMkw9AgFOUmdSbQIBSmFfYY8BAgFMXjNeOAIBS2Q6ZEACAUdkTWRUAgFGZLUBZLoBAgFFb5gBb/QBAgFIdIMBdOMBAgFDdO4BdPQBAgFCckNyXAIBQHmDAXnuAQIBPnn5AXn/AQIBPXdEd1oCATt8E3xDAgEvfgmRARQCATaUAQmUAYUCAgEynAFKnAF6AgEtnAGFAZwBiwECASyXAT6XAVQCASqZATOZATgCASmhAZgBoQH4AQIBJ58BhAGfAYoBAgEmnwFLnwFRAgElnwGvAp8BwQICASOfAXafAXsCASKfAV6fAWQCASGmAYMBpgGCAgIBH6YBjQKmAZMCAgEepAFgpAGAAQIBHK4BMa4BUwIBGKkBIqkBKAIBF6sBmAGrAZ8CAgEasQETsQFfAgEEswEJvgEUAgEKwQEJwQH5AQIBBn8Lf6IBAgE4gAELkAEbAgE3lAF3lAGCAgIBM7QBC7QB/AECARK1AQu8ARQCAQ69AQu9AawBAgELwQF3wQH2AQIBB394f58BAgE5tAF4tAH5AQIBE7oBN7oBOwIBEbcBOLcBQwIBD70BeL0BqQECAQw=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="675,60" />
       <sap2010:ViewStateData Id="ClickImage_2" sap:VirtualizedContainerService.HintSize="675,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -306,7 +323,9 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_8" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,215">
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="LogMessage_9" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,446">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -314,7 +333,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_7" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="675,363" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="675,594" />
       <sap2010:ViewStateData Id="ClickImage_3" sap:VirtualizedContainerService.HintSize="314,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -331,14 +350,14 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="CommentOut_2" sap:VirtualizedContainerService.HintSize="675,308" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="697,2553">
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="697,2884">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Monitor_CompletedTab_1" sap:VirtualizedContainerService.HintSize="737,2633" />
+      <sap2010:ViewStateData Id="Monitor_CompletedTab_1" sap:VirtualizedContainerService.HintSize="737,3684" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
