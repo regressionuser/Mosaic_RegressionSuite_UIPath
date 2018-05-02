@@ -2,6 +2,7 @@
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:p="http://schemas.uipath.com/workflow/activities/word"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
@@ -64,6 +65,9 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Default="D:\Mosaic_RegressionSuite_UIPath\Reports\LogFiles\Monitor\MonitorLogs.docx" Name="LogReportPath" />
+    </Sequence.Variables>
     <Sequence DisplayName="MonitorPage" sap2010:WorkflowViewState.IdRef="Sequence_1">
       <Sequence.Variables>
         <Variable x:TypeArguments="x:String" Name="FilteredDSStatus" />
@@ -72,7 +76,7 @@
         <Variable x:TypeArguments="x:Boolean" Name="Is_RunningTabDisplayed" />
         <Variable x:TypeArguments="x:Boolean" Name="Is_CompletedTabDisplayed" />
       </Sequence.Variables>
-      <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Monitor Tab" sap2010:WorkflowViewState.IdRef="ClickImage_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+      <ui:ClickImage DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" ContinueOnError="True" DisplayName="Click Monitor Tab" sap2010:WorkflowViewState.IdRef="ClickImage_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
         <ui:ClickImage.CursorPosition>
           <ui:CursorPosition Position="Center">
             <ui:CursorPosition.OffsetX>
@@ -100,37 +104,71 @@
           <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="2d62a0bec9acbd9c80af70db0f0c3822" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Completed' parentid='app' tag='A' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
         </ui:UiElementExists.Target>
       </ui:UiElementExists>
-      <ui:WaitUiElementAppear DisplayName="Find Element 'INPUT'" FoundElement="[UiElement_FilterBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_1" WaitActive="False" WaitVisible="True">
+      <ui:WaitUiElementAppear ContinueOnError="True" DisplayName="Find Element 'INPUT'" FoundElement="[UiElement_FilterBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_1" WaitActive="False" WaitVisible="True">
         <ui:WaitUiElementAppear.Target>
           <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="57eb7617d2df7de0545a9c8683be2c1e" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='content' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
         </ui:WaitUiElementAppear.Target>
       </ui:WaitUiElementAppear>
       <If Condition="[Is_CompletedTabDisplayed And Is_RunningTabDisplayed]" DisplayName="If Monitors tab Check" sap2010:WorkflowViewState.IdRef="If_2">
         <If.Then>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="SUCCESS:Running and Completed tab is displayed in monitor screen" />
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_8">
+            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
+              <Sequence.Variables>
+                <Variable x:TypeArguments="x:String" Name="variable1" />
+              </Sequence.Variables>
+              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="D_Monitor-TCNo_001_SUCCESS:Running and Completed tab is displayed in monitor screen" />
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="ReportTc1" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+                <ui:InvokeWorkflowFile.Arguments>
+                  <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
+                  <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">True</InArgument>
+                  <InArgument x:TypeArguments="x:String" x:Key="LogMessage">D_Monitor-TCNo_001_SUCCESS: Running and Completed tab is displayed in monitor screen</InArgument>
+                  <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportPath]</InArgument>
+                </ui:InvokeWorkflowFile.Arguments>
+              </ui:InvokeWorkflowFile>
+              <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_1">
+                <ui:CommentOut.Body>
+                  <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_10">
+                    <p:WordApplicationScope DisplayName="Word Application Scope" FilePath="C:\Users\10640913\Desktop\New Microsoft Word Document.docx" sap2010:WorkflowViewState.IdRef="WordApplicationScope_1">
+                      <p:WordApplicationScope.Body>
+                        <ActivityAction x:TypeArguments="ui:WordDocument">
+                          <ActivityAction.Argument>
+                            <DelegateInArgument x:TypeArguments="ui:WordDocument" Name="WordDocumentScope" />
+                          </ActivityAction.Argument>
+                          <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_9">
+                            <p:WordAppendText DisplayName="Append Text" sap2010:WorkflowViewState.IdRef="WordAppendText_1" Text="Welcome" />
+                          </Sequence>
+                        </ActivityAction>
+                      </p:WordApplicationScope.Body>
+                    </p:WordApplicationScope>
+                  </Sequence>
+                </ui:CommentOut.Body>
+              </ui:CommentOut>
+            </Sequence>
+          </Sequence>
         </If.Then>
         <If.Else>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Error" Message="ERROR: Running tab or Completed tab is not displayed" />
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Error" Message="ERROR: Running tab or Completed tab is not displayed" />
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="ReportTC1" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_Monitor-TCNo_001_ERROR</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">False</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="LogMessage">D_Monitor-TCNo_001_ERROR: Running tab or Completed tab is not displayed</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportPath]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+          </Sequence>
         </If.Else>
       </If>
-<<<<<<< HEAD
-      <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_1">
-        <ui:CommentOut.Body>
-          <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_5">
-            <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
-              <Assign.To>
-                <OutArgument x:TypeArguments="x:String">[sourceName]</OutArgument>
-              </Assign.To>
-              <Assign.Value>
-                <InArgument x:TypeArguments="x:String">Csv_auto_sanity1</InArgument>
-              </Assign.Value>
-            </Assign>
-          </Sequence>
-        </ui:CommentOut.Body>
-      </ui:CommentOut>
-=======
->>>>>>> 8884e25755952cacccb8924bdbf7a9c98d02b317
-      <ui:TypeInto DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayBefore="4000" DisplayName="Type into FilterBox" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="[sourceName]">
+      <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:String">[sourceName]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:String">TestDs323</InArgument>
+        </Assign.Value>
+      </Assign>
+      <ui:TypeInto DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" ContinueOnError="True" DelayBefore="4000" DisplayName="Type into FilterBox" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="[sourceName]">
         <ui:TypeInto.Target>
           <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_FilterBox]" WaitForReady="INTERACTIVE" />
         </ui:TypeInto.Target>
@@ -150,6 +188,14 @@
               <Variable x:TypeArguments="x:String" Name="CompletedFilteredDSStatus" />
             </Sequence.Variables>
             <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;Source still in Running Tab: &quot;+Is_UiElement_FilteredResultVisible.ToString]" />
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="ReportTC2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
+                <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">True</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="LogMessage">D_Monitor-TCNo_002_SUCCESS:Source displayed in Running Tab</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportPath]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Running Tab" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="MonitorPage\Monitor_RunningTab.xaml">
               <ui:InvokeWorkflowFile.Arguments>
                 <InArgument x:TypeArguments="x:String" x:Key="FilteredDSName">[sourceName]</InArgument>
@@ -161,13 +207,23 @@
               <ui:InvokeWorkflowFile.Arguments>
                 <InArgument x:TypeArguments="x:String" x:Key="FilteredDSName">[sourceName]</InArgument>
                 <InArgument x:TypeArguments="x:String" x:Key="RunningTabFilteredResult" />
+                <OutArgument x:TypeArguments="x:String" x:Key="CompletedTabFilteredResultStatus" />
+                <OutArgument x:TypeArguments="x:Boolean" x:Key="JobStatus" />
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
           </Sequence>
         </If.Then>
         <If.Else>
           <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;UiElement_FilteredResult.IsVisible&quot;+Is_UiElement_FilteredResultVisible.ToString]" />
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Warn" Message="[&quot;UiElement_FilteredResult.IsVisible&quot;+Is_UiElement_FilteredResultVisible.ToString]" />
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Report TC2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_8" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_Monitor-TCNo_002_ERROR</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">False</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="LogMessage">["D_Monitor-TCNo_002_WARN: UiElement_FilteredResult.IsVisible"+Is_UiElement_FilteredResultVisible.ToString]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportPath]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Completed Tab" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="MonitorPage\Monitor_CompletedTab.xaml">
               <ui:InvokeWorkflowFile.Arguments>
                 <InArgument x:TypeArguments="x:String" x:Key="FilteredDSName">[sourceName]</InArgument>
@@ -178,15 +234,11 @@
         </If.Else>
       </If>
     </Sequence>
-<<<<<<< HEAD
-    <sads:DebugSymbol.Symbol>dz1EOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxNb25pdG9yUGFnZVxNb25pdG9yUGFnZS54YW1sM0IDswEOAgEBQwWxARACAQJLB1wXAgFBXQdhHAIBPGIHZhwCATdnB2sgAgEzbAdzDAIBK3QHgQEXAgEqggEHhgEVAgEkhwEHjgEXAgEejwEHsAEMAgEDWmFakQECAUNXNVc6AgFCX4UBX+4BAgFAX/kBX/8BAgE/XUxdZgIBPWSFAWTwAQIBO2T7AWSBAgIBOmJPYmsCAThnT2dmAgE1aZoBafoBAgE0bBVsTAIBLG4Lbr0BAgExcQtxsgECAS+CAZUCggGjAgIBKIQBYYQBeAIBJoIBeIIBfgIBJYwBTIwBfAIBI4wBhwGMAY0BAgEihwFMhwFyAgEgiQE1iQE6AgEfjwEVjwE7AgEEkQELowEWAgEQpgELrgEWAgEGbnhuugECATJxeXGvAQIBMJUBDZUB1gECARuWAQ2cASUCARWdAQ2iASUCARGnAQ2nAdsBAgENqAENrQElAgEHlQF6lQHTAQIBHJgBT5gBWwIBGZoBYpoBdAIBF5YBtwGWAdwBAgEWnwFPnwFbAgETnQG5AZ0B4AECARKnAXqnAdgBAgEOqgFPqgFbAgELqAG5AagB4AECAQqrAVmrAWsCAQg=</sads:DebugSymbol.Symbol>
-=======
-    <sads:DebugSymbol.Symbol>d1pEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX0xvY2FsXE1vc2FpY19SZWdyZXNzaW9uU3VpdGVfVUlQYXRoXE1vbml0b3JQYWdlXE1vbml0b3JQYWdlLnhhbWwyQgOlAQ4CAQFDBaMBEAIBAksHXBcCAUBdB2EcAgE7YgdmHAIBNmcHayACATJsB3MMAgEqdAd4FQIBJHkHgAEXAgEegQEHogEMAgEDWmFakQECAUJXNVc6AgFBX4UBX+4BAgE/X/kBX/8BAgE+XUxdZgIBPGSFAWTwAQIBOmT7AWSBAgIBOWJPYmsCATdnT2dmAgE0aZoBafoBAgEzbBVsTAIBK24Lbr0BAgEwcQtxsgECAS50lQJ0owICASh2YXZ4AgEmdHh0fgIBJX5MfnwCASN+hwF+jQECASJ5THlyAgEgezV7OgIBH4EBFYEBOwIBBIMBC5UBFgIBEJgBC6ABFgIBBm54broBAgExcXlxrwECAS+HAQ2HAdYBAgEbiAENjgElAgEVjwENlAElAgERmQENmQHbAQIBDZoBDZ8BJQIBB4cBeocB0wECARyKAU+KAVsCARmMAWKMAXQCAReIAbcBiAHcAQIBFpEBT5EBWwIBE48BuQGPAeABAgESmQF6mQHYAQIBDpwBT5wBWwIBC5oBuQGaAeABAgEKnQFZnQFrAgEI</sads:DebugSymbol.Symbol>
->>>>>>> 8884e25755952cacccb8924bdbf7a9c98d02b317
+    <sads:DebugSymbol.Symbol>dz1EOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxNb25pdG9yUGFnZVxNb25pdG9yUGFnZS54YW1sU0MD7gEOAgEBRTRFgAECAQJHBewBEAIBA08HYBcCAWZhB2UcAgFhZgdqHAIBXGsHbyACAVdwB6IBDAIBPqMBB6oBEAIBOqsBB68BFQIBM7ABB7cBFwIBLbgBB+sBDAIBBE9pT28CAWdeYV6RAQIBaVs1WzoCAWhjhQFj7gECAWVj+QFj/wECAWRhTGFmAgFiaIUBaPABAgFgaPsBaIECAgFfZk9mawIBXWtma30CAVptmgFt+gECAVlrL2s1AgFYcBVwTAIBP3ILkwEWAgFMlgELoAEWAgFCqAEyqAE7AgE9pQEzpQE/AgE7qwF8qwGCAQIBOasBrAKrAboCAgE3rQFhrQF4AgE1qwGPAasBlQECATS1AUy1AXwCATK1AYcBtQGNAQIBMbABTLABcgIBL7IBNbIBOgIBLrgBFbgBOwIBBboBC9YBFgIBGdkBC+kBFgIBB3MNkgEYAgFNlwENlwG0AQIBSpgBDZ8BJQIBQ74BDb4B1gECASq/AQ3GASUCASTHAQ3NASUCAR7OAQ3VASUCARraAQ3aAdsBAgEW2wEN4gElAgEO4wEN6AElAgEIdw931AECAVV4D38nAgFPgAEPkQEfAgFOlwF7lwGxAQIBS50BS50BWgIBSJoBT5oBZwIBR5sBVpsBWwIBRpwBS5wBkgECAUWYAa4BmAHfAQIBRL4Ber4B0wECASvEAUvEAVoCASjCAVbCAVoCASfDAUvDAYUBAgEmvwGuAb8B3wECASXJAU/JAVsCASLLAWLLAXQCASDHAbcBxwHcAQIBH9ABT9ABWwIBHM4BuQHOAeABAgEb2gF62gHYAQIBF+ABS+ABWgIBFN0BT90BZwIBE94BVt4BWwIBEt8BS98BtgECARDbAa8B2wHgAQIBD+UBT+UBWwIBDOMBuQHjAeABAgEL5gFZ5gFrAgEJd3x30QECAVZ9TX1cAgFTe1h7XAIBUnxNfKEBAgFReLABeOEBAgFQ</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="ClickImage_1" sap:VirtualizedContainerService.HintSize="697,106">
+      <sap2010:ViewStateData Id="ClickImage_1" sap:VirtualizedContainerService.HintSize="719,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -194,22 +246,34 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="697,106" />
-      <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="697,106" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="719,106" />
+      <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="719,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="719,106" />
       <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="697,239" />
-<<<<<<< HEAD
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,60" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="264,184">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_6" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="WordAppendText_1" sap:VirtualizedContainerService.HintSize="314,59" />
+      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="336,183">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="697,51">
+      <sap2010:ViewStateData Id="WordApplicationScope_1" sap:VirtualizedContainerService.HintSize="414,292">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="436,416">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="314,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -217,11 +281,35 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-=======
->>>>>>> 8884e25755952cacccb8924bdbf7a9c98d02b317
-      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="697,96" />
-      <sap2010:ViewStateData Id="ImageFound_1" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="336,433">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="358,557">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="719,705" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="719,60" />
+      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="719,96" />
+      <sap2010:ViewStateData Id="ImageFound_1" sap:VirtualizedContainerService.HintSize="719,106" />
       <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_7" sap:VirtualizedContainerService.HintSize="314,87" />
       <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="314,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -238,7 +326,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="336,469">
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="336,596">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -246,6 +334,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_8" sap:VirtualizedContainerService.HintSize="314,87" />
       <sap2010:ViewStateData Id="InvokeWorkflowFile_4" sap:VirtualizedContainerService.HintSize="314,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -254,19 +343,15 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,342">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,469">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="697,617" />
-<<<<<<< HEAD
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="719,1977">
-=======
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="719,1886">
->>>>>>> 8884e25755952cacccb8924bdbf7a9c98d02b317
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="719,744" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="741,2579">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -274,22 +359,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-<<<<<<< HEAD
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="741,2101">
-=======
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="741,2010">
->>>>>>> 8884e25755952cacccb8924bdbf7a9c98d02b317
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="763,2703">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-<<<<<<< HEAD
-      <sap2010:ViewStateData Id="MonitorPage_1" sap:VirtualizedContainerService.HintSize="781,2221" />
-=======
-      <sap2010:ViewStateData Id="MonitorPage_1" sap:VirtualizedContainerService.HintSize="781,2090" />
->>>>>>> 8884e25755952cacccb8924bdbf7a9c98d02b317
+      <sap2010:ViewStateData Id="MonitorPage_1" sap:VirtualizedContainerService.HintSize="803,2783" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
