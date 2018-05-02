@@ -12,9 +12,13 @@
   <x:Members>
     <x:Property Name="TestCaseFilePath" Type="InArgument(x:String)" />
     <x:Property Name="SheetName" Type="InArgument(x:String)" />
-    <x:Property Name="StatusCellName" Type="InArgument(x:String)" />
     <x:Property Name="Status" Type="InArgument(x:String)" />
     <x:Property Name="ScreenShotName" Type="InArgument(x:String)" />
+    <x:Property Name="StatusCellNo" Type="InArgument(x:String)" />
+    <x:Property Name="ScreenshotCellNo" Type="InArgument(x:String)" />
+    <x:Property Name="LogCellNo" Type="InArgument(x:String)" />
+    <x:Property Name="ScreenshotPath" Type="InArgument(x:String)" />
+    <x:Property Name="LogMessage" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -65,34 +69,35 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="AutomationStatusReport" sap2010:WorkflowViewState.IdRef="Sequence_2">
-    <ui:ExcelApplicationScope Password="{x:Null}" DisplayName="Excel application scope" WorkbookPath="[TestCaseFilePath]">
+    <ui:ExcelApplicationScope Password="{x:Null}" DisplayName="Excel application scope" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_2" WorkbookPath="[TestCaseFilePath]">
       <ui:ExcelApplicationScope.Body>
         <ActivityAction x:TypeArguments="ui:WorkbookApplication">
           <ActivityAction.Argument>
             <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
           </ActivityAction.Argument>
-          <Sequence DisplayName="Do">
-            <ui:ExcelWriteCell Cell="[StatusCellName]" DisplayName="Write Cell" SheetName="[SheetName]" Text="[Status]" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_2" />
-            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" UnSafe="False" WorkflowFileName="Utility\TakeScreenshot.xaml">
+          <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_3">
+            <ui:ExcelWriteCell Cell="[StatusCellNo]" DisplayName="Write Cell" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_2" SheetName="[SheetName]" Text="[Status]" />
+            <ui:ExcelWriteCell Cell="[ScreenshotCellNo]" DisplayName="Write Cell" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_3" SheetName="[SheetName]" Text="[ScreenshotPath]" />
+            <ui:ExcelWriteCell Cell="[LogCellNo]" DisplayName="Write Cell" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_4" SheetName="[SheetName]" Text="[LogMessage]" />
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
               <ui:InvokeWorkflowFile.Arguments>
                 <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">[ScreenShotName]</InArgument>
                 <InArgument x:TypeArguments="x:String" x:Key="ScreenshotType">[Status]</InArgument>
               </ui:InvokeWorkflowFile.Arguments>
-              <sap2010:WorkflowViewState.IdRef>InvokeWorkflowFile_2</sap2010:WorkflowViewState.IdRef>
             </ui:InvokeWorkflowFile>
-            <sap2010:WorkflowViewState.IdRef>Sequence_3</sap2010:WorkflowViewState.IdRef>
           </Sequence>
         </ActivityAction>
       </ui:ExcelApplicationScope.Body>
-      <sap2010:WorkflowViewState.IdRef>ExcelApplicationScope_2</sap2010:WorkflowViewState.IdRef>
     </ui:ExcelApplicationScope>
-    <sads:DebugSymbol.Symbol>d2ZEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX0xvY2FsXE1vc2FpY19SZWdyZXNzaW9uU3VpdGVfVUlQYXRoXEdlbmVyaWNcV3JpdGVBdXRvbWF0aW9uU3RhdHVzUmVwb3J0LnhhbWwMQwNaDgIBAUQFWCACAQJEZkR6AgERSgtUFgIBA0sNS64BAgEKTA1SJQIBBEslSzcCAQ9Lbkt4AgENS1tLaAIBC05OTl4CAQhMjAFMqQECAQdPT09XAgEF</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxHZW5lcmljXFdyaXRlQXV0b21hdGlvblN0YXR1c1JlcG9ydC54YW1sFEcDXQ4CAQFIBVsgAgECSKABSLQBAgEfTgtYFgIBA08NT6wBAgEYUA1QuAECARFRDVGtAQIBClINVyUCAQRPJU81AgEdT58BT6kBAgEbT4wBT5kBAgEZUCVQOQIBFlCjAVC1AQIBFFCQAVCdAQIBElElUTICAQ9RnAFRqgECAQ1RiQFRlgECAQtUTlReAgEIUsMBUuABAgEHVU9VVwIBBQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="ExcelWriteCell_2" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="ExcelWriteCell_3" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="ExcelWriteCell_4" sap:VirtualizedContainerService.HintSize="314,87" />
       <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="314,87" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="336,338">
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="336,592">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -100,22 +105,22 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ExcelApplicationScope_2" sap:VirtualizedContainerService.HintSize="200,51">
+      <sap2010:ViewStateData Id="ExcelApplicationScope_2" sap:VirtualizedContainerService.HintSize="414,701">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,175">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="436,825">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="AutomationStatusReport_1" sap:VirtualizedContainerService.HintSize="262,255" />
+      <sap2010:ViewStateData Id="AutomationStatusReport_1" sap:VirtualizedContainerService.HintSize="476,1225" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
