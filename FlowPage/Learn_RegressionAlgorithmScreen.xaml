@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Classification_AlgorithmScreen" this:Classification_AlgorithmScreen.AlgorithmName="Decision Tree"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Classification_AlgorithmScreen" this:Classification_AlgorithmScreen.AlgorithmName="Linear Regression"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -64,7 +64,7 @@
       <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="AlgorithmScreen_LearnNode" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="Learn_RegressionAlgorithmScreen" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="ui:UiElement" Name="UiElement_DesignTab" />
       <Variable x:TypeArguments="ui:UiElement" Name="UiElement_SettingsTab" />
@@ -77,20 +77,23 @@
       <Variable x:TypeArguments="ui:UiElement" Name="UiElement_ModelName" />
       <Variable x:TypeArguments="ui:UiElement" Name="UiElement_TargetColumn" />
       <Variable x:TypeArguments="ui:UiElement" Name="UiElement_FeaturesColumn" />
+      <Variable x:TypeArguments="ui:UiElement" Name="UiElement_RegularizationParameter" />
+      <Variable x:TypeArguments="ui:UiElement" Name="UiElement_ElasticNetValue" />
+      <Variable x:TypeArguments="ui:UiElement" Name="UiElement_MaxNoOfIterations" />
     </Sequence.Variables>
     <ui:WaitUiElementAppear DisplayName="Find Element 'A'" FoundElement="[UiElement_DesignTab]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_1" WaitActive="False" WaitVisible="False">
       <ui:WaitUiElementAppear.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="5d86da3801f4a90039eca7558f6c08ec" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Design' parentid='tabs' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="31f2e61a3840f57ef88b6a9e3700eb70" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Design' parentid='tabs' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:WaitUiElementAppear.Target>
     </ui:WaitUiElementAppear>
     <ui:WaitUiElementAppear DisplayName="Find Element 'A'" FoundElement="[UiElement_SettingsTab]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_2" WaitActive="False" WaitVisible="False">
       <ui:WaitUiElementAppear.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="06a50000da3e87bae136f3f9a8c0b0f7" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Settings' parentid='tabs' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="9a0460daa8fc6a88b6aa6bbf558c83a4" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Settings' parentid='tabs' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:WaitUiElementAppear.Target>
     </ui:WaitUiElementAppear>
     <ui:WaitUiElementAppear DisplayName="Find Element 'DIV'" FoundElement="[UiElement_InputFields]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_3" WaitActive="False" WaitVisible="False">
       <ui:WaitUiElementAppear.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d1b8236e9cae5e159c20fb0c4a750308" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div' idx='1' parentid='app' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="797fef7e77017def730e957833463f6b" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div' idx='1' parentid='app' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:WaitUiElementAppear.Target>
     </ui:WaitUiElementAppear>
     <If Condition="[UiElement_DesignTab.IsVisible and UiElement_SettingsTab.IsVisible and UiElement_InputFields.IsVisible]" sap2010:WorkflowViewState.IdRef="If_2">
@@ -121,22 +124,22 @@
     </ui:Click>
     <ui:WaitUiElementAppear DisplayName="Find Element 'SPAN'" FoundElement="[UiElement_SaveForExplorationCheckBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_8" WaitActive="False" WaitVisible="False">
       <ui:WaitUiElementAppear.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="faebb468fb041af39f2e1342a8b6d2de" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;fieldset&amp;gt;fieldset&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;label&amp;gt;span' isleaf='1' parentid='app' tag='SPAN' /&gt;" WaitForReady="INTERACTIVE" />
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="b93114da1a07ac2187c76d949da16405" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;fieldset&amp;gt;fieldset&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;label&amp;gt;span' isleaf='1' parentid='app' tag='SPAN' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:WaitUiElementAppear.Target>
     </ui:WaitUiElementAppear>
     <ui:WaitUiElementAppear DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_SaveAndExitBtn]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_4" WaitActive="False" WaitVisible="False">
       <ui:WaitUiElementAppear.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fc1f5930f83f1ddcab901da3478a7f75" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Save &amp;amp; Exit' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="19df0d94b6f9e93999623087b920fc31" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Save &amp;amp; Exit' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:WaitUiElementAppear.Target>
     </ui:WaitUiElementAppear>
     <ui:WaitUiElementAppear DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_SaveBtn]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_5" WaitActive="False" WaitVisible="False">
       <ui:WaitUiElementAppear.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="41f3246174432fd4fe2a1d7a1e807d38" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Save' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="47bc2e17f3fa4ad8459ee8c9ef5e48d6" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Save' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:WaitUiElementAppear.Target>
     </ui:WaitUiElementAppear>
     <ui:WaitUiElementAppear DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_CancelBtn]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_6" WaitActive="False" WaitVisible="False">
       <ui:WaitUiElementAppear.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="3c514f40d3a97eeb89e63f4af5bcd3e3" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="91638901cb2ff19993c839591d796fc5" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:WaitUiElementAppear.Target>
     </ui:WaitUiElementAppear>
     <If Condition="[UiElement_SaveAndExitBtn.IsVisible and UiElement_SaveBtn.IsVisible and UiElement_CancelBtn.IsVisible and UiElement_SaveForExplorationCheckBox.IsVisible]" sap2010:WorkflowViewState.IdRef="If_1">
@@ -167,7 +170,7 @@
     </ui:Click>
     <ui:WaitUiElementAppear DisplayName="Find Element 'SPAN'" FoundElement="[UiElement_SelectAlgorithm]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_9" WaitActive="False" WaitVisible="False">
       <ui:WaitUiElementAppear.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="2494b5d25e66cd7519ab88b408842913" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Select Algorithm   ' tag='SPAN' /&gt;" WaitForReady="INTERACTIVE" />
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="538d709c9b77a30f011f6a92e45f3d1c" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Select Algorithm   ' parentid='dateTimePickerRemoveScrollNode' tag='SPAN' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:WaitUiElementAppear.Target>
     </ui:WaitUiElementAppear>
     <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DisplayName="Type into" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="[AlgorithmName]">
@@ -195,14 +198,14 @@
         <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_SaveAndExitBtn]" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke HandleMessageBox workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="DataSourcePage\HandleMessageBox.xaml">
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke HandleMessageBox workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
       <ui:InvokeWorkflowFile.Arguments>
         <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Please enter model name!</InArgument>
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
     <ui:WaitUiElementAppear DisplayName="Find Element 'INPUT'" FoundElement="[UiElement_ModelName]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_10" WaitActive="False" WaitVisible="False">
       <ui:WaitUiElementAppear.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="6a2d58bd172e32ebe961ffa0f5723a38" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='INPUT' type='text' idx='18' /&gt;" WaitForReady="INTERACTIVE" />
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="6cf854309e67bc5339cfc434a2304b72" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='INPUT' type='text' idx='18' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:WaitUiElementAppear.Target>
     </ui:WaitUiElementAppear>
     <ui:WaitUiElementAppear DisplayName="Find Element 'SPAN'" FoundElement="[UiElement_TargetColumn]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_13" WaitActive="False" WaitVisible="False">
@@ -246,7 +249,7 @@
         <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_SaveBtn]" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke HandleMessageBox workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="DataSourcePage\HandleMessageBox.xaml">
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke HandleMessageBox workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
       <ui:InvokeWorkflowFile.Arguments>
         <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Please select target column!</InArgument>
       </ui:InvokeWorkflowFile.Arguments>
@@ -286,7 +289,7 @@
         <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_SaveAndExitBtn]" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke HandleMessageBox workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="DataSourcePage\HandleMessageBox.xaml">
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke HandleMessageBox workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
       <ui:InvokeWorkflowFile.Arguments>
         <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Please select feature columns!</InArgument>
       </ui:InvokeWorkflowFile.Arguments>
@@ -323,7 +326,7 @@
         </ui:CursorPosition>
       </ui:Click.CursorPosition>
       <ui:Click.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="143d7fd2b9e1e993a3499ea64f209824" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' parentid='app' tag='INPUT' type='checkbox' /&gt;" WaitForReady="INTERACTIVE" />
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="84c87a781d20783a439268bd10f68554" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;span&amp;gt;label&amp;gt;input' tag='INPUT' type='checkbox' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
     <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_9" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
@@ -341,7 +344,158 @@
         <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_SaveBtn]" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke HandleMessageBox workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="DataSourcePage\HandleMessageBox.xaml">
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke HandleMessageBox workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">App status is Inactive please publish app.</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:WaitUiElementAppear DisplayName="Find Element 'INPUT'" FoundElement="[UiElement_RegularizationParameter]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_15" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fdd06f028b28e73aa272a18b2a55501f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;input' idx='1' parentid='dateTimePickerRemoveScrollNode' tag='INPUT' type='text' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:WaitUiElementAppear DisplayName="Find Element 'INPUT'" FoundElement="[UiElement_ElasticNetValue]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_16" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="f8326f33519507c3a5dc0d796366d41f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;input' idx='2' parentid='dateTimePickerRemoveScrollNode' tag='INPUT' type='text' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:WaitUiElementAppear DisplayName="Find Element 'INPUT'" FoundElement="[UiElement_MaxNoOfIterations]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_17" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="92d568a88334397b29e56a1ce714afd3" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;input' idx='3' parentid='dateTimePickerRemoveScrollNode' tag='INPUT' type='text' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <If Condition="[UiElement_RegularizationParameter.IsVisible and UiElement_ElasticNetValue.IsVisible and UiElement_MaxNoOfIterations.IsVisible]" sap2010:WorkflowViewState.IdRef="If_4">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Info" Message="SUCCESS: Algorithm popup RegularizationParameter, Elastic Net Value and Max no of Iterations fields are visible" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Trace" Message="[&quot;Found visibilty of Impurity input field as: &quot;+UiElement_RegularizationParameter.IsVisible.ToString +vbNewLine +&#xA;&quot;Found visibilty of Max depth field as: &quot;+UiElement_ElasticNetValue.IsVisible.ToString +vbNewLine +&#xA;&quot;Found visibilty of Max Bins field as: &quot;+UiElement_MaxNoOfIterations.IsVisible.ToString +vbNewLine]" />
+          <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type into" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_3" SendWindowMessages="False" SimulateType="False">
+            <ui:TypeInto.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_RegularizationParameter]" WaitForReady="INTERACTIVE" />
+            </ui:TypeInto.Target>
+            <ui:TypeInto.Text>
+              <InArgument x:TypeArguments="x:String">
+                <Literal x:TypeArguments="x:String" Value="" />
+              </InArgument>
+            </ui:TypeInto.Text>
+          </ui:TypeInto>
+          <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type into" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_4" SendWindowMessages="False" SimulateType="False">
+            <ui:TypeInto.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_ElasticNetValue]" WaitForReady="INTERACTIVE" />
+            </ui:TypeInto.Target>
+            <ui:TypeInto.Text>
+              <InArgument x:TypeArguments="x:String">
+                <Literal x:TypeArguments="x:String" Value="" />
+              </InArgument>
+            </ui:TypeInto.Text>
+          </ui:TypeInto>
+          <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type into" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_5" SendWindowMessages="False" SimulateType="False">
+            <ui:TypeInto.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_MaxNoOfIterations]" WaitForReady="INTERACTIVE" />
+            </ui:TypeInto.Target>
+            <ui:TypeInto.Text>
+              <InArgument x:TypeArguments="x:String">
+                <Literal x:TypeArguments="x:String" Value="" />
+              </InArgument>
+            </ui:TypeInto.Text>
+          </ui:TypeInto>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Error" Message="[&quot;FAILED: Algorithm popup verification failed due to one to the below reasons: &quot; +vbNewLine+&#xD;&#xA;&quot;Found visibilty of Impurity input field as: &quot;+UiElement_RegularizationParameter.IsVisible.ToString +vbNewLine +&#xD;&#xA;&quot;Found visibilty of Max depth field as: &quot;+UiElement_ElasticNetValue.IsVisible.ToString +vbNewLine +&#xD;&#xA;&quot;Found visibilty of Max Bins field as: &quot;+UiElement_MaxNoOfIterations.IsVisible.ToString +vbNewLine]" />
+      </If.Else>
+    </If>
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_14" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_SaveBtn]" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke HandleMessageBox workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Please enter regression parameter!</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type into" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_6" SendWindowMessages="False" SimulateType="False" Text="0.3">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_RegularizationParameter]" WaitForReady="INTERACTIVE" />
+      </ui:TypeInto.Target>
+    </ui:TypeInto>
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_15" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_SaveBtn]" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke HandleMessageBox workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_8" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Please enter elastic net value!</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type into" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_7" SendWindowMessages="False" SimulateType="False" Text="0.8">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_ElasticNetValue]" WaitForReady="INTERACTIVE" />
+      </ui:TypeInto.Target>
+    </ui:TypeInto>
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_16" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_SaveBtn]" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke HandleMessageBox workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_9" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Please enter maximum no of iterations!</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type into" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_8" SendWindowMessages="False" SimulateType="False" Text="10">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_MaxNoOfIterations]" WaitForReady="INTERACTIVE" />
+      </ui:TypeInto.Target>
+    </ui:TypeInto>
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_17" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_SaveBtn]" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke HandleMessageBox workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_10" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
       <ui:InvokeWorkflowFile.Arguments>
         <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">App status is Inactive please publish app.</InArgument>
       </ui:InvokeWorkflowFile.Arguments>
@@ -391,12 +545,12 @@
         <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_SaveAndExitBtn]" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke HandleMessageBox workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="DataSourcePage\HandleMessageBox.xaml">
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke HandleMessageBox workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
       <ui:InvokeWorkflowFile.Arguments>
         <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">App status is Inactive please publish app.</InArgument>
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
-    <sads:DebugSymbol.Symbol>d1VEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcTGVhcm5fUmVncmVzc2lvbkFsZ29yaXRobVNjcmVlbi54YW1scAGGAQGUAQECQwOQAw4CAQFRBVUeAwGGAVYFWh4DAYIBWwVfHgIBfmAFagoCAXVrBXkQAgFyegV+HgIBbn8FgwEeAgFqhAEFiAEeAgFmiQEFjQEeAgFijgEFmAEKAgFZmQEFpwEQAgFWqAEFrAEeAgFSrQEFsQETAgFNsgEFtgEVAgFLtwEFxQEQAgFIxgEFygEdAgFFywEFzwEeAgFB0AEF1AEeAgE91QEF2QEeAgE52gEF5AEKAgEw5QEF6QETAgEr6gEF+AEQAgEo+QEF/QEdAgEl/gEFjAIQAgEijQIFkQIVAgEhkgIFoAIQAgEeoQIFpQIdAgEbpgIFtAIQAgEYtQIFuQIVAgEXugIFyAIQAgEVyQIF1wIQAgES2AIF3AIdAgEP3QIF6wIQAgEM7AIF+gIQAgEI+wIFiQMQAgEFigMFjgMdAgECUUlRYAMBiAFTmAFTgQIDAYcBVklWYgMBhAFYmAFYgwIDAYMBW0tbZAMBgAFdmAFdigMCAX9gE2B8AgF2YgllFAIBeWgJaK8EAgF3d193eAIBc3pMenQCAXB8mAF8qAMCAW9/Tn9qAgFsgQGYAYEBkgICAWuEAU6EAWMCAWiGAZgBhgGDAgIBZ4kBTokBZQIBZIsBmAGLAYUCAgFjjgETjgGuAQIBWpABCZMBFAIBXZYBCZYBvwUCAVulAV+lAXYCAVeoAUyoAWkCAVSqAZgBqgGBAgIBU60BjQKtAZ4CAgFQrwFfrwF8AgFOtAGYAbQBgQICAUzDAV/DAXsCAUnIAUjIAWACAUfGAb0BxgHjAQIBRssBTcsBZAIBQ80BmAHNAfoBAgFC0AFM0AFmAgE/0gGYAdIBlwICAT7VAUvVAWcCATvXAZgB1wGmBAIBOtoBE9oBgAECATHcAQnfARQCATTiAQniAb4EAgEy5QGPAuUBsgICAS7nAV/nAXYCASz2AV/2AXQCASn7AUj7AWQCASf5Ab0B+QHjAQIBJooCX4oCeQIBI54CX54CewIBH6MCSKMCZgIBHaECvQGhAuMBAgEcsgJfsgJ7AgEZxgKYAcYCjAICARbVAl/VAnQCARPaAkjaAnICARHYAr0B2ALjAQIBEOkCX+kCeAIBDfgCX/gChwECAQrsAkfsAk0CAQmHA1+HA3sCAQaMA0iMA3ICAQSKA70BigPjAQIBA2MLY7kBAgF8ZAtkuQMCAXpod2isBAIBeJEBC5EBuAECAWCSAQuSAcoEAgFelgF3lgG8BQIBXN0BC90B1gECATfeAQveAdYDAgE14gF34gG7BAIBM2N4Y7YBAgF9ZHlktgMCAXuRAXiRAbUBAgFhkgF5kgHHBAIBX90BeN0B0wECATjeAXneAdMDAgE2</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -462,18 +616,46 @@
       <sap2010:ViewStateData Id="Click_8" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="Click_9" sap:VirtualizedContainerService.HintSize="675,68" />
       <sap2010:ViewStateData Id="InvokeWorkflowFile_4" sap:VirtualizedContainerService.HintSize="675,87" />
-      <sap2010:ViewStateData Id="Click_10" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="Click_11" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="Click_12" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="675,87" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="697,6039">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_15" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_16" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_17" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="LogMessage_10" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_11" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="TypeInto_3" sap:VirtualizedContainerService.HintSize="314,96" />
+      <sap2010:ViewStateData Id="TypeInto_4" sap:VirtualizedContainerService.HintSize="314,96" />
+      <sap2010:ViewStateData Id="TypeInto_5" sap:VirtualizedContainerService.HintSize="314,96" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="336,754">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Classification_AlgorithmScreen_1" sap:VirtualizedContainerService.HintSize="737,6239" />
+      <sap2010:ViewStateData Id="LogMessage_12" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="675,902" />
+      <sap2010:ViewStateData Id="Click_14" sap:VirtualizedContainerService.HintSize="675,68" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_7" sap:VirtualizedContainerService.HintSize="675,87" />
+      <sap2010:ViewStateData Id="TypeInto_6" sap:VirtualizedContainerService.HintSize="675,96" />
+      <sap2010:ViewStateData Id="Click_15" sap:VirtualizedContainerService.HintSize="675,68" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_8" sap:VirtualizedContainerService.HintSize="675,87" />
+      <sap2010:ViewStateData Id="TypeInto_7" sap:VirtualizedContainerService.HintSize="675,96" />
+      <sap2010:ViewStateData Id="Click_16" sap:VirtualizedContainerService.HintSize="675,68" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_9" sap:VirtualizedContainerService.HintSize="675,87" />
+      <sap2010:ViewStateData Id="TypeInto_8" sap:VirtualizedContainerService.HintSize="675,96" />
+      <sap2010:ViewStateData Id="Click_17" sap:VirtualizedContainerService.HintSize="675,68" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_10" sap:VirtualizedContainerService.HintSize="675,87" />
+      <sap2010:ViewStateData Id="Click_10" sap:VirtualizedContainerService.HintSize="675,68" />
+      <sap2010:ViewStateData Id="Click_11" sap:VirtualizedContainerService.HintSize="675,68" />
+      <sap2010:ViewStateData Id="Click_12" sap:VirtualizedContainerService.HintSize="675,68" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="675,87" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="697,8767">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Classification_AlgorithmScreen_1" sap:VirtualizedContainerService.HintSize="737,9207" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
