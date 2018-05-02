@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Save_PublishAndRunFlow" mva:VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="Save_PublishAndRunFlow_1"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Save_PublishAndRunFlow" this:Save_PublishAndRunFlow.RCP_FlowFlag="False"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -8,8 +8,20 @@
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:swa="clr-namespace:System.Windows.Automation;assembly=UIAutomationTypes"
+ xmlns:this="clr-namespace:"
  xmlns:ui="http://schemas.uipath.com/workflow/activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="RCP_FlowFlag" Type="InArgument(x:Boolean)" />
+    <x:Property Name="rcp_DSname" Type="InArgument(x:String)" />
+    <x:Property Name="DS_nameToMap" Type="InArgument(x:String)" />
+    <x:Property Name="field1ToMap" Type="InArgument(x:String)" />
+    <x:Property Name="field2ToMap" Type="InArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>Save_PublishAndRunFlow_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -121,7 +133,7 @@
         <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[UiElement_RunAppButton]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
       </ui:UiElementExists.Target>
     </ui:UiElementExists>
-    <If Condition="[Is_SaveAppButtonDisplayed and Is_ValidateAppButtonDisplayed and Is_RunAppButtonDisplayed]" sap2010:WorkflowViewState.IdRef="If_1">
+    <If Condition="[Is_SaveAppButtonDisplayed and Is_ValidateAppButtonDisplayed and Is_RunAppButtonDisplayed]" DisplayName="If( Verify if Save, publish and Run flow button are displayed)" sap2010:WorkflowViewState.IdRef="If_1">
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
           <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;Found Save App button verification as &quot;+Is_SaveAppButtonDisplayed.ToString+ vbNewLine+&#xA;&quot;Found Validate App button verification as &quot;+Is_ValidateAppButtonDisplayed.ToString+ vbNewLine+&#xA;&quot;Found Run App button verification as &quot;+Is_RunAppButtonDisplayed.ToString+ vbNewLine]" />
@@ -135,7 +147,7 @@
         </Sequence>
       </If.Else>
     </If>
-    <ui:Click DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DelayBefore="3000" sap2010:WorkflowViewState.IdRef="Click_7" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:Click DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DelayBefore="3000" DisplayName="Click UiElement Save Button" sap2010:WorkflowViewState.IdRef="Click_7" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -150,12 +162,12 @@
         <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_SaveAppButton]" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:WaitUiElementAppear DisplayName="Find Element 'DIV  topTipMaxiqId5'" FoundElement="[UiElement_PopupMessage]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_5" WaitActive="False" WaitVisible="False">
+    <ui:WaitUiElementAppear DisplayName="Find Success/Error message" FoundElement="[UiElement_PopupMessage]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_5" WaitActive="False" WaitVisible="False">
       <ui:WaitUiElementAppear.Target>
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="95dbd3b439935b8b5d26481e100b1819" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='topTipMaxiqId*' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:WaitUiElementAppear.Target>
     </ui:WaitUiElementAppear>
-    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text" sap2010:WorkflowViewState.IdRef="GetValue_4">
+    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Success/Error message Text" sap2010:WorkflowViewState.IdRef="GetValue_4">
       <ui:GetValue.Target>
         <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_PopupMessage]" WaitForReady="INTERACTIVE" />
       </ui:GetValue.Target>
@@ -163,11 +175,11 @@
         <OutArgument x:TypeArguments="x:String">[SuccessMsg_ForSaveApp]</OutArgument>
       </ui:GetValue.Value>
     </ui:GetValue>
-    <If Condition="[SuccessMsg_ForSaveApp.Contains(&quot;App saved successfully, Please validate to make it active&quot;)]" sap2010:WorkflowViewState.IdRef="If_2">
+    <If Condition="[SuccessMsg_ForSaveApp.Contains(&quot;App saved successfully, Please validate to make it active&quot;)]" DisplayName="If (Verify message when save flow button is clicked)" sap2010:WorkflowViewState.IdRef="If_2">
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;App Saved Successfuly. Success Message is: &quot;+SuccessMsg_ForSaveApp]" />
-          <ui:AppendLine DisplayName="Append line" FileName="[ReportPath]" sap2010:WorkflowViewState.IdRef="AppendLine_3" Text="[&quot;App Saved Successfuly. Success Message is: &quot;+SuccessMsg_ForSaveApp]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;SUCCESS: App Saved Successfuly. Success Message is: &quot;+SuccessMsg_ForSaveApp]" />
+          <ui:AppendLine DisplayName="Append line" FileName="[ReportPath]" sap2010:WorkflowViewState.IdRef="AppendLine_3" Text="[&quot;SUCCESS: App Saved Successfuly. Success Message is: &quot;+SuccessMsg_ForSaveApp]" />
           <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
             <ui:Click.CursorPosition>
               <ui:CursorPosition Position="Center">
@@ -187,13 +199,13 @@
       </If.Then>
       <If.Else>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="[&quot;Error while trying to save the App. Error message is: &quot;+SuccessMsg_ForSaveApp]" />
-          <ui:AppendLine DisplayName="Append line" FileName="[ReportPath]" sap2010:WorkflowViewState.IdRef="AppendLine_4" Text="[&quot;Error while trying to save the App. Error message is: &quot;+SuccessMsg_ForSaveApp]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="[&quot;FAILED: Error while trying to save the App. Error message is: &quot;+SuccessMsg_ForSaveApp]" />
+          <ui:AppendLine DisplayName="Append line" FileName="[ReportPath]" sap2010:WorkflowViewState.IdRef="AppendLine_4" Text="[&quot;SUCCESS: Error while trying to save the App. Error message is: &quot;+SuccessMsg_ForSaveApp]" />
           <TerminateWorkflow DisplayName="Terminate workflow" Exception="[SaveErrorException]" sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" />
         </Sequence>
       </If.Else>
     </If>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_8" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Validate Flow button" sap2010:WorkflowViewState.IdRef="Click_8" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -208,7 +220,7 @@
         <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UIElement_ValidateAppButton]" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:GetAttribute ContinueOnError="{x:Null}" Attribute="aaname" DisplayName="Get attribute 'H3'" sap2010:WorkflowViewState.IdRef="GetAttribute_1">
+    <ui:GetAttribute ContinueOnError="{x:Null}" Attribute="aaname" DisplayName="Get validate popup title" sap2010:WorkflowViewState.IdRef="GetAttribute_1">
       <ui:GetAttribute.Result>
         <OutArgument x:TypeArguments="x:String">[get_PublishPopupTitle]</OutArgument>
       </ui:GetAttribute.Result>
@@ -216,7 +228,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d2073e4d7ded7d2222b90524df8290f7" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='H3' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:GetAttribute.Target>
     </ui:GetAttribute>
-    <ui:UiElementExists DisplayName="Element Exists 'BUTTON'" Exists="[Is_PublishButtonDisplayed]" sap2010:WorkflowViewState.IdRef="UiElementExists_5">
+    <ui:UiElementExists DisplayName="Element Exists Publish BUTTON'" Exists="[Is_PublishButtonDisplayed]" sap2010:WorkflowViewState.IdRef="UiElementExists_5">
       <ui:UiElementExists.Target>
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="d3acc864551faac9af63870dbe9f9ec4" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Publish' parentid='app' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
       </ui:UiElementExists.Target>
@@ -226,21 +238,21 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="b9646e3835caf6a78e414ec318bf3cfb" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' parentid='app' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
       </ui:UiElementExists.Target>
     </ui:UiElementExists>
-    <If Condition="[get_PublishPopupTitle.Trim().Contains(&quot;App validation&quot;) and Is_PublishButtonDisplayed and Is_CancelButtonDisplayed]" sap2010:WorkflowViewState.IdRef="If_3">
+    <If Condition="[get_PublishPopupTitle.Trim().Contains(&quot;App validation&quot;) and Is_PublishButtonDisplayed and Is_CancelButtonDisplayed]" DisplayName="If (Verify publish popup screen)" sap2010:WorkflowViewState.IdRef="If_3">
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_9">
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[&quot;Found Publish Popup title as: &quot;+get_PublishPopupTitle+ vbNewLine+&#xA;&quot;Status of Publish button on Publish popup is: &quot;+Is_PublishButtonDisplayed.ToString+ vbNewLine+&#xA;&quot;Status of cancel button on Publish popup is: &quot;+Is_CancelButtonDisplayed.ToString+ vbNewLine]" />
-          <ui:AppendLine DisplayName="Append line" FileName="[ReportPath]" sap2010:WorkflowViewState.IdRef="AppendLine_5" Text="[&quot;Found Publish Popup title as: &quot;+get_PublishPopupTitle+ vbNewLine+&#xA;&quot;Status of Publish button on Publish popup is: &quot;+Is_PublishButtonDisplayed.ToString+ vbNewLine+&#xA;&quot;Status of cancel button on Publish popup is: &quot;+Is_CancelButtonDisplayed.ToString+ vbNewLine]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[&quot;SUCCESS: Found Publish Popup title as: &quot;+get_PublishPopupTitle+ vbNewLine+&#xD;&#xA;&quot;Status of Publish button on Publish popup is: &quot;+Is_PublishButtonDisplayed.ToString+ vbNewLine+&#xD;&#xA;&quot;Status of cancel button on Publish popup is: &quot;+Is_CancelButtonDisplayed.ToString+ vbNewLine]" />
+          <ui:AppendLine DisplayName="Append line" FileName="[ReportPath]" sap2010:WorkflowViewState.IdRef="AppendLine_5" Text="[&quot;SUCCESS: Found Publish Popup title as: &quot;+get_PublishPopupTitle+ vbNewLine+&#xD;&#xA;&quot;Status of Publish button on Publish popup is: &quot;+Is_PublishButtonDisplayed.ToString+ vbNewLine+&#xD;&#xA;&quot;Status of cancel button on Publish popup is: &quot;+Is_CancelButtonDisplayed.ToString+ vbNewLine]" />
         </Sequence>
       </If.Then>
       <If.Else>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_10">
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="[&quot;Publish button popup verification failed due to one of the below reasons: &quot;+ vbNewLine+&#xA;&quot;Found Publish Popup title as: &quot;+get_PublishPopupTitle+ vbNewLine+&#xA;&quot;Status of Publish button on Publish popup is: &quot;+Is_PublishButtonDisplayed.ToString+ vbNewLine+&#xA;&quot;Status of cancel button on Publish popup is: &quot;+Is_CancelButtonDisplayed.ToString+ vbNewLine]" />
-          <ui:AppendLine DisplayName="Append line" FileName="[ReportPath]" sap2010:WorkflowViewState.IdRef="AppendLine_6" Text="[&quot;Publish button popup verification failed due to one of the below reasons: &quot;+ vbNewLine+&#xA;&quot;Found Publish Popup title as: &quot;+get_PublishPopupTitle+ vbNewLine+&#xA;&quot;Status of Publish button on Publish popup is: &quot;+Is_PublishButtonDisplayed.ToString+ vbNewLine+&#xA;&quot;Status of cancel button on Publish popup is: &quot;+Is_CancelButtonDisplayed.ToString+ vbNewLine]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="[&quot;FAILED: Publish button popup verification failed due to one of the below reasons: &quot;+ vbNewLine+&#xD;&#xA;&quot;Found Publish Popup title as: &quot;+get_PublishPopupTitle+ vbNewLine+&#xD;&#xA;&quot;Status of Publish button on Publish popup is: &quot;+Is_PublishButtonDisplayed.ToString+ vbNewLine+&#xD;&#xA;&quot;Status of cancel button on Publish popup is: &quot;+Is_CancelButtonDisplayed.ToString+ vbNewLine]" />
+          <ui:AppendLine DisplayName="Append line" FileName="[ReportPath]" sap2010:WorkflowViewState.IdRef="AppendLine_6" Text="[&quot;FAILED: Publish button popup verification failed due to one of the below reasons: &quot;+ vbNewLine+&#xD;&#xA;&quot;Found Publish Popup title as: &quot;+get_PublishPopupTitle+ vbNewLine+&#xD;&#xA;&quot;Status of Publish button on Publish popup is: &quot;+Is_PublishButtonDisplayed.ToString+ vbNewLine+&#xD;&#xA;&quot;Status of cancel button on Publish popup is: &quot;+Is_CancelButtonDisplayed.ToString+ vbNewLine]" />
         </Sequence>
       </If.Else>
     </If>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_4" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Publish Button" sap2010:WorkflowViewState.IdRef="Click_4" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -255,7 +267,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d3acc864551faac9af63870dbe9f9ec4" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Publish' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
-    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'DIV  topTipMaxiqId0'" sap2010:WorkflowViewState.IdRef="GetValue_3">
+    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Success/Error Message" sap2010:WorkflowViewState.IdRef="GetValue_3">
       <ui:GetValue.Target>
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fb02b0cff5249c566e6624f31a0f5474" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='topTipMaxiqId*' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:GetValue.Target>
@@ -263,10 +275,10 @@
         <OutArgument x:TypeArguments="x:String">[SuccessMsg_forPublishApp]</OutArgument>
       </ui:GetValue.Value>
     </ui:GetValue>
-    <If Condition="[SuccessMsg_forPublishApp.Contains(&quot;App status is active you can run app&quot;)]" sap2010:WorkflowViewState.IdRef="If_4">
+    <If Condition="[SuccessMsg_forPublishApp.Contains(&quot;App status is active you can run app&quot;)]" DisplayName="If (Verify Publish Success/Error Message)" sap2010:WorkflowViewState.IdRef="If_4">
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;App Published Successfuly. Success Message is: &quot;+SuccessMsg_forPublishApp]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;SUCCESS: App Published Successfuly. Success Message is: &quot;+SuccessMsg_forPublishApp]" />
           <ui:AppendLine DisplayName="Append line" FileName="[ReportPath]" sap2010:WorkflowViewState.IdRef="AppendLine_7" Text="[&quot;App Published Successfuly. Success Message is: &quot;+SuccessMsg_forPublishApp]" />
           <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_5" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
             <ui:Click.CursorPosition>
@@ -290,13 +302,13 @@
           <Sequence.Variables>
             <Variable x:TypeArguments="swa:ElementNotAvailableException" Name="PublishFlowException" />
           </Sequence.Variables>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="[&quot;Error while trying to publish the App. Error message is: &quot;+SuccessMsg_forPublishApp]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="[&quot;FAILED: Error while trying to publish the App. Error message is: &quot;+SuccessMsg_forPublishApp]" />
           <ui:AppendLine DisplayName="Append line" FileName="[ReportPath]" sap2010:WorkflowViewState.IdRef="AppendLine_8" Text="[&quot;Error while trying to publish the App. Error message is: &quot;+SuccessMsg_forPublishApp]" />
           <TerminateWorkflow DisplayName="Terminate workflow" Exception="[PublishFlowException]" sap2010:WorkflowViewState.IdRef="TerminateWorkflow_2" />
         </Sequence>
       </If.Else>
     </If>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_9" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Run Flow Button" sap2010:WorkflowViewState.IdRef="Click_9" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -311,6 +323,24 @@
         <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_RunAppButton]" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
+    <If Condition="[RCP_FlowFlag.Equals(true)]" sap2010:WorkflowViewState.IdRef="If_8">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_17">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_16" Level="Info" Message="Found RCP_FlowFlag as true.. Invoking RCP workflow to map parameters" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Run_RCPFlow workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="FlowPage\Run_RCPFlow.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="RCP_DSname">[rcp_DSname]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="DSnameToMap">[DS_nameToMap]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Field1ToMap">[field1ToMap]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Field2ToMap">[field2ToMap]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_17" Level="Info" Message="Not invoking RCP Run workflow as found RCP_flowFlag as false" />
+      </If.Else>
+    </If>
     <ui:GetAttribute ContinueOnError="{x:Null}" Attribute="aaname" DisplayName="Get attribute 'H3'" sap2010:WorkflowViewState.IdRef="GetAttribute_2">
       <ui:GetAttribute.Result>
         <OutArgument x:TypeArguments="x:String">[get_RunAppPopupTitle]</OutArgument>
@@ -404,7 +434,7 @@
         </Sequence>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -413,9 +443,30 @@
       <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="WaitUiElementAppear_2" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="WaitUiElementAppear_3" sap:VirtualizedContainerService.HintSize="697,106" />
-      <sap2010:ViewStateData Id="UiElementExists_9" sap:VirtualizedContainerService.HintSize="697,68" />
-      <sap2010:ViewStateData Id="UiElementExists_10" sap:VirtualizedContainerService.HintSize="697,68" />
-      <sap2010:ViewStateData Id="UiElementExists_11" sap:VirtualizedContainerService.HintSize="697,68" />
+      <sap2010:ViewStateData Id="UiElementExists_9" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="UiElementExists_10" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="UiElementExists_11" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="WriteTextFile_1" sap:VirtualizedContainerService.HintSize="314,87" />
       <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,342">
@@ -434,10 +485,38 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="697,490" />
-      <sap2010:ViewStateData Id="Click_7" sap:VirtualizedContainerService.HintSize="697,68" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_5" sap:VirtualizedContainerService.HintSize="697,106" />
-      <sap2010:ViewStateData Id="GetValue_4" sap:VirtualizedContainerService.HintSize="697,68" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="697,490">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_7" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_5" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="GetValue_4" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="AppendLine_3" sap:VirtualizedContainerService.HintSize="314,87" />
       <sap2010:ViewStateData Id="Click_2" sap:VirtualizedContainerService.HintSize="314,106" />
@@ -458,9 +537,30 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="697,636" />
-      <sap2010:ViewStateData Id="Click_8" sap:VirtualizedContainerService.HintSize="697,68" />
-      <sap2010:ViewStateData Id="GetAttribute_1" sap:VirtualizedContainerService.HintSize="697,134" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="697,636">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_8" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="GetAttribute_1" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="UiElementExists_5" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="UiElementExists_6" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="314,91" />
@@ -481,9 +581,30 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="697,490" />
-      <sap2010:ViewStateData Id="Click_4" sap:VirtualizedContainerService.HintSize="697,106" />
-      <sap2010:ViewStateData Id="GetValue_3" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_4" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="GetValue_3" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_7" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="AppendLine_7" sap:VirtualizedContainerService.HintSize="314,87" />
       <sap2010:ViewStateData Id="Click_5" sap:VirtualizedContainerService.HintSize="314,106" />
@@ -504,8 +625,26 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="697,636" />
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="Click_9" sap:VirtualizedContainerService.HintSize="697,68" />
+      <sap2010:ViewStateData Id="LogMessage_16" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_17" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_17" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_8" sap:VirtualizedContainerService.HintSize="697,490" />
       <sap2010:ViewStateData Id="GetAttribute_2" sap:VirtualizedContainerService.HintSize="697,134" />
       <sap2010:ViewStateData Id="WaitUiElementAppear_4" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="UiElementExists_12" sap:VirtualizedContainerService.HintSize="697,68" />
@@ -552,14 +691,14 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_7" sap:VirtualizedContainerService.HintSize="697,636" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="719,6859">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="719,6015">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Save_PublishAndRunFlow_1" sap:VirtualizedContainerService.HintSize="759,7019" />
+      <sap2010:ViewStateData Id="Save_PublishAndRunFlow_1" sap:VirtualizedContainerService.HintSize="759,5128" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
