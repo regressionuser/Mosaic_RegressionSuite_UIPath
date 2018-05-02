@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Manager_ConnectionHome" mva:VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="Manager_ConnectionHome_1"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Manager_ConnectionHome"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -9,6 +9,14 @@
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:ui="http://schemas.uipath.com/workflow/activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="ExternalConnectionList" Type="InOutArgument(scg:List(x:String))" />
+    <x:Property Name="RDBMSConnectionList" Type="InOutArgument(scg:List(x:String))" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>Manager_ConnectionHome_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -54,6 +62,7 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
@@ -266,17 +275,20 @@
       </Sequence>
       <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file: External File" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="ConnectionPage\ExternalConnectors\Manager_ExternalConnectorMain.xaml">
         <ui:InvokeWorkflowFile.Arguments>
-          <scg:Dictionary x:TypeArguments="x:String, Argument" />
+          <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
+          <InArgument x:TypeArguments="x:String" x:Key="argument1" />
+          <InOutArgument x:TypeArguments="scg:List(x:String)" x:Key="dsName_List">[ExternalConnectionList]</InOutArgument>
         </ui:InvokeWorkflowFile.Arguments>
       </ui:InvokeWorkflowFile>
       <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file: RDBMS Connection" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMSConnectors.xaml">
         <ui:InvokeWorkflowFile.Arguments>
           <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
+          <OutArgument x:TypeArguments="scg:List(x:String)" x:Key="RDBMSdsName_List">[RDBMSConnectionList]</OutArgument>
         </ui:InvokeWorkflowFile.Arguments>
       </ui:InvokeWorkflowFile>
       <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file: FTP Connection" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="ConnectionPage\OtherConnectors\Manager_FTPConnectionConnection.xaml">
         <ui:InvokeWorkflowFile.Arguments>
-          <scg:Dictionary x:TypeArguments="x:String, Argument" />
+          <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
         </ui:InvokeWorkflowFile.Arguments>
       </ui:InvokeWorkflowFile>
       <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file Stream Connection" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="ConnectionPage\OtherConnectors\Manager_StreamConnection.xaml">
@@ -290,7 +302,7 @@
         </ui:InvokeWorkflowFile.Arguments>
       </ui:InvokeWorkflowFile>
     </Sequence>
-    <sads:DebugSymbol.Symbol>d0ZEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxDb25uZWN0aW9uUGFnZVxDcmVhdGVDb25uZWN0aW9ucy54YW1sVDsDpgIOAgEBPAWkAhACAQJPNk9LAgEHUDZQWwIBBlE2UY0BAgEFUjZSSwIBBFM2U1ECAQNeB4oCEgIBEosCB48CHwIBEJACB5QCHwIBDpUCB5kCHwIBDJoCB54CHwIBCp8CB6MCHwIBCF8JZhcCAWFnCZUBDgIBT5YBCZYBxAECAUyXAQmeARcCAUifAQm3AQ4CAT24AQm/AR4CATjAAQnEAR4CATLFAQndAQ4CASbeAQniASICASLjAQnnAR4CARzoAQmJAg4CAROLAsIBiwKIAgIBEZACxQGQAoICAgEPlQLDAZUCiAICAQ2aAsUBmgKDAgIBC58CwwGfAoACAgEJZDVkRgIBYmGcAWGoAgIBZGcXZ0gCAVBpDWmhAQIBX2wNkwEYAgFSlgGBAZYBwQECAU2cATWcAUQCAUmZAZwBmQH0AQIBS58BF58BRAIBPqEBDbIBGAIBQ7UBDbUB2AECAUC4AU+4AWoCATu9AWO9AZMBAgE6ugE3ugE8AgE5wgF0wgF6AgE3wAFRwAFuAgE1wgFOwgFpAgEzxQEXxQE0AgEnxwEN2AEYAgEr2wEN2wHEAQIBKd4BaN4BkgECASTgAZwB4AH4AQIBI+UBgwHlAYkBAgEh4wFe4wGHAQIBH+UBTuUBeAIBHegBF+gBQAIBFOoBDYQCGAIBGIcCDYcC1QECARZpe2meAQIBYG0PexoCAVt8D4MBHQIBV4QBD5IBGgIBU6IBD7ABGgIBRrEBD7EBowECAUS1AYYBtQHVAQIBQcgBD8gBpgECATDJAQ/XARoCASzbAZwB2wHBAQIBKusBD+sBtAECARrsAQ+DAh8CARmHApwBhwLSAQIBF3miAXm0AgIBXm1NbVMCAV1tPm1EAgFcgQE7gQFPAgFYfqIBfv0BAgFakAGiAZAB/QECAVaEAU2EAVMCAVWEAT6EAUQCAVSuAaIBrgH6AQIBR7EBgwGxAaABAgFFyAF9yAGjAQIBMdUBadUBhAECAS7JAVHJAVcCAS3rAX3rAbEBAgEb</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0ZEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxDb25uZWN0aW9uUGFnZVxDcmVhdGVDb25uZWN0aW9ucy54YW1sVkQDsgIOAgEBRQWwAhACAQJYNlhLAgEHWTZZWwIBBlo2Wo0BAgEFWzZbSwIBBFw2XFECAQNnB5MCEgIBFpQCB5oCHwIBEpsCB6ACHwIBDqECB6UCHwIBDKYCB6oCHwIBCqsCB68CHwIBCGgJbxcCAWVwCZ4BDgIBU58BCZ8BxAECAVCgAQmnARcCAUyoAQnAAQ4CAUHBAQnIAR4CATzJAQnNAR4CATbOAQnmAQ4CASrnAQnrASICASbsAQnwAR4CASDxAQmSAg4CAReYAlOYAmsCARSUAsIBlAKIAgIBE54CVp4CawIBEJsCxQGbAoICAgEPoQLDAaECiAICAQ2mAsUBpgKDAgIBC6sCwwGrAoACAgEJbTVtRgIBZmqcAWqoAgIBaHAXcEgCAVRyDXKhAQIBY3UNnAEYAgFWnwGBAZ8BwQECAVGlATWlAUQCAU2iAZwBogH0AQIBT6gBF6gBRAIBQqoBDbsBGAIBR74BDb4B2AECAUTBAU/BAWoCAT/GAWPGAZMBAgE+wwE3wwE8AgE9ywF0ywF6AgE7yQFRyQFuAgE5ywFOywFpAgE3zgEXzgE0AgEr0AEN4QEYAgEv5AEN5AHEAQIBLecBaOcBkgECASjpAZwB6QH4AQIBJ+4BgwHuAYkBAgEl7AFe7AGHAQIBI+4BTu4BeAIBIfEBF/EBQAIBGPMBDY0CGAIBHJACDZAC1QECARpye3KeAQIBZHYPhAEaAgFfhQEPjAEdAgFbjQEPmwEaAgFXqwEPuQEaAgFKugEPugGjAQIBSL4BhgG+AdUBAgFF0QEP0QGmAQIBNNIBD+ABGgIBMOQBnAHkAcEBAgEu9AEP9AG0AQIBHvUBD4wCHwIBHZACnAGQAtIBAgEbggGiAYIBtAICAWJ2TXZTAgFhdj52RAIBYIoBO4oBTwIBXIcBogGHAf0BAgFemQGiAZkB/QECAVqNAU2NAVMCAVmNAT6NAUQCAVi3AaIBtwH6AQIBS7oBgwG6AaABAgFJ0QF90QGjAQIBNd4Bad4BhAECATLSAVHSAVcCATH0AX30AbEBAgEf</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -506,10 +518,10 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,51">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
@@ -543,7 +555,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,774">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,810">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -551,14 +563,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="358,898">
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="358,934">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Manager_ConnectionHome_1" sap:VirtualizedContainerService.HintSize="398,1138">
+      <sap2010:ViewStateData Id="Manager_ConnectionHome_1" sap:VirtualizedContainerService.HintSize="398,1174">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="ShouldCollapseAll">True</x:Boolean>
