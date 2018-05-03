@@ -12,6 +12,8 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="expectedMessage" Type="InArgument(x:String)" />
+    <x:Property Name="flag" Type="OutArgument(x:Boolean)" />
+    <x:Property Name="out_actualMessage" Type="OutArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -73,11 +75,10 @@
         <Sequence.Variables>
           <Variable x:TypeArguments="ui:UiElement" Name="element_MessageBoxContainer" />
           <Variable x:TypeArguments="ui:GenericValue" Name="actualMessage" />
-          <Variable x:TypeArguments="x:Boolean" Name="flag" />
         </Sequence.Variables>
         <ui:WaitUiElementAppear ContinueOnError="True" DisplayName="element_MessageBoxContainer" FoundElement="[element_MessageBoxContainer]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_1" WaitActive="True" WaitVisible="True">
           <ui:WaitUiElementAppear.Target>
-            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e1d1529cf18e682f82726f4bae449c35" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='DIV' parentclass='toast-bottom-right' parentid='toast-container' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="e1d1529cf18e682f82726f4bae449c35" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='DIV' parentclass='toast-bottom-right' parentid='toast-container' title='MOSAIC' /&gt;" TimeoutMS="50000" WaitForReady="INTERACTIVE" />
           </ui:WaitUiElementAppear.Target>
         </ui:WaitUiElementAppear>
         <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
@@ -88,17 +89,10 @@
             <InArgument x:TypeArguments="x:Boolean">False</InArgument>
           </Assign.Value>
         </Assign>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Warn" Message="[flag.ToString]" />
         <If Condition="[element_MessageBoxContainer.IsVisible]" DisplayName="If Message Box Container present" sap2010:WorkflowViewState.IdRef="If_1">
           <If.Then>
             <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-              <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
-                <Assign.To>
-                  <OutArgument x:TypeArguments="x:Boolean">[flag]</OutArgument>
-                </Assign.To>
-                <Assign.Value>
-                  <InArgument x:TypeArguments="x:Boolean">True</InArgument>
-                </Assign.Value>
-              </Assign>
               <ui:GetAttribute ContinueOnError="{x:Null}" Attribute="aaname" DisplayName="Get attribute" sap2010:WorkflowViewState.IdRef="GetAttribute_1">
                 <ui:GetAttribute.Result>
                   <OutArgument x:TypeArguments="ui:GenericValue">[actualMessage]</OutArgument>
@@ -119,11 +113,27 @@
             <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Error" Message="No Message Box container is Open" />
           </If.Else>
         </If>
+        <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:String">[out_actualMessage]</OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:String">[actualMessage.ToString.Trim.Replace("×","")]</InArgument>
+          </Assign.Value>
+        </Assign>
         <If Condition="[actualMessage.ToString.Trim.Replace(&quot;×&quot;,&quot;&quot;).Equals(expectedMessage)]" sap2010:WorkflowViewState.IdRef="If_3">
           <If.Then>
             <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+              <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:Boolean">[flag]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                </Assign.Value>
+              </Assign>
               <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="Message is as Expected" />
-              <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+              <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
                 <ui:Click.CursorPosition>
                   <ui:CursorPosition Position="Center">
                     <ui:CursorPosition.OffsetX>
@@ -141,7 +151,24 @@
             </Sequence>
           </If.Then>
           <If.Else>
-            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="Message is not as Expected" />
+            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="Message is not as Expected" />
+              <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                <ui:Click.CursorPosition>
+                  <ui:CursorPosition Position="Center">
+                    <ui:CursorPosition.OffsetX>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetX>
+                    <ui:CursorPosition.OffsetY>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetY>
+                  </ui:CursorPosition>
+                </ui:Click.CursorPosition>
+                <ui:Click.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_CloseMessage]" WaitForReady="INTERACTIVE" />
+                </ui:Click.Target>
+              </ui:Click>
+            </Sequence>
           </If.Else>
         </If>
         <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_1">
@@ -162,17 +189,17 @@
         </ActivityAction>
       </Catch>
     </TryCatch.Catches>
-    <sads:DebugSymbol.Symbol>d1tEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aDFcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcR2VuZXJpY1xWZXJpZnlfTWVzc2FnZS54YW1sJkMDpgEOAgEBSAeaARICAQJOCVIiAgEpUwlaEgIBJVsJeQ4CARB6CZIBDgIBBJMBCZkBGQIBA05vTo4BAgEsUJwBULICAgErTjFONwIBKlg1WDoCAShVNlU8AgEmWxdbQAIBEV0NdBgCARR3DXegAQIBEnoXenICAQV8DY0BGAIBCJABDZABmgECAQZeD2UYAgEhZg9tIQIBG24PcigCARdzD3OZAQIBFXd7d50BAgETfQ99lwECAQ5+D4wBGgIBCZABe5ABlwECAQdjO2M/AgEkYDxgQgIBImZFZk0CAR5oQmhRAgEca2lriAECAR9uV25vAgEZcKIBcKUCAgEYc3xzlgECARZ9fH2UAQIBD35NflMCAQ2KAWmKAYEBAgELfj5+RAIBCg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aDFcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcR2VuZXJpY1xWZXJpZnlfTWVzc2FnZS54YW1sMUUDwQEOAgEBSge1ARICAQJPCVMiAgE2VAlbEgIBMlwJXIoBAgEvXQlzDgIBHnQJexICARp8Ca0BDgIBBK4BCbQBGQIBA09vT44BAgE6UYcBUZ0CAgE5UagCUa8CAgE4TzFPNwIBN1k1WToCATVWNlY8AgEzXHZchwECATBdF11AAgEfXw1uGAIBInENcaABAgEgeTR5YQIBHXY1dkgCARt8F3xyAgEFfg2XARgCAQ6aAQ2rARgCAQZgD2chAgEpaA9sKAIBJW0PbZkBAgEjcXtxnQECASF/D4YBGAIBFocBD4cBlwECARSIAQ+WARoCAQ+bAQ+bAZwBAgEMnAEPqgEaAgEHYEVgTQIBLGJCYlECASplaWWIAQIBLWhXaG8CASdqogFqpQICASZtfG2WAQIBJIQBO4QBPwIBGYEBPIEBQgIBF4cBfIcBlAECARWIAU2IAVMCAROUAWmUAYEBAgERiAE+iAFEAgEQmwF9mwGZAQIBDZwBTZwBUwIBC6gBaagBgQECAQmcAT6cAUQCAQg=</sads:DebugSymbol.Symbol>
   </TryCatch>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="675,60" />
-      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="697,60" />
+      <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="697,91" />
       <sap2010:ViewStateData Id="GetAttribute_1" sap:VirtualizedContainerService.HintSize="314,96" />
       <sap2010:ViewStateData Id="WaitUiElementAppear_3" sap:VirtualizedContainerService.HintSize="314,106" />
       <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,597">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,497">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -180,7 +207,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="675,745">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="697,645">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -188,9 +215,11 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="697,60" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="314,60" />
       <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="314,68" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="336,323">
+      <sap2010:ViewStateData Id="Click_2" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="336,423">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -198,7 +227,15 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="675,471" />
+      <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,323">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="697,571" />
       <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,207" />
       <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="486,331">
         <sap:WorkflowViewStateService.ViewState>
@@ -207,7 +244,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="675,51">
+      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="697,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -215,14 +252,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="697,1717">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="719,1948">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Catch`1_1" sap:VirtualizedContainerService.HintSize="701,21">
+      <sap2010:ViewStateData Id="Catch`1_1" sap:VirtualizedContainerService.HintSize="723,21">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -230,8 +267,8 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TryCatch_1" sap:VirtualizedContainerService.HintSize="715,1944" />
-      <sap2010:ViewStateData Id="HandleMessageBox_1" sap:VirtualizedContainerService.HintSize="755,2024" />
+      <sap2010:ViewStateData Id="TryCatch_1" sap:VirtualizedContainerService.HintSize="737,2375" />
+      <sap2010:ViewStateData Id="HandleMessageBox_1" sap:VirtualizedContainerService.HintSize="777,2655" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
