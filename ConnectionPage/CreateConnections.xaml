@@ -63,6 +63,7 @@
       <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
       <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
@@ -101,62 +102,11 @@
         <Variable x:TypeArguments="ui:UiElement" Name="UiElement_ConfigureNewConnectionButton" />
       </Sequence.Variables>
       <Sequence DisplayName="Sequence: Navigate To connectionTab" sap2010:WorkflowViewState.IdRef="Sequence_70">
-        <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text Persona Tab" sap2010:WorkflowViewState.IdRef="GetValue_3">
-          <ui:GetValue.Target>
-            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d11418b38481bfdfbca7d2760c96aefb" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='A' class='dropdown-toggle user-css demoCss ng-binding' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
-          </ui:GetValue.Target>
-          <ui:GetValue.Value>
-            <OutArgument x:TypeArguments="x:String">[SelectedPersona]</OutArgument>
-          </ui:GetValue.Value>
-        </ui:GetValue>
-        <If Condition="[SelectedPersona.Contains(&quot;Manager&quot;)]" DisplayName="If: Selected Manager Persona  " sap2010:WorkflowViewState.IdRef="If_6">
-          <If.Then>
-            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_18" Level="Info" Message="SUCCESS: Manager Persona Selected" />
-          </If.Then>
-          <If.Else>
-            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_8">
-              <ui:Click ClickType="CLICK_SINGLE" DelayBefore="2000" DelayMS="2000" DisplayName="Click Persona tab" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
-                <ui:Click.CursorPosition>
-                  <ui:CursorPosition Position="Center">
-                    <ui:CursorPosition.OffsetX>
-                      <InArgument x:TypeArguments="x:Int32" />
-                    </ui:CursorPosition.OffsetX>
-                    <ui:CursorPosition.OffsetY>
-                      <InArgument x:TypeArguments="x:Int32" />
-                    </ui:CursorPosition.OffsetY>
-                  </ui:CursorPosition>
-                </ui:Click.CursorPosition>
-                <ui:Click.Target>
-                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="61d9f9b6b218f98ffe15bb304e9ea271" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='A' parentclass='dropdown langs text-normal persona-width' parentid='header' /&gt;" WaitForReady="COMPLETE" />
-                </ui:Click.Target>
-              </ui:Click>
-              <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text dropdown Persona" sap2010:WorkflowViewState.IdRef="GetValue_2">
-                <ui:GetValue.Target>
-                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="01f4adfb61c4d14218f3c5dcb61672ec" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname=' Manager' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
-                </ui:GetValue.Target>
-                <ui:GetValue.Value>
-                  <OutArgument x:TypeArguments="x:String">[ManagerPersonaText]</OutArgument>
-                </ui:GetValue.Value>
-              </ui:GetValue>
-              <ui:Click ClickType="CLICK_SINGLE" DelayBefore="3000" DelayMS="3000" DisplayName="Click Dropdown Persona" sap2010:WorkflowViewState.IdRef="Click_3" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
-                <ui:Click.CursorPosition>
-                  <ui:CursorPosition Position="Center">
-                    <ui:CursorPosition.OffsetX>
-                      <InArgument x:TypeArguments="x:Int32" />
-                    </ui:CursorPosition.OffsetX>
-                    <ui:CursorPosition.OffsetY>
-                      <InArgument x:TypeArguments="x:Int32" />
-                    </ui:CursorPosition.OffsetY>
-                  </ui:CursorPosition>
-                </ui:Click.CursorPosition>
-                <ui:Click.Target>
-                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e37f43568705476824d14462562d24ec" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname=' Manager' tag='A' /&gt;" WaitForReady="COMPLETE" />
-                </ui:Click.Target>
-              </ui:Click>
-            </Sequence>
-          </If.Else>
-        </If>
-        <ui:LogMessage DisplayName="Selected Persona Name" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Trace" Message="[&quot;Dropdown persona list Name is:  &quot;+SelectedPersona]" />
+        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke SelectPersona workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_8" UnSafe="False" WorkflowFileName="Navigations\SelectPersona.xaml">
+          <ui:InvokeWorkflowFile.Arguments>
+            <InArgument x:TypeArguments="x:String" x:Key="persona">Manager</InArgument>
+          </ui:InvokeWorkflowFile.Arguments>
+        </ui:InvokeWorkflowFile>
         <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text Admin Tab" sap2010:WorkflowViewState.IdRef="GetValue_1">
           <ui:GetValue.Target>
             <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="7738c4f032893063fc08418332b431bc" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Admin' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
@@ -280,87 +230,76 @@
           <InOutArgument x:TypeArguments="scg:List(x:String)" x:Key="dsName_List">[ExternalConnectionList]</InOutArgument>
         </ui:InvokeWorkflowFile.Arguments>
       </ui:InvokeWorkflowFile>
-      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file: RDBMS Connection" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMSConnectors.xaml">
+      <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_7">
+        <ui:CommentOut.Body>
+          <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_72">
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file: RDBMS Connection" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMSConnectors.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
+                <OutArgument x:TypeArguments="scg:List(x:String)" x:Key="RDBMSdsName_List">[RDBMSConnectionList]</OutArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+          </Sequence>
+        </ui:CommentOut.Body>
+      </ui:CommentOut>
+      <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_8">
+        <ui:CommentOut.Body>
+          <Sequence DisplayName="Ignored Activities">
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file: FTP Connection" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="ConnectionPage\OtherConnectors\Manager_FTPConnectionConnection.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+          </Sequence>
+        </ui:CommentOut.Body>
+      </ui:CommentOut>
+      <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_9">
+        <ui:CommentOut.Body>
+          <Sequence DisplayName="Ignored Activities">
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file Stream Connection" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="ConnectionPage\OtherConnectors\Manager_StreamConnection.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <scg:Dictionary x:TypeArguments="x:String, Argument" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+          </Sequence>
+        </ui:CommentOut.Body>
+      </ui:CommentOut>
+      <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_6">
+        <ui:CommentOut.Body>
+          <Sequence DisplayName="Ignored Activities">
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file NOSQL Connector" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="ConnectionPage\OtherConnectors\Manager_NOSQLConnection.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <scg:Dictionary x:TypeArguments="x:String, Argument" />
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+          </Sequence>
+        </ui:CommentOut.Body>
+      </ui:CommentOut>
+      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke SelectPersona workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="Navigations\SelectPersona.xaml">
         <ui:InvokeWorkflowFile.Arguments>
-          <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
-          <OutArgument x:TypeArguments="scg:List(x:String)" x:Key="RDBMSdsName_List">[RDBMSConnectionList]</OutArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="persona">Design</InArgument>
         </ui:InvokeWorkflowFile.Arguments>
       </ui:InvokeWorkflowFile>
-      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file: FTP Connection" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="ConnectionPage\OtherConnectors\Manager_FTPConnectionConnection.xaml">
+      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke CreateExternalDataConnectors workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="DataSourcePage\CreateExternalDataConnectors.xaml">
         <ui:InvokeWorkflowFile.Arguments>
-          <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
-        </ui:InvokeWorkflowFile.Arguments>
-      </ui:InvokeWorkflowFile>
-      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file Stream Connection" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="ConnectionPage\OtherConnectors\Manager_StreamConnection.xaml">
-        <ui:InvokeWorkflowFile.Arguments>
-          <scg:Dictionary x:TypeArguments="x:String, Argument" />
-        </ui:InvokeWorkflowFile.Arguments>
-      </ui:InvokeWorkflowFile>
-      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file NOSQL Connector" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="ConnectionPage\OtherConnectors\Manager_NOSQLConnection.xaml">
-        <ui:InvokeWorkflowFile.Arguments>
-          <scg:Dictionary x:TypeArguments="x:String, Argument" />
+          <InArgument x:TypeArguments="x:String" x:Key="projectName">Automation_Sanity</InArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="randomNo">[new random().Next(1111,99999).ToString]</InArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="dsName" />
+          <InArgument x:TypeArguments="x:String" x:Key="dsType">Advance</InArgument>
+          <OutArgument x:TypeArguments="scg:List(x:String)" x:Key="dsName_List" />
+          <InArgument x:TypeArguments="scg:List(x:String)" x:Key="ExternalDataConnectionNameList">[ExternalConnectionList]</InArgument>
         </ui:InvokeWorkflowFile.Arguments>
       </ui:InvokeWorkflowFile>
     </Sequence>
-    <sads:DebugSymbol.Symbol>d0ZEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxDb25uZWN0aW9uUGFnZVxDcmVhdGVDb25uZWN0aW9ucy54YW1sVkQDsgIOAgEBRQWwAhACAQJYNlhLAgEHWTZZWwIBBlo2Wo0BAgEFWzZbSwIBBFw2XFECAQNnB5MCEgIBFpQCB5oCHwIBEpsCB6ACHwIBDqECB6UCHwIBDKYCB6oCHwIBCqsCB68CHwIBCGgJbxcCAWVwCZ4BDgIBU58BCZ8BxAECAVCgAQmnARcCAUyoAQnAAQ4CAUHBAQnIAR4CATzJAQnNAR4CATbOAQnmAQ4CASrnAQnrASICASbsAQnwAR4CASDxAQmSAg4CAReYAlOYAmsCARSUAsIBlAKIAgIBE54CVp4CawIBEJsCxQGbAoICAgEPoQLDAaECiAICAQ2mAsUBpgKDAgIBC6sCwwGrAoACAgEJbTVtRgIBZmqcAWqoAgIBaHAXcEgCAVRyDXKhAQIBY3UNnAEYAgFWnwGBAZ8BwQECAVGlATWlAUQCAU2iAZwBogH0AQIBT6gBF6gBRAIBQqoBDbsBGAIBR74BDb4B2AECAUTBAU/BAWoCAT/GAWPGAZMBAgE+wwE3wwE8AgE9ywF0ywF6AgE7yQFRyQFuAgE5ywFOywFpAgE3zgEXzgE0AgEr0AEN4QEYAgEv5AEN5AHEAQIBLecBaOcBkgECASjpAZwB6QH4AQIBJ+4BgwHuAYkBAgEl7AFe7AGHAQIBI+4BTu4BeAIBIfEBF/EBQAIBGPMBDY0CGAIBHJACDZAC1QECARpye3KeAQIBZHYPhAEaAgFfhQEPjAEdAgFbjQEPmwEaAgFXqwEPuQEaAgFKugEPugGjAQIBSL4BhgG+AdUBAgFF0QEP0QGmAQIBNNIBD+ABGgIBMOQBnAHkAcEBAgEu9AEP9AG0AQIBHvUBD4wCHwIBHZACnAGQAtIBAgEbggGiAYIBtAICAWJ2TXZTAgFhdj52RAIBYIoBO4oBTwIBXIcBogGHAf0BAgFemQGiAZkB/QECAVqNAU2NAVMCAVmNAT6NAUQCAVi3AaIBtwH6AQIBS7oBgwG6AaABAgFJ0QF90QGjAQIBNd4Bad4BhAECATLSAVHSAVcCATH0AX30AbEBAgEf</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2NEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX0xvY2FsXE1vc2FpY19SZWdyZXNzaW9uU3VpdGVfVUlQYXRoXENvbm5lY3Rpb25QYWdlXENyZWF0ZUNvbm5lY3Rpb25zLnhhbWxIRQOnAg4CAQFGBaUCEAIBAlk2WUsCAQdaNlpbAgEGWzZbjQECAQVcNlxLAgEEXTZdUQIBA2gH4QESAgEa4gEH6AEfAgEW6QEH9AEXAgEV9QEH/wEXAgEUgAIHigIXAgETiwIHlQIXAgESlgIHmgIfAgEPmwIHpAIfAgEIaQltIQIBVG4JdRcCAVB2CY4BDgIBRY8BCZYBHgIBQJcBCZsBHgIBOpwBCbQBDgIBLrUBCbkBIgIBKroBCb4BHgIBJL8BCeABDgIBG+YBU+YBawIBGOIBwgHiAYgCAgEXmAJCmAJIAgERlgK8AZYC3AECARCiAmOiAnsCAQ2dAkadAlcCAQygAkGgAkgCAQueAkOeAmsCAQqbAssBmwL9AQIBCWtEa0sCAVZpvgFp3gECAVVzNXNEAgFRcJwBcPQBAgFTdhd2RAIBRngNiQEYAgFLjAENjAHYAQIBSI8BT48BagIBQ5QBY5QBkwECAUKRATeRATwCAUGZAXSZAXoCAT+XAVGXAW4CAT2ZAU6ZAWkCATucARecATQCAS+eAQ2vARgCATOyAQ2yAcQBAgExtQFotQGSAQIBLLcBnAG3AfgBAgErvAGDAbwBiQECASm6AV66AYcBAgEnvAFOvAF4AgElvwEXvwFAAgEcwQEN2wEYAgEg3gEN3gHVAQIBHnkPhwEaAgFOiAEPiAGjAQIBTIwBhgGMAdUBAgFJnwEPnwGmAQIBOKABD64BGgIBNLIBnAGyAcEBAgEywgEPwgG0AQIBIsMBD9oBHwIBId4BnAHeAdIBAgEfhQGiAYUB+gECAU+IAYMBiAGgAQIBTZ8BfZ8BowECATmsAWmsAYQBAgE2oAFRoAFXAgE1wgF9wgGxAQIBIw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GetValue_3" sap:VirtualizedContainerService.HintSize="200,51">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_8" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_18" sap:VirtualizedContainerService.HintSize="314,91">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Click_2" sap:VirtualizedContainerService.HintSize="314,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="GetValue_2" sap:VirtualizedContainerService.HintSize="314,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Click_3" sap:VirtualizedContainerService.HintSize="314,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="336,522">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="200,51">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="200,51">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
@@ -518,7 +457,74 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,87">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_72" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_7" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_8" sap:VirtualizedContainerService.HintSize="314,51" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_4" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_9" sap:VirtualizedContainerService.HintSize="314,51" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_6" sap:VirtualizedContainerService.HintSize="314,51" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_7" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_6" sap:VirtualizedContainerService.HintSize="314,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
@@ -526,36 +532,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="314,87">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="314,87">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_4" sap:VirtualizedContainerService.HintSize="314,87">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="314,87">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,810">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,848">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -563,14 +540,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="358,934">
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="358,972">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Manager_ConnectionHome_1" sap:VirtualizedContainerService.HintSize="398,1174">
+      <sap2010:ViewStateData Id="Manager_ConnectionHome_1" sap:VirtualizedContainerService.HintSize="398,1092">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="ShouldCollapseAll">True</x:Boolean>
