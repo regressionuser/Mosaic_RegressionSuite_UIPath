@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="dragdrop"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="dragdrop" this:dragdrop.AscendingFieldName="ENAME"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -7,10 +7,13 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:this="clr-namespace:"
  xmlns:ui="http://schemas.uipath.com/workflow/activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="NodeName" Type="OutArgument(x:String)" />
+    <x:Property Name="AscendingFieldName" Type="InArgument(x:String)" />
+    <x:Property Name="SecondFieldName" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -294,7 +297,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="12003fa8dd37a1255529fc171e986006" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' parentid='dateTimePickerRemoveScrollNode' parentname='newSortingForm' tag='SELECT' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:SelectItem.Target>
     </ui:SelectItem>
-    <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Select ENAME in field name" sap2010:WorkflowViewState.IdRef="SelectItem_2" Item="ENAME">
+    <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Select ENAME in field name" sap2010:WorkflowViewState.IdRef="SelectItem_2" Item="[AscendingFieldName]">
       <ui:SelectItem.Items>
         <scg:List x:TypeArguments="x:String" Capacity="16">
           <x:String>Field name</x:String>
@@ -327,6 +330,55 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="61eeef0c163c70628c23e7b0e8abe170" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='dateTimePickerRemoveScrollNode' parentname='newSortingForm' tag='BUTTON' type='submit' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
+    <If Condition="[SecondFieldName.IsNullOrEmpty]" sap2010:WorkflowViewState.IdRef="If_6">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Trace" Message="TRACE: Found second element to select as null or empty.. Saving with only one Field" />
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_8">
+          <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Select item 'SELECT'" sap2010:WorkflowViewState.IdRef="SelectItem_3" Item="Descending">
+            <ui:SelectItem.Items>
+              <scg:List x:TypeArguments="x:String" Capacity="4">
+                <x:String>Select order of sorting</x:String>
+                <x:String>Ascending</x:String>
+                <x:String>Descending</x:String>
+              </scg:List>
+            </ui:SelectItem.Items>
+            <ui:SelectItem.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="add761d34f6186d95d40165d258dc772" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='3' parentid='dateTimePickerRemoveScrollNode' parentname='newSortingForm' tag='SELECT' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:SelectItem.Target>
+          </ui:SelectItem>
+          <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Select item 'SELECT'" sap2010:WorkflowViewState.IdRef="SelectItem_4" Item="[SecondFieldName]">
+            <ui:SelectItem.Items>
+              <scg:List x:TypeArguments="x:String" Capacity="4">
+                <x:String>Field name</x:String>
+                <x:String>gp_EmpNo</x:String>
+                <x:String>gp_EmpName</x:String>
+              </scg:List>
+            </ui:SelectItem.Items>
+            <ui:SelectItem.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="580ac23de6848617ed547ccc0cc2b14e" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='4' parentid='dateTimePickerRemoveScrollNode' parentname='newSortingForm' tag='SELECT' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:SelectItem.Target>
+          </ui:SelectItem>
+          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_27" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="95087a9adbf7ee9dfdfe2ae8e2c4f475" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='dateTimePickerRemoveScrollNode' parentname='newSortingForm' tag='BUTTON' type='submit' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Info" Message="[&quot;SUCCESS: Successfully selected &quot;+SecondFieldName +&quot; with sort type as Descending&quot;]" />
+        </Sequence>
+      </If.Else>
+    </If>
     <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Settings tab" sap2010:WorkflowViewState.IdRef="Click_24" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
         <ui:CursorPosition Position="Center">
@@ -413,7 +465,7 @@
         <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Trace" Message="[&quot;FAILED: Failed to edit the newly created node. The error message recieved from UI is: &quot;+Get_SuccessOrErrorMsg]" />
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d1ZEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQWRkTm9kZV9Db25uZWN0V2l0aERTX1ZlcmlmeU5vZGUueGFtbElCA6EDDgIBAU80T1oCAQJSBVkOAgFNWgVoEAIBS2kFexACAUl8BYoBEAIBR4sBBZkBEAIBRJoBBagBEAIBQakBBa0BHQIBPq4BBbwBEAIBPL0BBc8BEAIBOtABBd4BEAIBON8BBd8BnAECATbgAQXuARACATTvAQX9ARACATL+AQX+AaEBAgEw/wEFjQIQAgEujgIFkgIeAgEqkwIFlwIeAgEomAIFnAIeAgEmnQIFqAIVAgEiqQIFugIVAgEfuwIFyQIQAgEdygIF2AIQAgEb2QIF5wIQAgEZ6AIF9gIQAgEX9wIF/gITAgET/wIFnwMKAgEDVzBXRgIBUFQxVDsCAU5mmAFm9QECAUx1fnXJAQIBSogBmAGIAfUBAgFIlwGYAZcB+wICAUaLAUeLAU0CAUWmAZgBpgH/AQIBQ5oBR5oBTQIBQqsBQasBSQIBQKkBygGpAfcBAgE/ugGYAboB9QECAT3JAX7JAdABAgE73AGYAdwB9QECATnfAXLfAZkBAgE37AGYAewB7gECATX7AZgB+wH/AQIBM/4Bc/4BngECATGLApgBiwL1AQIBL44CXI4CfwIBLJACmAGQAvkBAgErlQKYAZUCgQICASmaApgBmgKDAgIBJ50CUZ0CVwIBJJ0CtgGdAsEBAgEjpgKYAaYCtAICASWpArkBqQLAAQIBILgCmAG4ArQCAgEhxwKYAccCugICAR7WApgB1gKDAgIBHOUCmAHlAqgDAgEa9AKYAfQCkgICARj8AjH8AkgCART5ApgB+QL3AQIBFv8CE/8CcQIBBIEDCZoDFAIBCZ0DCZ0D9wECAQaFAwuFA6cBAgERhgMLigMkAgENiwMLmQMWAgEKnQN4nQP0AQIBB4UDeYUDpAECARKGA1SGA28CAQ+IA54BiAOGAgIBDpcDZZcDgAECAQs=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1ZEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQWRkTm9kZV9Db25uZWN0V2l0aERTX1ZlcmlmeU5vZGUueGFtbFkBXwFlAQJFA9UDDgIBAVI0UloCAQJVBVwOAgFfXQVrEAIBXWwFfhACAVt/BY0BEAIBWY4BBZwBEAIBVp0BBasBEAIBU6wBBbABHQIBULEBBb8BEAIBTsABBdIBEAIBTNMBBeEBEAIBSuIBBeIBnAECAUjjAQXxARACAUbyAQWAAhACAUSBAgWBAqEBAgFCggIFkAIQAgFAkQIFlQIeAgE8lgIFmgIeAgE6mwIFnwIeAgE4oAIFqwIVAgE0rAIFvQIVAgEwvgIFzAIQAgEuzQIF/QIKAgEd/gIFjAMQAgEbjQMFmwMQAgEZnAMFqgMQAgEXqwMFsgMTAgETswMF0wMKAgEDWjBaRgIBYlcxVzsCAWBpmAFp9QECAV54fnjJAQIBXIsBmAGLAfUBAgFamgGYAZoB+wICAViOAUeOAU0CAVepAZgBqQH/AQIBVZ0BR50BTQIBVK4BQa4BSQIBUqwBygGsAfcBAgFRvQGYAb0B9QECAU/MAX7MAdABAgFN3wGYAd8B9QECAUviAXLiAZkBAgFJ7wGYAe8B7gECAUf+AZgB/gH/AQIBRYECc4ECngECAUOOApgBjgL1AQIBQZECXJECfwIBPpMCmAGTAvkBAgE9mAKYAZgCgQICATudApgBnQKDAgIBOaACUaACVwIBNqACtgGgAsEBAgE1qQKYAakCtAICATesArkBrALPAQIBMbsCmAG7ArQCAgEzygKYAcoCugICAS/NAhPNAjQCAR7PAgnPAtABAgEs0gIJ+wIUAgEfigOYAYoDgwICARyZA5gBmQOoAwIBGqgDmAGoA5ICAgEYsAMxsANIAgEUrQOYAa0D9wECARazAxOzA3ECAQS1AwnOAxQCAQnRAwnRA/cBAgEGzwJ4zwLNAQIBLdMCC94CGwIBKd8CC+oCGwIBJesCC/kCFgIBI/oCC/oC5gECASC5Awu5A6cBAgERugMLvgMkAgENvwMLzQMWAgEK0QN40QP0AQIBB9MCuQHTAsUBAgEq3AKeAdwCugICASvfArkB3wLMAQIBJugCngHoAroCAgEo9wKeAfcCwAICAST6Ann6AuMBAgEhuQN5uQOkAQIBEroDVLoDbwIBD7wDngG8A4YCAgEOywNlywOAAQIBCw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -438,6 +490,19 @@
       <sap2010:ViewStateData Id="SelectItem_1" sap:VirtualizedContainerService.HintSize="675,134" />
       <sap2010:ViewStateData Id="SelectItem_2" sap:VirtualizedContainerService.HintSize="675,134" />
       <sap2010:ViewStateData Id="Click_22" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="LogMessage_13" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="SelectItem_3" sap:VirtualizedContainerService.HintSize="314,134" />
+      <sap2010:ViewStateData Id="SelectItem_4" sap:VirtualizedContainerService.HintSize="314,134" />
+      <sap2010:ViewStateData Id="Click_27" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="LogMessage_14" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="336,709">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="675,857" />
       <sap2010:ViewStateData Id="Click_24" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="Click_25" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="Click_23" sap:VirtualizedContainerService.HintSize="675,106" />
@@ -454,14 +519,14 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_12" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="675,617" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="697,4352">
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="697,5249">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="dragdrop_1" sap:VirtualizedContainerService.HintSize="737,4432" />
+      <sap2010:ViewStateData Id="dragdrop_1" sap:VirtualizedContainerService.HintSize="737,5449" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
