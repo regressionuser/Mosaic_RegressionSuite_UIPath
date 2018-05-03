@@ -73,6 +73,8 @@
       <Variable x:TypeArguments="x:Boolean" Name="is_CheckBoxDisplayed" />
       <Variable x:TypeArguments="x:Boolean" Name="is_ClearButtonDisplayed" />
       <Variable x:TypeArguments="x:Boolean" Name="is_SaveButtonDisplayed" />
+      <Variable x:TypeArguments="x:String" Name="get_SaveMessage" />
+      <Variable x:TypeArguments="x:Boolean" Name="messageFlag" />
     </Sequence.Variables>
     <ui:GetValue ContinueOnError="{x:Null}" DisplayName="get_ContentType" sap2010:WorkflowViewState.IdRef="GetValue_1">
       <ui:GetValue.Target>
@@ -85,6 +87,14 @@
     <If Condition="[get_ContentType.Trim.Equals(&quot;Delimited file&quot;)]" DisplayName="verify_ContentType" sap2010:WorkflowViewState.IdRef="If_1">
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log Report " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_8" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
+              <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess" />
+              <InArgument x:TypeArguments="x:String" x:Key="LogMessage">["D_Data_TCNo_008_SUCESS : Content type is selected as " +get_ContentType]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="ReportPath">D:\Mosaic_RegressionSuite_UIPath1\Mosaic_RegressionSuite_UIPath\Reports\LogFiles\Datasource\DataSource. docx</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
           <ui:UiElementExists DisplayName="is_FilePathPresent" Exists="[is_FilePathDisplayed]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
             <ui:UiElementExists.Target>
               <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="041a2632652e0c3062cd77a2766afcd9" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='label-focus' name='filepath' tag='INPUT' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
@@ -123,16 +133,31 @@
         </Sequence>
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Error" Message="Delimited is not selected" />
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Error" Message="Delimited is not selected" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log Report " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
+              <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess" />
+              <InArgument x:TypeArguments="x:String" x:Key="LogMessage">["D_Data_TCNo_008_FAILURE : Content type is not selected as Delimited selected content Type is : " +get_ContentType]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="ReportPath">D:\Mosaic_RegressionSuite_UIPath1\Mosaic_RegressionSuite_UIPath\Reports\LogFiles\Datasource\DataSource. docx</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
       </If.Else>
     </If>
     <If Condition="[is_FilePathDisplayed And is_UploadFileDisplayed And is_ContainsHeaderDisplayed And is_DelimiterDisplayed And is_CheckBoxDisplayed And is_ClearButtonDisplayed And is_SaveButtonDisplayed]" DisplayName="enter_DataInFields" sap2010:WorkflowViewState.IdRef="If_2">
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
-          <Sequence.Variables>
-            <Variable x:TypeArguments="x:String" Name="get_SaveMessage" />
-          </Sequence.Variables>
           <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="Delimited File :   All fields present" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log Report " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
+              <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess" />
+              <InArgument x:TypeArguments="x:String" x:Key="LogMessage">D_Data_TCNo_17_SUCESS : ALL fields are present for Delimited content type</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="ReportPath">D:\Mosaic_RegressionSuite_UIPath1\Mosaic_RegressionSuite_UIPath\Reports\LogFiles\Datasource\DataSource. docx</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
           <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="selectFileToUpload" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="DataSourcePage\SelectFileToUpload.xaml">
             <ui:InvokeWorkflowFile.Arguments>
               <InArgument x:TypeArguments="x:String" x:Key="in_fileName">[in_FileName]</InArgument>
@@ -158,50 +183,102 @@
               <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="081db60bad899f45532f97122a049218" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div&amp;gt;fieldset&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;button' tag='BUTTON' type='submit' /&gt;" WaitForReady="INTERACTIVE" />
             </ui:Click.Target>
           </ui:Click>
-          <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'DIV  topTipMaxiqId7'" sap2010:WorkflowViewState.IdRef="GetValue_2">
-            <ui:GetValue.Target>
-              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="758265d2e1825c5a20331947bebf0cd2" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='DIV' class='toast toast-success' parentclass='toast-bottom-right' parentid='toast-container' title='MOSAIC' /&gt;" TimeoutMS="2500" WaitForReady="INTERACTIVE" />
-            </ui:GetValue.Target>
-            <ui:GetValue.Value>
-              <OutArgument x:TypeArguments="x:String">[get_SaveMessage]</OutArgument>
-            </ui:GetValue.Value>
-          </ui:GetValue>
-          <If Condition="[get_SaveMessage.Contains(&quot;Connection details saved successfully&quot;)]" DisplayName="verify_SaveMessage" sap2010:WorkflowViewState.IdRef="If_3">
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="verifyMessage" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Connection details saved successfully</InArgument>
+              <OutArgument x:TypeArguments="x:Boolean" x:Key="flag">[messageFlag]</OutArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="out_actualMessage">[get_SaveMessage]</OutArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <If Condition="[messageFlag.ToString.Equals(&quot;True&quot;)]" sap2010:WorkflowViewState.IdRef="If_4">
             <If.Then>
-              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="Save message verified for create new DS." />
-                <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
-                  <ui:Click.CursorPosition>
-                    <ui:CursorPosition Position="Center">
-                      <ui:CursorPosition.OffsetX>
-                        <InArgument x:TypeArguments="x:Int32" />
-                      </ui:CursorPosition.OffsetX>
-                      <ui:CursorPosition.OffsetY>
-                        <InArgument x:TypeArguments="x:Int32" />
-                      </ui:CursorPosition.OffsetY>
-                    </ui:CursorPosition>
-                  </ui:Click.CursorPosition>
-                  <ui:Click.Target>
-                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="6416dad64077202fad95f10bb82408eb" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='BUTTON' aaname='×' parentclass='toast toast-success' /&gt;" TimeoutMS="1000" WaitForReady="INTERACTIVE" />
-                  </ui:Click.Target>
-                </ui:Click>
-              </Sequence>
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log Report " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+                <ui:InvokeWorkflowFile.Arguments>
+                  <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
+                  <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess" />
+                  <InArgument x:TypeArguments="x:String" x:Key="LogMessage">["D_Data_TCNo_20 : "+get_SaveMessage]</InArgument>
+                  <InArgument x:TypeArguments="x:String" x:Key="ReportPath">D:\Mosaic_RegressionSuite_UIPath1\Mosaic_RegressionSuite_UIPath\Reports\LogFiles\Datasource\DataSource. docx</InArgument>
+                </ui:InvokeWorkflowFile.Arguments>
+              </ui:InvokeWorkflowFile>
             </If.Then>
             <If.Else>
-              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Error" Message="Save message does not verified for create new DS." />
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log Report " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+                <ui:InvokeWorkflowFile.Arguments>
+                  <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
+                  <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess" />
+                  <InArgument x:TypeArguments="x:String" x:Key="LogMessage">["D_Data_TCNo_20_FAILURE : "+get_SaveMessage]</InArgument>
+                  <InArgument x:TypeArguments="x:String" x:Key="ReportPath">D:\Mosaic_RegressionSuite_UIPath1\Mosaic_RegressionSuite_UIPath\Reports\LogFiles\Datasource\DataSource. docx</InArgument>
+                </ui:InvokeWorkflowFile.Arguments>
+              </ui:InvokeWorkflowFile>
             </If.Else>
           </If>
+          <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_1">
+            <ui:CommentOut.Body>
+              <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_6">
+                <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'DIV  topTipMaxiqId7'" sap2010:WorkflowViewState.IdRef="GetValue_2">
+                  <ui:GetValue.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="758265d2e1825c5a20331947bebf0cd2" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='DIV' class='toast toast-success' parentclass='toast-bottom-right' parentid='toast-container' title='MOSAIC' /&gt;" TimeoutMS="2500" WaitForReady="INTERACTIVE" />
+                  </ui:GetValue.Target>
+                  <ui:GetValue.Value>
+                    <OutArgument x:TypeArguments="x:String">[get_SaveMessage]</OutArgument>
+                  </ui:GetValue.Value>
+                </ui:GetValue>
+              </Sequence>
+            </ui:CommentOut.Body>
+          </ui:CommentOut>
+          <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_2">
+            <ui:CommentOut.Body>
+              <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_7">
+                <If Condition="[get_SaveMessage.Contains(&quot;Connection details saved successfully&quot;)]" DisplayName="verify_SaveMessage" sap2010:WorkflowViewState.IdRef="If_3">
+                  <If.Then>
+                    <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+                      <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="Save message verified for create new DS." />
+                      <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                        <ui:Click.CursorPosition>
+                          <ui:CursorPosition Position="Center">
+                            <ui:CursorPosition.OffsetX>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:CursorPosition.OffsetX>
+                            <ui:CursorPosition.OffsetY>
+                              <InArgument x:TypeArguments="x:Int32" />
+                            </ui:CursorPosition.OffsetY>
+                          </ui:CursorPosition>
+                        </ui:Click.CursorPosition>
+                        <ui:Click.Target>
+                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="6416dad64077202fad95f10bb82408eb" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='BUTTON' aaname='×' parentclass='toast toast-success' /&gt;" TimeoutMS="1000" WaitForReady="INTERACTIVE" />
+                        </ui:Click.Target>
+                      </ui:Click>
+                    </Sequence>
+                  </If.Then>
+                  <If.Else>
+                    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Error" Message="Save message does not verified for create new DS." />
+                  </If.Else>
+                </If>
+              </Sequence>
+            </ui:CommentOut.Body>
+          </ui:CommentOut>
         </Sequence>
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Error" Message="[&quot;File Path : &quot;+is_FilePathDisplayed.ToString+&#xA;&quot;Upload File : &quot;+is_UploadFileDisplayed.ToString+&#xA;&quot;Contains Header : &quot;+is_ContainsHeaderDisplayed.ToString+&#xA;&quot;Delimiter : &quot;+is_DelimiterDisplayed.ToString+&#xA;&quot;CheckBox : &quot;+is_CheckBoxDisplayed.ToString+&#xA;&quot;Clear Button : &quot;+is_ClearButtonDisplayed.ToString+&#xA;&quot;Save Button : &quot;+is_SaveButtonDisplayed.ToString]" />
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_8">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Error" Message="[&quot;File Path : &quot;+is_FilePathDisplayed.ToString+&#xA;&quot;Upload File : &quot;+is_UploadFileDisplayed.ToString+&#xA;&quot;Contains Header : &quot;+is_ContainsHeaderDisplayed.ToString+&#xA;&quot;Delimiter : &quot;+is_DelimiterDisplayed.ToString+&#xA;&quot;CheckBox : &quot;+is_CheckBoxDisplayed.ToString+&#xA;&quot;Clear Button : &quot;+is_ClearButtonDisplayed.ToString+&#xA;&quot;Save Button : &quot;+is_SaveButtonDisplayed.ToString]" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log Report " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
+              <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess" />
+              <InArgument x:TypeArguments="x:String" x:Key="LogMessage">D_Data_TCNo_17_FAILURE : ALL fields are not present for Delimited content type</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="ReportPath">D:\Mosaic_RegressionSuite_UIPath1\Mosaic_RegressionSuite_UIPath\Reports\LogFiles\Datasource\DataSource. docx</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d25EOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX0xvY2FsXE1vc2FpY19SZWdyZXNzaW9uU3VpdGVfVUlQYXRoXERhdGFTb3VyY2VQYWdlXERTX0NvbnRlbnRUeXBlc1xEZWxpbWl0ZWRfRFMueGFtbEJCA8kBDgIBAU0FVBMCAVlVBYABCgIBMIEBBccBCgIBAlIxUkICAVpPmAFPgAICAVxVE1VOAgExVwl7FAIBNX4JfpUBAgEzgQETgQHPAQIBA4MBCcIBFAIBFMUBCcUBtgQCAQtYC1wgAgFUXQthIAIBT2ILZiACAUpnC2sgAgFFbAtwIAIBQHELdSACATt2C3ogAgE2fnd+kgECATSHAQuHAaIBAgEuiAELjAEjAgEqjQELkQEZAgEnkgELoAEWAgEloQELqAEZAgEgqQELwQEQAgEVxQF3xQGzBAIBDFqJAVr3AQIBWFqCAlqIAgIBV1hHWF8CAVVfiQFf5gECAVNf8QFf9wECAVJdSV1jAgFQZIkBZMMDAgFOZM4DZNQDAgFNYk1iawIBS2mJAWnnAQIBSWnyAWn4AQIBSGdIZ2ECAUZuiQFuwwMCAURuzgNu1AMCAUNsR2xfAgFBc4kBc4kDAgE/c5QDc5oDAgE+cUtxZQIBPHiJAXj0AQIBOnj/AXiFAgIBOXZMdmcCATeHAXiHAZ8BAgEviAG1AYgB3QECAS2KAUqKAVcCASuPAZ4BjwH8AQIBKY0BmwKNAZ4CAgEongGeAZ4BngMCASamATemAUgCASGjAYkBowG7AgIBJKMBxgKjAcwCAgEjqQEZqQFoAgEWqwEPvAEaAgEavwEPvwGzAQIBGKwBEawBqwECAR6tARG7ARwCARu/AX2/AbABAgEZrAF+rAGoAQIBH7kBjwG5AYoCAgEduQGVArkBmwICARw=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d3BEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aDFcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRGF0YVNvdXJjZVBhZ2VcRFNfQ29udGVudFR5cGVzXERlbGltaXRlZF9EUy54YW1sV0IDlQIOAgEBTwVWEwIBc1cFlAEKAgE/lQEFkwIKAgECVDFUQgIBdFGYAVGAAgIBdlcTV04CAUBZCYUBFAIBSogBCZIBFAIBQpUBE5UBzwECAQOXAQmEAhQCARmHAgmRAhQCAQtaC2EjAgFuYgtmIAIBaWcLayACAWRsC3AgAgFfcQt1IAIBWnYLeiACAVV7C38gAgFQgAELhAEgAgFLiQELiQGXAQIBSIoBC5EBIwIBQ5gBC5gBogECAT2ZAQugASMCATmhAQulASMCATWmAQuqARkCATKrAQu5ARYCATC6AQvAASMCASnBAQvWARACARzXAQvkARsCARvlAQuDAhsCARqIAguIArgEAgEQiQILkAIjAgEMX0lftQECAXJeSV6TAQIBcFquAVrfAQIBb2SJAWT3AQIBbWSCAmSIAgIBbGJHYl8CAWppiQFp5gECAWhp8QFp9wECAWdnSWdjAgFlbokBbsMDAgFjbs4DbtQDAgFibE1sawIBYHOJAXPnAQIBXnPyAXP4AQIBXXFIcWECAVt4iQF4wwMCAVl4zgN41AMCAVh2R3ZfAgFWfYkBfYkDAgFUfZQDfZoDAgFTe0t7ZQIBUYIBiQGCAfQBAgFPggH/AYIBhQICAU6AAUyAAWcCAUyJAXmJAZQBAgFJjwFJjwG1AQIBR44BSY4BvQECAUWKAa4BigHfAQIBRJgBeJgBnwECAT6eAUmeAbUBAgE8nQFJnQGSAQIBO5kBrgGZAd8BAgE6oQG1AaEB3QECATijAUqjAVcCATaoAZ4BqAH8AQIBNKYBmwKmAZ4CAgEztwGeAbcBngMCATG8AU68AXMCAS+9AUW9AVICAS2+AVG+AWICASu6AbABugHNAQIBKsEBGcEBSgIBHcMBD8oBJwIBJM0BD9QBJwIBH4gCeYgCtQQCARGOAkmOArUBAgEPjQJJjQKXAQIBDokCrgGJAt8BAgENyAFNyAG5AQIBKMcBTccBcgIBJsMBsgHDAeMBAgEl0gFN0gG5AQIBI9EBTdEBegIBIc0BsgHNAeMBAgEg</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="GetValue_1" sap:VirtualizedContainerService.HintSize="1036,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_8" sap:VirtualizedContainerService.HintSize="314,87" />
       <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="314,106" />
       <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="314,106" />
       <sap2010:ViewStateData Id="UiElementExists_3" sap:VirtualizedContainerService.HintSize="314,106" />
@@ -223,7 +300,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,1106">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,1233">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -231,12 +308,47 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1036,1254" />
-      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="675,91" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="675,87" />
-      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="675,134" />
-      <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="GetValue_2" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1036,1381" />
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="653,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="653,87" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="653,87" />
+      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="653,134" />
+      <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="653,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_4" sap:VirtualizedContainerService.HintSize="653,87" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_6" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="653,235">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="GetValue_2" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="336,230">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="653,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="Click_2" sap:VirtualizedContainerService.HintSize="314,106" />
       <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="336,361">
@@ -247,8 +359,23 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="675,509" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="697,1357">
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="675,508" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="697,632">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_2" sap:VirtualizedContainerService.HintSize="653,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="675,1373">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -256,15 +383,23 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="1036,1505" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1058,3069">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_7" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="336,342">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Delimited_DS_1" sap:VirtualizedContainerService.HintSize="1098,3149" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="1036,1521" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1058,3212">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Delimited_DS_1" sap:VirtualizedContainerService.HintSize="1098,3292" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
