@@ -11,6 +11,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="FlowName" Type="OutArgument(x:String)" />
+    <x:Property Name="LogReportPath" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -225,30 +226,50 @@
       <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Trace" Message="[CreatedFlowName+&quot; this is created flow name&quot;]" />
       <If Condition="[CreatedFlowName.Trim.contains(FlowName)]" DisplayName="If (Verify if the flow created has the same name as provided by user)" sap2010:WorkflowViewState.IdRef="If_4">
         <If.Then>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;SUCCESS: Flow has been created successfully.. Created flow name is: &quot;+CreatedFlowName.Trim]" />
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;SUCCESS: Flow has been created successfully.. Created flow name is: &quot;+CreatedFlowName.Trim]" />
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke GenerteLogsApplicationScopeUtility workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_FLow_periodic_TCNo_3_SUCCESS</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">True</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="LogMessage" xml:space="preserve">D_FLow_periodic_TCNo_3_SUCCESS: Configure new flow functionality is verified. New flow has been created </InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportPath]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+          </Sequence>
         </If.Then>
         <If.Else>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="FAILED: Flow did not create successfully" />
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="FAILED: Flow did not create successfully" />
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke GenerteLogsApplicationScopeUtility workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+              <ui:InvokeWorkflowFile.Arguments>
+                <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_FLow_periodic_TCNo_3_ERROR</InArgument>
+                <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">False</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="LogMessage" xml:space="preserve">D_FLow_periodic_TCNo_3_ERROR: Could not verify configure new flow functionality. Error while creating new flow. Refer automation logs and Screenshots </InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportPath]</InArgument>
+              </ui:InvokeWorkflowFile.Arguments>
+            </ui:InvokeWorkflowFile>
+          </Sequence>
         </If.Else>
       </If>
     </Sequence>
-    <sads:DebugSymbol.Symbol>d0ZEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQ29uZmlndXJlTmV3Rmxvdy54YW1sSkQD7AEOAgEBRQXqARACAQJKNkpcAgEDTgdSHAIBVVMHWgwCAU5bB2wXAgFKbQd0FwIBRHUHfAwCAT19B4QBEAIBOIUBB4kBFQIBNIoBB5sBFwIBMJwBB6MBFQIBLKQBB7wBDAIBIb0BB8EBFQIBHMIBB8YBFQIBGMcBB9gBFwIBFNkBB+ABFQIBEOEBB+EBsgECAQ3iAQfpAQwCAQRQhQFQ7wECAVlQ+gFQgAICAVhOUE52AgFWUxVTOwIBT1ULVaYBAgFTWAtYrgECAVFbaVtvAgFLamFqkQECAU1nNWc6AgFMckxyfAIBSXKHAXKNAQIBSG1WbXgCAUZvNW86AgFFdRV1NwIBPncLd7EBAgFCegt6sQECAUCCATKCAUwCATt/M389AgE5hwGaAYcB6gECATeFAXiFAX4CATaFAZkChQG1AgIBNYoBaYoBbwIBMZkBYZkBkQECATOWATWWAToCATKhATOhAU8CAS2eAZoBngGfAgIBL6QBFaQBcAIBIqYBC7cBFgIBJroBC7oBqgECASS/AZoBvwGCAgIBIL0BeL0BfgIBH70BkgK9AZ4CAgEdxAGaAcQB6gECARvCAXjCAX4CARrCAZMCwgGvAgIBGccBaccBbwIBFdYBYdYBkQECARfTATXTAToCARbeATPeAUQCARHbAZoB2wHuAQIBE+EBdeEBrwECAQ7iARXiAUACAQXkAQvkAeQBAgEK5wEL5wGmAQIBCFV5VaMBAgFUWHlYqwECAVJ3eHeuAQIBQ3p5eq4BAgFBpwENpwHXAQIBKagBDbYBGAIBJ7oBeroBpwECASXkAXjkAeEBAgEL5wF55wGjAQIBCacBfKcB1AECASq0AaABtAGIAgIBKA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0ZEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQ29uZmlndXJlTmV3Rmxvdy54YW1sVkUDgQIOAgEBRgX/ARACAQJLNktcAgEDTwdTHAIBZVQHWwwCAV5cB20XAgFabgd1FwIBVHYHfQwCAU1+B4UBEAIBSIYBB4oBFQIBRIsBB5wBFwIBQJ0BB6QBFQIBPKUBB70BDAIBMb4BB8IBFQIBLMMBB8cBFQIBKMgBB9kBFwIBJNoBB+EBFQIBIOIBB+IBsgECAR3jAQf+AQwCAQRRhQFR7wECAWlR+gFRgAICAWhPUE92AgFmVBVUOwIBX1YLVqYBAgFjWQtZrgECAWFcaVxvAgFba2FrkQECAV1oNWg6AgFcc0xzfAIBWXOHAXONAQIBWG5WbngCAVZwNXA6AgFVdhV2NwIBTngLeLEBAgFSewt7sQECAVCDATKDAUwCAUuAATOAAT0CAUmIAZoBiAHqAQIBR4YBeIYBfgIBRoYBmQKGAbUCAgFFiwFpiwFvAgFBmgFhmgGRAQIBQ5cBNZcBOgIBQqIBM6IBTwIBPZ8BmgGfAZ8CAgE/pQEVpQFwAgEypwELuAEWAgE2uwELuwGqAQIBNMABmgHAAYICAgEwvgF4vgF+AgEvvgGSAr4BngICAS3FAZoBxQHqAQIBK8MBeMMBfgIBKsMBkwLDAa8CAgEpyAFpyAFvAgEl1wFh1wGRAQIBJ9QBNdQBOgIBJt8BM98BRAIBIdwBmgHcAe4BAgEj4gF14gGvAQIBHuMBFeMBQAIBBeUBC+8BFgIBEvIBC/wBFgIBCFZ5VqMBAgFkWXlZqwECAWJ4eHiuAQIBU3t5e64BAgFRqAENqAHXAQIBOakBDbcBGAIBN7sBersBpwECATXmAQ3mAeYBAgEa5wEN7gElAgET8wEN8wGoAQIBEPQBDfsBJQIBCagBfKgB1AECATq1AaABtQGIAgIBOOYBeuYB4wECARvsAUvsAVoCARjpAU/pAW0CARfqAVbqAVoCARbnAdcB5wGIAgIBFPMBe/MBpQECARH5AUv5AVoCAQ72AU/2AWsCAQ33AVb3AVsCAQz0AdcB9AGIAgIBCg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="675,239" />
-      <sap2010:ViewStateData Id="ClickImage_7" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="ImageFound_2" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="697,239" />
+      <sap2010:ViewStateData Id="ClickImage_7" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="ImageFound_2" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="LogMessage_6" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="675,239" />
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="675,60" />
-      <sap2010:ViewStateData Id="TypeInto_4" sap:VirtualizedContainerService.HintSize="675,134" />
-      <sap2010:ViewStateData Id="ClickImage_6" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="GetValue_2" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="697,239" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="697,60" />
+      <sap2010:ViewStateData Id="TypeInto_4" sap:VirtualizedContainerService.HintSize="697,134" />
+      <sap2010:ViewStateData Id="ClickImage_6" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="GetValue_2" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="LogMessage_24" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="Click_3" sap:VirtualizedContainerService.HintSize="314,106" />
       <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="336,361">
@@ -259,13 +280,21 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_25" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_12" sap:VirtualizedContainerService.HintSize="675,509" />
-      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="675,134" />
-      <sap2010:ViewStateData Id="TypeInto_2" sap:VirtualizedContainerService.HintSize="675,134" />
-      <sap2010:ViewStateData Id="ClickImage_4" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="GetValue_1" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="LogMessage_9" sap:VirtualizedContainerService.HintSize="675,91" />
+      <sap2010:ViewStateData Id="If_12" sap:VirtualizedContainerService.HintSize="697,509" />
+      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="697,134" />
+      <sap2010:ViewStateData Id="TypeInto_2" sap:VirtualizedContainerService.HintSize="697,134" />
+      <sap2010:ViewStateData Id="ClickImage_4" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="GetValue_1" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="LogMessage_9" sap:VirtualizedContainerService.HintSize="697,91" />
       <sap2010:ViewStateData Id="LogMessage_7" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_8" sap:VirtualizedContainerService.HintSize="314,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -274,22 +303,30 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="675,239" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="697,3245">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,342">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="719,3369">
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="697,490" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="719,3496">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="MosaicFlow_1" sap:VirtualizedContainerService.HintSize="759,3449" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="741,3620">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="MosaicFlow_1" sap:VirtualizedContainerService.HintSize="781,3700" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
