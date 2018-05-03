@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="IndexingMain" this:IndexingMain.randomNo="[new Random().Next(1000,999999).ToString]"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="IndexingMain" this:IndexingMain.randomNo="[new Random().Next(1000,999999).ToString]" this:IndexingMain.ReportPath="[&quot;D:\Mosaic_RegressionSuite_UIPath\Reports\LogFiles\Search\SearchLogs&quot;+System.DateTime.Now.ToString(&quot;yyyy_MM_dd_HH&quot;)+&quot;.docx&quot;]"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -13,6 +13,7 @@
   <x:Members>
     <x:Property Name="randomNo" Type="InArgument(x:String)" />
     <x:Property Name="IndexName" Type="InArgument(x:String)" />
+    <x:Property Name="ReportPath" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -71,6 +72,7 @@
       <Variable x:TypeArguments="ui:UiElement" Name="element_CreateNewQueryPopupHeader" />
       <Variable x:TypeArguments="ui:UiElement" Name="element_PopupCreateButton" />
       <Variable x:TypeArguments="ui:UiElement" Name="element_popupCancelButton" />
+      <Variable x:TypeArguments="x:Boolean" Name="Is_TestQueryButtonVisible" />
     </Sequence.Variables>
     <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
       <Sequence.Variables>
@@ -90,6 +92,7 @@
         <Variable x:TypeArguments="scg:IEnumerable(ui:UiElement)" Name="SelectQueryConditionDropdown" />
         <Variable x:TypeArguments="scg:IEnumerable(ui:UiElement)" Name="SelectQueryMatchDropdown" />
         <Variable x:TypeArguments="scg:IEnumerable(ui:UiElement)" Name="SelectQuerySearchDropdown" />
+        <Variable x:TypeArguments="x:Boolean" Name="Is_filteredSearchQueryDisplayed" />
       </Sequence.Variables>
       <ui:WaitImageAppear ContinueOnError="True" DisplayName="Find Image 'chrome.exe  MOSAIC'" FoundElement="[element_SearchTab]" sap2010:WorkflowViewState.IdRef="WaitImageAppear_3">
         <ui:WaitImageAppear.Image>
@@ -120,7 +123,7 @@
         <If.Else>
           <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
             <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;Search  tab exist condition - &quot; +element_SearchTab.IsVisible.ToString]" />
-            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Utility\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
               <ui:InvokeWorkflowFile.Arguments>
                 <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">SearchTabNotVisible</InArgument>
                 <InArgument x:TypeArguments="x:String" x:Key="ScreenshotType">FAILED</InArgument>
@@ -182,12 +185,14 @@
       </ui:WaitUiElementAppear>
       <If Condition="[element_Breadcrumb.IsVisible And element_CreateNewQueryButton.IsVisible And element_FilterBox.IsVisible]" DisplayName="SearchingTab Filter,Create query &amp; Breadcrumb Check" sap2010:WorkflowViewState.IdRef="If_21">
         <If.Then>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_43" Level="Info" Message="SUCCESS: Searching page  FilterBox,CreateQuery And Breadcrumb Visible" />
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_47">
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_43" Level="Info" Message="SUCCESS: Searching page  FilterBox,CreateQuery And Breadcrumb Visible" />
+          </Sequence>
         </If.Then>
         <If.Else>
           <Sequence sap2010:WorkflowViewState.IdRef="Sequence_41">
             <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_44" Level="Error" Message="SUCCESS:Searching page  FilterBox,CreateQuery And Breadcrumb is not Visible" />
-            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_30" UnSafe="False" WorkflowFileName="Utility\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_30" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
               <ui:InvokeWorkflowFile.Arguments>
                 <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Search_Searching_FilterBox-CreateQuery-BreadcrumbMissing</InArgument>
                 <InArgument x:TypeArguments="x:String" x:Key="ScreenshotType">FAILED</InArgument>
@@ -228,12 +233,14 @@
       </ui:WaitUiElementAppear>
       <If Condition="[element_CreateNewQueryPopupHeader.IsVisible And element_PopupCreateButton.IsVisible And element_popupCancelButton.IsVisible]" sap2010:WorkflowViewState.IdRef="If_22">
         <If.Then>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_45" Level="Info" Message="Create new Query popup displayed" />
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_48">
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_45" Level="Info" Message="Create new Query popup displayed" />
+          </Sequence>
         </If.Then>
         <If.Else>
           <Sequence sap2010:WorkflowViewState.IdRef="Sequence_40">
             <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_46" Level="Error" Message="Create New Query Popup Is not displaayed" />
-            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_29" UnSafe="False" WorkflowFileName="Utility\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_29" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
               <ui:InvokeWorkflowFile.Arguments>
                 <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Search_Searching_CreateNewQueryPopupNotDisplayed</InArgument>
                 <InArgument x:TypeArguments="x:String" x:Key="ScreenshotType">FAILED</InArgument>
@@ -262,7 +269,7 @@
           <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_PopupCreateButton]" WaitForReady="INTERACTIVE" />
         </ui:Click.Target>
       </ui:Click>
-      <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_31" UnSafe="False" WorkflowFileName="Utility\HandleMessageBox.xaml">
+      <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_31" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
         <ui:InvokeWorkflowFile.Arguments>
           <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Query is created successfully</InArgument>
         </ui:InvokeWorkflowFile.Arguments>
@@ -272,30 +279,45 @@
           <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="541c4550b590936e14c0c3c544277a6c" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='content' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
         </ui:TypeInto.Target>
       </ui:TypeInto>
-      <ui:WaitUiElementAppear ContinueOnError="True" DisplayName="Find Element 'FilteredResult'" FoundElement="[element_FilteredQueryResult]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_37" WaitActive="False" WaitVisible="False">
-        <ui:WaitUiElementAppear.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="1742e54d8475850acda09aa1c5ef1e4c" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TABLE' /&gt;&lt;webctrl tableCol='2' tag='TD' /&gt;" WaitForReady="INTERACTIVE" />
-        </ui:WaitUiElementAppear.Target>
-      </ui:WaitUiElementAppear>
-      <ui:GetValue ContinueOnError="True" DisplayName="Get Text" sap2010:WorkflowViewState.IdRef="GetValue_7">
-        <ui:GetValue.Target>
-          <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_FilteredQueryResult]" WaitForReady="INTERACTIVE" />
-        </ui:GetValue.Target>
-        <ui:GetValue.Value>
-          <OutArgument x:TypeArguments="x:String">[FilteredQueryResultText]</OutArgument>
-        </ui:GetValue.Value>
-      </ui:GetValue>
-      <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_49" Level="Info" Message="[&quot;FilteredQeryresulttext:&quot;+FilteredQueryResultText]" />
+      <ui:UiElementExists DisplayName="Element Filtered Result" Exists="[Is_filteredSearchQueryDisplayed]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
+        <ui:UiElementExists.Target>
+          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="6cd9dd5604095106634a8e6a142fe6e2" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TABLE' /&gt;&lt;webctrl idx='1' tableCol='2' tag='TD' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+        </ui:UiElementExists.Target>
+      </ui:UiElementExists>
+      <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_1">
+        <ui:CommentOut.Body>
+          <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_49">
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_49" Level="Info" Message="[&quot;FilteredQeryresulttext:&quot;+FilteredQueryResultText]" />
+          </Sequence>
+        </ui:CommentOut.Body>
+      </ui:CommentOut>
       <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_50" Level="Info" Message="[&quot;SearchQueryName&quot;+SearchQueryName]" />
-      <If Condition="[element_FilteredQueryResult.IsVisible And SearchQueryName.Equals(FilteredQueryResultText)]" DisplayName="FileteredSearch Query Result check" sap2010:WorkflowViewState.IdRef="If_23">
+      <If Condition="[Is_filteredSearchQueryDisplayed]" DisplayName="FileteredSearch Query Result check" sap2010:WorkflowViewState.IdRef="If_23">
         <If.Then>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_47" Level="Info" Message="SUCCESS:Filtered Search Query result match new Search Query name " />
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_46">
+            <ui:WaitUiElementAppear ContinueOnError="True" DisplayName="Find Element 'FilteredResult'" FoundElement="[element_FilteredQueryResult]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_37" WaitActive="False" WaitVisible="False">
+              <ui:WaitUiElementAppear.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="1742e54d8475850acda09aa1c5ef1e4c" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TABLE' /&gt;&lt;webctrl tableCol='2' tag='TD' /&gt;" WaitForReady="INTERACTIVE" />
+              </ui:WaitUiElementAppear.Target>
+            </ui:WaitUiElementAppear>
+            <ui:GetValue ContinueOnError="True" DisplayName="Get Text" sap2010:WorkflowViewState.IdRef="GetValue_7">
+              <ui:GetValue.Target>
+                <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_FilteredQueryResult]" WaitForReady="INTERACTIVE" />
+              </ui:GetValue.Target>
+              <ui:GetValue.Value>
+                <OutArgument x:TypeArguments="x:String">[FilteredQueryResultText]</OutArgument>
+              </ui:GetValue.Value>
+            </ui:GetValue>
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_47" Level="Info" Message="SUCCESS:Filtered Search Query result match new Search Query name " />
+          </Sequence>
         </If.Then>
         <If.Else>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_48" Level="Error" Message="ERROR:Filtered Search Query result does not  match  Search Query name " />
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_50">
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_48" Level="Error" Message="ERROR:Filtered Search Query result does not  match  Search Query name " />
+          </Sequence>
         </If.Else>
       </If>
-      <ui:Click ClickType="CLICK_SINGLE" ContinueOnError="True" DelayBefore="4000" DelayMS="2000" DisplayName="Click 'FilteredSearchResult'" sap2010:WorkflowViewState.IdRef="Click_37" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click ClickType="CLICK_SINGLE" ContinueOnError="True" DelayBefore="3000" DelayMS="2000" DisplayName="Click 'FilteredSearchResult'" sap2010:WorkflowViewState.IdRef="Click_37" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
         <ui:Click.CursorPosition>
           <ui:CursorPosition Position="Center">
             <ui:CursorPosition.OffsetX>
@@ -348,7 +370,7 @@
             <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="54ff04dfd3637dd5b030b66ec22bc9b0" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;span&amp;gt;select' idx='1' tag='SELECT' /&gt;" WaitForReady="INTERACTIVE" />
           </ui:FindChildren.Target>
         </ui:FindChildren>
-        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow Compare list " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_32" UnSafe="False" WorkflowFileName="Utility\Generic_VerifyDropdownList.xaml">
+        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow Compare list " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_32" UnSafe="False" WorkflowFileName="Generic\Generic_VerifyDropdownList.xaml">
           <ui:InvokeWorkflowFile.Arguments>
             <InArgument x:TypeArguments="scg:IEnumerable(ui:UiElement)" x:Key="ListItems">[SelectAggregationDropdown]</InArgument>
             <InArgument x:TypeArguments="scg:IEnumerable(x:String)" x:Key="Expected_DropDownList">[SelectAggregationExpectedList]</InArgument>
@@ -359,7 +381,7 @@
             <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d363efd48eec352f6261b7551120d4e6" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;span&amp;gt;select' idx='3' tag='SELECT' /&gt;" WaitForReady="INTERACTIVE" />
           </ui:FindChildren.Target>
         </ui:FindChildren>
-        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow Compare list " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_33" UnSafe="False" WorkflowFileName="Utility\Generic_VerifyDropdownList.xaml">
+        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow Compare list " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_33" UnSafe="False" WorkflowFileName="Generic\Generic_VerifyDropdownList.xaml">
           <ui:InvokeWorkflowFile.Arguments>
             <InArgument x:TypeArguments="scg:IEnumerable(ui:UiElement)" x:Key="ListItems">[SelectQueryConditionDropdown]</InArgument>
             <InArgument x:TypeArguments="scg:IEnumerable(x:String)" x:Key="Expected_DropDownList">[SelectQueryConditionExpectedList]</InArgument>
@@ -370,7 +392,7 @@
             <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="99a304d014bdd4e673effa43216a2776" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;span&amp;gt;select' idx='5' tag='SELECT' /&gt;" WaitForReady="INTERACTIVE" />
           </ui:FindChildren.Target>
         </ui:FindChildren>
-        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow Compare list " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_34" UnSafe="False" WorkflowFileName="Utility\Generic_VerifyDropdownList.xaml">
+        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow Compare list " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_34" UnSafe="False" WorkflowFileName="Generic\Generic_VerifyDropdownList.xaml">
           <ui:InvokeWorkflowFile.Arguments>
             <InArgument x:TypeArguments="scg:IEnumerable(ui:UiElement)" x:Key="ListItems">[SelectQuerySearchDropdown]</InArgument>
             <InArgument x:TypeArguments="scg:IEnumerable(x:String)" x:Key="Expected_DropDownList">[SelectQuerySearchtypeExpectedList]</InArgument>
@@ -381,13 +403,13 @@
             <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="009c1aec330501cb3a7aa03aa04eceb5" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;section&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;span&amp;gt;select' idx='6' tag='SELECT' /&gt;" WaitForReady="INTERACTIVE" />
           </ui:FindChildren.Target>
         </ui:FindChildren>
-        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow Compare list " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_35" UnSafe="False" WorkflowFileName="Utility\Generic_VerifyDropdownList.xaml">
+        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow Compare list " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_35" UnSafe="False" WorkflowFileName="Generic\Generic_VerifyDropdownList.xaml">
           <ui:InvokeWorkflowFile.Arguments>
             <InArgument x:TypeArguments="scg:IEnumerable(ui:UiElement)" x:Key="ListItems">[SelectQueryMatchDropdown]</InArgument>
             <InArgument x:TypeArguments="scg:IEnumerable(x:String)" x:Key="Expected_DropDownList">[SelectQueryMatchTypeExpectedList]</InArgument>
           </ui:InvokeWorkflowFile.Arguments>
         </ui:InvokeWorkflowFile>
-        <ui:SelectItem ContinueOnError="True" DelayAfter="1000" DelayBefore="1000" DisplayName="Select Index" sap2010:WorkflowViewState.IdRef="SelectItem_1" Item="[IndexName]">
+        <ui:SelectItem ContinueOnError="True" DelayAfter="1000" DelayBefore="1000" DisplayName="Select Index" sap2010:WorkflowViewState.IdRef="SelectItem_1" Item="auto_ds_index809156">
           <ui:SelectItem.Items>
             <scg:List x:TypeArguments="x:String" Capacity="8">
               <x:String>SELECT INDEX</x:String>
@@ -419,7 +441,7 @@
             <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="29589f68c9f9b86d6121289615819c2d" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
           </ui:Click.Target>
         </ui:Click>
-        <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_36" UnSafe="False" WorkflowFileName="Utility\HandleMessageBox.xaml">
+        <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_36" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
           <ui:InvokeWorkflowFile.Arguments>
             <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Index name is saved successfully</InArgument>
           </ui:InvokeWorkflowFile.Arguments>
@@ -473,7 +495,7 @@
             <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="29589f68c9f9b86d6121289615819c2d" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='2' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
           </ui:Click.Target>
         </ui:Click>
-        <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_37" UnSafe="False" WorkflowFileName="Utility\HandleMessageBox.xaml">
+        <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_37" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
           <ui:InvokeWorkflowFile.Arguments>
             <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Aggregation are saved successfully.</InArgument>
           </ui:InvokeWorkflowFile.Arguments>
@@ -550,13 +572,39 @@
             <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="10acb4102055e0ae7bbc90cd2939ed84" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='3' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
           </ui:Click.Target>
         </ui:Click>
-        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_38" UnSafe="False" WorkflowFileName="Utility\HandleMessageBox.xaml">
+        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_38" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
           <ui:InvokeWorkflowFile.Arguments>
             <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Quries fields are saved successfully</InArgument>
           </ui:InvokeWorkflowFile.Arguments>
         </ui:InvokeWorkflowFile>
-        <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" ContinueOnError="True" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_41" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
-          <ui:Click.CursorPosition>
+        <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists 'BUTTON'" sap2010:WorkflowViewState.IdRef="UiElementExists_3">
+          <ui:UiElementExists.Target>
+            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="156e5dbc44b4b698b33a7eaac37a8428" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Test       Query' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+          </ui:UiElementExists.Target>
+        </ui:UiElementExists>
+        <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_3">
+          <ui:CommentOut.Body>
+            <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_53">
+              <DoWhile DisplayName="Do while" sap2010:WorkflowViewState.IdRef="DoWhile_1" Condition="[Is_TestQueryButtonVisible.ToString.Equals(&quot;False&quot;)]">
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_52">
+                  <ui:SendHotkey DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Send hotkey (Page Down)" EmptyField="False" sap2010:WorkflowViewState.IdRef="SendHotkey_2" Key="end" KeyModifiers="Ctrl" SendWindowMessages="False" SpecialKey="True">
+                    <ui:SendHotkey.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="4d9be6f916cbb88094a34bd9632d2425" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' parentid='content' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
+                    </ui:SendHotkey.Target>
+                  </ui:SendHotkey>
+                  <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists 'BUTTON'" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
+                    <ui:UiElementExists.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="156e5dbc44b4b698b33a7eaac37a8428" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Test       Query' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+                    </ui:UiElementExists.Target>
+                  </ui:UiElementExists>
+                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_54" Level="Info" Message="[Is_TestQueryButtonVisible.ToString]" />
+                </Sequence>
+              </DoWhile>
+            </Sequence>
+          </ui:CommentOut.Body>
+        </ui:CommentOut>
+        <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click image 'chrome.exe  MOSAIC'" sap2010:WorkflowViewState.IdRef="ClickImage_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+          <ui:ClickImage.CursorPosition>
             <ui:CursorPosition Position="Center">
               <ui:CursorPosition.OffsetX>
                 <InArgument x:TypeArguments="x:Int32" />
@@ -565,11 +613,14 @@
                 <InArgument x:TypeArguments="x:Int32" />
               </ui:CursorPosition.OffsetY>
             </ui:CursorPosition>
-          </ui:Click.CursorPosition>
-          <ui:Click.Target>
-            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="156e5dbc44b4b698b33a7eaac37a8428" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Test       Query' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
-          </ui:Click.Target>
-        </ui:Click>
+          </ui:ClickImage.CursorPosition>
+          <ui:ClickImage.Image>
+            <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAAGoAAAAtCAYAAABGfP5DAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAPtSURBVHhe7Zoxi6NAGIbv5wsWUwgWKVIIFhYBCwuLBctAWCzcJZDCQvDAIsWAhSwp3vtmNIlxo+7mbnMOfA8ImUzUcR7nnTH4C4wRsChDYFGGwKIMgUUZAosyBBZlCCzKEFiUIbAoQ5gU9fHxgbe3N7y+vvL2w9v7+7vu7zEmRamdpZRdiflJVD+rQTHGpChlmnkeU/3NohYEizIEFmUILMoQWJQhsChDeK6oKoZrWbBGNjeuuh8+RlNL1E1XuEuNPPbgXM5pww1SHLvaJfPkEdWgpoc39QAn5RYedZa3PZfnOnmOCrE7LbuMXVhijfggcaJyczwgon0sb0cKl82TRfXJ4JMoP+uKPU7VAds4RJRkKIZ/fsgCWRIhiBJk58qmxD5N4AsLwk+Q7ku6JQY0O7oxbDrfoOaYYGU5iIq22JR7pHn/pBJ5mqL/1Vj72n2P1MQtonCH3/S7NCtvbgKZp0gPlb5RvsPiRNWZD2G58IIAgUcjgD7HZVdZqugUWPlUF3g6Rl1VKTNEgQ/XtmC7PknMqHsH7AM6lo+0K14pETt0nJc2ACs16m4addvOqfbpfYWAsB2svQR5EVHMUv1lkLejfpV8P2yXJaq76zf7rkzkobh0XPv52tVNGkC4EXJdmom+1IflxKTlM6lvwel6e1LUTPv0vm7/HIM26Tl6hQc8LUyUvutXCClq0vMWrvTFq0ttqF5QTPkxRVFVD+JjWlSz8y7HGZKRKNFl36SomfZ93lcl67Vef14lDy1eliWKYsWyu1jpb70ok0WKOFjDoZhTsRPuzzPAzIhSx74bfbf7TYqaad89UZBqDlTxJ5GsVOx9CuUvsSxRhw1sy8NuZPU3XH7LLY0SK0CbRDOi7sSWRi8m6PtDW5wUNdO+u6JoWbPzqF2bDZ2HYu8xTwsThQIRTeyC5qHLCKJ5yIsLirn2gu1+nRJlb9D2cVsvwnbGukcROTTZe9iWXU/LbnneiyOp4skm+TpXT6joHOLSzqn2jYnqYpeOoR4DRhzPsjBRxDFFoDqP7nJbXZzjITnPzvUeoWvri7ZV9FEMXaOPqs8dQhH3ubsUNfah2x73vNlr7G7u8hIvFFHnerFe69XlpZ0T7RsT1Y5memYcG4pf4D+KmqGpIeuRpw1dN3LRVDf/4HyiB+8aTVMgWdOqjSIpym8feU9z/3JMtW+InqfGI/MrLFfU06iRJwl6A/Mfov6JqWj5Lyiys4djT8GifpLji45N2w3/+kZgUYbAogyBRRkCizIEFmUID4tSb27ym7LPQfWzejN5jElR6l1otbMyzdvPbmpQPPzuObMcWJQhsChDYFGGwKIMgUUZAfAHhmSRrgTKiuoAAAAASUVORK5CYII=" />
+          </ui:ClickImage.Image>
+          <ui:ClickImage.Target>
+            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+          </ui:ClickImage.Target>
+        </ui:ClickImage>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_43">
           <Sequence.Variables>
             <Variable x:TypeArguments="x:String" Default="2" Name="TestQueryFeildValue" />
@@ -604,10 +655,10 @@
             <If.Then>
               <Sequence sap2010:WorkflowViewState.IdRef="Sequence_45">
                 <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_52" Level="Info" Message="SUCCESS: Search_Searching_TestQueryResultDisplayed" />
-                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_42" UnSafe="False" WorkflowFileName="Utility\TakeScreenshot.xaml">
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_42" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
                   <ui:InvokeWorkflowFile.Arguments>
                     <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Search_SearchingTab_TestQueryResultDisplayed</InArgument>
-                    <InArgument x:TypeArguments="x:String" x:Key="ScreenshotType">PASS</InArgument>
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">True</InArgument>
                   </ui:InvokeWorkflowFile.Arguments>
                 </ui:InvokeWorkflowFile>
               </Sequence>
@@ -615,15 +666,15 @@
             <If.Else>
               <Sequence sap2010:WorkflowViewState.IdRef="Sequence_44">
                 <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_53" Level="Error" Message="ERROR:Searching tab Test Query Failed" />
-                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_40" UnSafe="False" WorkflowFileName="Utility\HandleMessageBox.xaml">
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_40" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
                   <ui:InvokeWorkflowFile.Arguments>
                     <InArgument x:TypeArguments="x:String" x:Key="expectedMessage" />
                   </ui:InvokeWorkflowFile.Arguments>
                 </ui:InvokeWorkflowFile>
-                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_41" UnSafe="False" WorkflowFileName="Utility\TakeScreenshot.xaml">
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_41" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
                   <ui:InvokeWorkflowFile.Arguments>
                     <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Search_SearchingTab_TestQueryFailed</InArgument>
-                    <InArgument x:TypeArguments="x:String" x:Key="ScreenshotType">FAILED</InArgument>
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
                   </ui:InvokeWorkflowFile.Arguments>
                 </ui:InvokeWorkflowFile>
               </Sequence>
@@ -632,14 +683,14 @@
         </Sequence>
       </Sequence>
     </Sequence>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WaitImageAppear_3" sap:VirtualizedContainerService.HintSize="653,106">
+      <sap2010:ViewStateData Id="WaitImageAppear_3" sap:VirtualizedContainerService.HintSize="741,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
@@ -647,7 +698,7 @@
       <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="314,68">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
@@ -655,26 +706,26 @@
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,51">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="336,306">
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="336,342">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="653,51">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="741,490">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -682,7 +733,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_3" sap:VirtualizedContainerService.HintSize="653,51">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_3" sap:VirtualizedContainerService.HintSize="741,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -690,135 +741,149 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_4" sap:VirtualizedContainerService.HintSize="653,106">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_4" sap:VirtualizedContainerService.HintSize="741,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitImageAppear_1" sap:VirtualizedContainerService.HintSize="653,106">
+      <sap2010:ViewStateData Id="WaitImageAppear_1" sap:VirtualizedContainerService.HintSize="741,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ClickImage_1" sap:VirtualizedContainerService.HintSize="653,106">
+      <sap2010:ViewStateData Id="ClickImage_1" sap:VirtualizedContainerService.HintSize="741,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_31" sap:VirtualizedContainerService.HintSize="653,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_32" sap:VirtualizedContainerService.HintSize="653,106">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_31" sap:VirtualizedContainerService.HintSize="741,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_33" sap:VirtualizedContainerService.HintSize="653,106">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_32" sap:VirtualizedContainerService.HintSize="741,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_33" sap:VirtualizedContainerService.HintSize="741,106">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_43" sap:VirtualizedContainerService.HintSize="314,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_47" sap:VirtualizedContainerService.HintSize="336,215">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_44" sap:VirtualizedContainerService.HintSize="314,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="InvokeWorkflowFile_30" sap:VirtualizedContainerService.HintSize="314,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_41" sap:VirtualizedContainerService.HintSize="200,51">
+      <sap2010:ViewStateData Id="Sequence_41" sap:VirtualizedContainerService.HintSize="336,342">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_21" sap:VirtualizedContainerService.HintSize="653,239">
+      <sap2010:ViewStateData Id="If_21" sap:VirtualizedContainerService.HintSize="741,490">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Click_35" sap:VirtualizedContainerService.HintSize="653,68">
+      <sap2010:ViewStateData Id="Click_35" sap:VirtualizedContainerService.HintSize="741,68">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_34" sap:VirtualizedContainerService.HintSize="653,106">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_34" sap:VirtualizedContainerService.HintSize="741,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_35" sap:VirtualizedContainerService.HintSize="653,106">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_35" sap:VirtualizedContainerService.HintSize="741,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_36" sap:VirtualizedContainerService.HintSize="653,106">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_36" sap:VirtualizedContainerService.HintSize="741,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_45" sap:VirtualizedContainerService.HintSize="314,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_48" sap:VirtualizedContainerService.HintSize="336,215">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_46" sap:VirtualizedContainerService.HintSize="314,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="InvokeWorkflowFile_29" sap:VirtualizedContainerService.HintSize="314,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
@@ -826,11 +891,33 @@
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_22" sap:VirtualizedContainerService.HintSize="653,51">
+      <sap2010:ViewStateData Id="If_22" sap:VirtualizedContainerService.HintSize="741,490">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TypeInto_8" sap:VirtualizedContainerService.HintSize="741,134">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_36" sap:VirtualizedContainerService.HintSize="741,68">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_31" sap:VirtualizedContainerService.HintSize="741,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
@@ -838,363 +925,409 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TypeInto_8" sap:VirtualizedContainerService.HintSize="653,134">
+      <sap2010:ViewStateData Id="TypeInto_9" sap:VirtualizedContainerService.HintSize="741,134">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Click_36" sap:VirtualizedContainerService.HintSize="653,68">
+      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="741,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_31" sap:VirtualizedContainerService.HintSize="653,87">
+      <sap2010:ViewStateData Id="LogMessage_49" sap:VirtualizedContainerService.HintSize="314,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TypeInto_9" sap:VirtualizedContainerService.HintSize="653,134">
+      <sap2010:ViewStateData Id="Sequence_49" sap:VirtualizedContainerService.HintSize="336,215">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_37" sap:VirtualizedContainerService.HintSize="653,106">
+      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="741,293">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="GetValue_7" sap:VirtualizedContainerService.HintSize="653,68">
+      <sap2010:ViewStateData Id="LogMessage_50" sap:VirtualizedContainerService.HintSize="741,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_49" sap:VirtualizedContainerService.HintSize="653,91">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_37" sap:VirtualizedContainerService.HintSize="314,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_50" sap:VirtualizedContainerService.HintSize="653,91">
+      <sap2010:ViewStateData Id="GetValue_7" sap:VirtualizedContainerService.HintSize="314,68">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_47" sap:VirtualizedContainerService.HintSize="314,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_46" sap:VirtualizedContainerService.HintSize="336,469">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_48" sap:VirtualizedContainerService.HintSize="314,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_23" sap:VirtualizedContainerService.HintSize="653,239">
+      <sap2010:ViewStateData Id="Sequence_50" sap:VirtualizedContainerService.HintSize="336,215">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Click_37" sap:VirtualizedContainerService.HintSize="653,106">
+      <sap2010:ViewStateData Id="If_23" sap:VirtualizedContainerService.HintSize="741,617">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="486,60" />
-      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="486,60" />
-      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="486,60" />
-      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="486,60" />
-      <sap2010:ViewStateData Id="FindChildren_2" sap:VirtualizedContainerService.HintSize="486,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_32" sap:VirtualizedContainerService.HintSize="486,87">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="FindChildren_3" sap:VirtualizedContainerService.HintSize="486,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_33" sap:VirtualizedContainerService.HintSize="486,87">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="FindChildren_4" sap:VirtualizedContainerService.HintSize="486,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_34" sap:VirtualizedContainerService.HintSize="486,87">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="FindChildren_5" sap:VirtualizedContainerService.HintSize="486,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_35" sap:VirtualizedContainerService.HintSize="486,87">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="SelectItem_1" sap:VirtualizedContainerService.HintSize="486,134">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Click_38" sap:VirtualizedContainerService.HintSize="486,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_36" sap:VirtualizedContainerService.HintSize="486,87">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="SelectItem_2" sap:VirtualizedContainerService.HintSize="486,134">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="SelectItem_3" sap:VirtualizedContainerService.HintSize="486,134">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Click_39" sap:VirtualizedContainerService.HintSize="486,106">
+      <sap2010:ViewStateData Id="Click_37" sap:VirtualizedContainerService.HintSize="741,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="719,60" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="719,60" />
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="719,60" />
+      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="719,60" />
+      <sap2010:ViewStateData Id="FindChildren_2" sap:VirtualizedContainerService.HintSize="719,106">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_32" sap:VirtualizedContainerService.HintSize="719,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FindChildren_3" sap:VirtualizedContainerService.HintSize="719,106">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_33" sap:VirtualizedContainerService.HintSize="719,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FindChildren_4" sap:VirtualizedContainerService.HintSize="719,106">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_34" sap:VirtualizedContainerService.HintSize="719,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FindChildren_5" sap:VirtualizedContainerService.HintSize="719,106">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_35" sap:VirtualizedContainerService.HintSize="719,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SelectItem_1" sap:VirtualizedContainerService.HintSize="719,134">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_38" sap:VirtualizedContainerService.HintSize="719,106">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_36" sap:VirtualizedContainerService.HintSize="719,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SelectItem_2" sap:VirtualizedContainerService.HintSize="719,134">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SelectItem_3" sap:VirtualizedContainerService.HintSize="719,134">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_39" sap:VirtualizedContainerService.HintSize="719,106">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_37" sap:VirtualizedContainerService.HintSize="719,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SelectItem_4" sap:VirtualizedContainerService.HintSize="719,134">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SelectItem_5" sap:VirtualizedContainerService.HintSize="719,134">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SelectItem_6" sap:VirtualizedContainerService.HintSize="719,134">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SelectItem_7" sap:VirtualizedContainerService.HintSize="719,134">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_40" sap:VirtualizedContainerService.HintSize="719,106">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_38" sap:VirtualizedContainerService.HintSize="719,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="UiElementExists_3" sap:VirtualizedContainerService.HintSize="719,106" />
+      <sap2010:ViewStateData Id="SendHotkey_2" sap:VirtualizedContainerService.HintSize="314,154" />
+      <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="LogMessage_54" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Sequence_52" sap:VirtualizedContainerService.HintSize="336,555">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="DoWhile_1" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_37" sap:VirtualizedContainerService.HintSize="486,87">
+      <sap2010:ViewStateData Id="Sequence_53" sap:VirtualizedContainerService.HintSize="222,175">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_3" sap:VirtualizedContainerService.HintSize="719,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="SelectItem_4" sap:VirtualizedContainerService.HintSize="486,134">
+      <sap2010:ViewStateData Id="ClickImage_2" sap:VirtualizedContainerService.HintSize="719,106" />
+      <sap2010:ViewStateData Id="TypeInto_10" sap:VirtualizedContainerService.HintSize="697,134">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="SelectItem_5" sap:VirtualizedContainerService.HintSize="486,134">
+      <sap2010:ViewStateData Id="Click_42" sap:VirtualizedContainerService.HintSize="697,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="SelectItem_6" sap:VirtualizedContainerService.HintSize="486,134">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_39" sap:VirtualizedContainerService.HintSize="697,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="SelectItem_7" sap:VirtualizedContainerService.HintSize="486,134">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Click_40" sap:VirtualizedContainerService.HintSize="486,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_38" sap:VirtualizedContainerService.HintSize="486,87">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Click_41" sap:VirtualizedContainerService.HintSize="486,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TypeInto_10" sap:VirtualizedContainerService.HintSize="464,134">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Click_42" sap:VirtualizedContainerService.HintSize="464,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_39" sap:VirtualizedContainerService.HintSize="464,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_52" sap:VirtualizedContainerService.HintSize="314,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="InvokeWorkflowFile_42" sap:VirtualizedContainerService.HintSize="314,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_45" sap:VirtualizedContainerService.HintSize="200,51">
+      <sap2010:ViewStateData Id="Sequence_45" sap:VirtualizedContainerService.HintSize="336,342">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_53" sap:VirtualizedContainerService.HintSize="314,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="InvokeWorkflowFile_40" sap:VirtualizedContainerService.HintSize="314,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="InvokeWorkflowFile_41" sap:VirtualizedContainerService.HintSize="314,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_44" sap:VirtualizedContainerService.HintSize="200,51">
+      <sap2010:ViewStateData Id="Sequence_44" sap:VirtualizedContainerService.HintSize="336,469">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_25" sap:VirtualizedContainerService.HintSize="697,617">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_43" sap:VirtualizedContainerService.HintSize="719,1207">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_42" sap:VirtualizedContainerService.HintSize="741,5243">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="763,10667">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="785,10791">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_25" sap:VirtualizedContainerService.HintSize="464,208">
+      <sap2010:ViewStateData Id="IndexingMain_1" sap:VirtualizedContainerService.HintSize="825,10991">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_43" sap:VirtualizedContainerService.HintSize="486,798">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_42" sap:VirtualizedContainerService.HintSize="653,4597">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="675,8365">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="697,8489">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="IndexingMain_1" sap:VirtualizedContainerService.HintSize="737,8729">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="ShouldCollapseAll">True</x:Boolean>
-            <x:Boolean x:Key="ShouldExpandAll">False</x:Boolean>
+            <x:Boolean x:Key="ShouldCollapseAll">False</x:Boolean>
+            <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
