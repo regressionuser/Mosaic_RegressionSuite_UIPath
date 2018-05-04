@@ -130,143 +130,172 @@
             <ActivityAction.Argument>
               <DelegateInArgument x:TypeArguments="x:String" Name="connectionType" />
             </ActivityAction.Argument>
-            <Sequence DisplayName="AddValuesToList" sap2010:WorkflowViewState.IdRef="Sequence_55">
-              <Sequence.Variables>
-                <Variable x:TypeArguments="x:String" Default="[connectionType.Replace(&quot; &quot;,&quot;_&quot;).Replace(&quot;/&quot;,&quot;_&quot;)]" Name="getListValue" />
-              </Sequence.Variables>
-              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_CreateNewDS" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_77" UnSafe="False" WorkflowFileName="DataSourcePage\CreateNewDS.xaml">
-                <ui:InvokeWorkflowFile.Arguments>
-                  <OutArgument x:TypeArguments="x:String" x:Key="dataSourceName">[dsName]</OutArgument>
-                  <InArgument x:TypeArguments="x:String" x:Key="randomNo">[randomNo]</InArgument>
-                  <InArgument x:TypeArguments="x:String" x:Key="projectName">[projectName]</InArgument>
-                  <InArgument x:TypeArguments="x:String" x:Key="dSTypeFromUser">[dsType]</InArgument>
-                  <InArgument x:TypeArguments="x:String" x:Key="ds_List">[getListValue]</InArgument>
-                </ui:InvokeWorkflowFile.Arguments>
-              </ui:InvokeWorkflowFile>
-              <AddToCollection x:TypeArguments="x:String" Collection="[dsName_List]" DisplayName="Add to collection" sap2010:WorkflowViewState.IdRef="AddToCollection`1_7" Item="[dsName]" />
-              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ConfigurationTab" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_78" UnSafe="False" WorkflowFileName="DataSourcePage\DS_Tabs\ConfigurationTab.xaml">
-                <ui:InvokeWorkflowFile.Arguments>
-                  <scg:Dictionary x:TypeArguments="x:String, Argument" />
-                </ui:InvokeWorkflowFile.Arguments>
-              </ui:InvokeWorkflowFile>
-              <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="2000" DelayBefore="2000" DisplayName="select_ContentType" sap2010:WorkflowViewState.IdRef="SelectItem_6" Item="External data">
-                <ui:SelectItem.Items>
-                  <scg:List x:TypeArguments="x:String" Capacity="16">
-                    <x:String>Select data source type</x:String>
-                    <x:String>Delimited file</x:String>
-                    <x:String>RDBMS</x:String>
-                    <x:String>TSV</x:String>
-                    <x:String>CSV</x:String>
-                    <x:String>Excel sheet</x:String>
-                    <x:String>Fixed length format</x:String>
-                    <x:String>FTP/SFTP</x:String>
-                    <x:String>REMOTE_DATA</x:String>
-                    <x:String>NOSQL</x:String>
-                  </scg:List>
-                </ui:SelectItem.Items>
-                <ui:SelectItem.Target>
-                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="6db505df9009c0f0d9114efec68a707f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='connectionForm' tag='SELECT' /&gt;" WaitForReady="INTERACTIVE" />
-                </ui:SelectItem.Target>
-              </ui:SelectItem>
-              <ui:ForEach x:TypeArguments="x:String" DisplayName="Get Connection Name" sap2010:WorkflowViewState.IdRef="ForEach`1_20" Values="[ExternalDataConnectionNameList]">
-                <ui:ForEach.Body>
-                  <ActivityAction x:TypeArguments="x:String">
-                    <ActivityAction.Argument>
-                      <DelegateInArgument x:TypeArguments="x:String" Name="item" />
-                    </ActivityAction.Argument>
-                    <Sequence DisplayName="Body" sap2010:WorkflowViewState.IdRef="Sequence_53">
-                      <If Condition="[item.Contains(connectionType)]" sap2010:WorkflowViewState.IdRef="If_47">
-                        <If.Then>
-                          <Assign sap2010:WorkflowViewState.IdRef="Assign_17">
-                            <Assign.To>
-                              <OutArgument x:TypeArguments="x:String">[connectionName]</OutArgument>
-                            </Assign.To>
-                            <Assign.Value>
-                              <InArgument x:TypeArguments="x:String">[item]</InArgument>
-                            </Assign.Value>
-                          </Assign>
-                        </If.Then>
-                      </If>
-                    </Sequence>
-                  </ActivityAction>
-                </ui:ForEach.Body>
-              </ui:ForEach>
-              <Sequence DisplayName="enter_Data_External Data" sap2010:WorkflowViewState.IdRef="Sequence_54">
-                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_External Data" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_79" UnSafe="False" WorkflowFileName="DataSourcePage\DS_ContentTypes\ExternalData_DS.xaml">
-                  <ui:InvokeWorkflowFile.Arguments>
-                    <InArgument x:TypeArguments="x:String" x:Key="ConnectionType">[connectionType]</InArgument>
-                    <InArgument x:TypeArguments="x:String" x:Key="ConnectionName" />
-                    <InArgument x:TypeArguments="scg:List(x:String)" x:Key="ExternalDataConnectionNameList">[ExternalDataConnectionNameList]</InArgument>
-                  </ui:InvokeWorkflowFile.Arguments>
-                </ui:InvokeWorkflowFile>
-                <If Condition="[connectionType.Contains(&quot;SALESFORCE&quot;)]" DisplayName="Configure SALESFORCE" sap2010:WorkflowViewState.IdRef="If_48">
-                  <If.Then>
-                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Configue_SalesforceExternalConnector workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_80" UnSafe="False" WorkflowFileName="ConnectionPage\ExternalConnectors\ConfigureExternalConnection\Configue_SalesforceExternalConnector.xaml">
+            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_58">
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_57">
+                <ui:ForEach x:TypeArguments="x:String" DisplayName="Connection Name" sap2010:WorkflowViewState.IdRef="ForEach`1_21" Values="[ExternalDataConnectionNameList]">
+                  <ui:ForEach.Body>
+                    <ActivityAction x:TypeArguments="x:String">
+                      <ActivityAction.Argument>
+                        <DelegateInArgument x:TypeArguments="x:String" Name="connectionName" />
+                      </ActivityAction.Argument>
+                      <Sequence DisplayName="Body" sap2010:WorkflowViewState.IdRef="Sequence_56">
+                        <If Condition="[connectionName.Contains(ConnectionType)]" sap2010:WorkflowViewState.IdRef="If_55">
+                          <If.Then>
+                            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_59">
+                              <Assign sap2010:WorkflowViewState.IdRef="Assign_18">
+                                <Assign.To>
+                                  <OutArgument x:TypeArguments="x:String">[connectionName]</OutArgument>
+                                </Assign.To>
+                                <Assign.Value>
+                                  <InArgument x:TypeArguments="x:String">[connectionName]</InArgument>
+                                </Assign.Value>
+                              </Assign>
+                              <ui:Break sap2010:WorkflowViewState.IdRef="Break_1" />
+                            </Sequence>
+                          </If.Then>
+                        </If>
+                      </Sequence>
+                    </ActivityAction>
+                  </ui:ForEach.Body>
+                </ui:ForEach>
+                <Sequence DisplayName="AddValuesToList" sap2010:WorkflowViewState.IdRef="Sequence_55">
+                  <Sequence.Variables>
+                    <Variable x:TypeArguments="x:String" Default="[connectionType.Replace(&quot; &quot;,&quot;_&quot;).Replace(&quot;/&quot;,&quot;_&quot;)]" Name="getListValue" />
+                  </Sequence.Variables>
+                  <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_CreateNewDS" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_77" UnSafe="False" WorkflowFileName="DataSourcePage\CreateNewDS.xaml">
+                    <ui:InvokeWorkflowFile.Arguments>
+                      <OutArgument x:TypeArguments="x:String" x:Key="dataSourceName">[dsName]</OutArgument>
+                      <InArgument x:TypeArguments="x:String" x:Key="randomNo">[randomNo]</InArgument>
+                      <InArgument x:TypeArguments="x:String" x:Key="projectName">[projectName]</InArgument>
+                      <InArgument x:TypeArguments="x:String" x:Key="dSTypeFromUser">[dsType]</InArgument>
+                      <InArgument x:TypeArguments="x:String" x:Key="ds_List">[getListValue]</InArgument>
+                    </ui:InvokeWorkflowFile.Arguments>
+                  </ui:InvokeWorkflowFile>
+                  <AddToCollection x:TypeArguments="x:String" Collection="[dsName_List]" DisplayName="Add to collection" sap2010:WorkflowViewState.IdRef="AddToCollection`1_7" Item="[dsName]" />
+                  <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_ConfigurationTab" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_78" UnSafe="False" WorkflowFileName="DataSourcePage\DS_Tabs\ConfigurationTab.xaml">
+                    <ui:InvokeWorkflowFile.Arguments>
+                      <scg:Dictionary x:TypeArguments="x:String, Argument" />
+                    </ui:InvokeWorkflowFile.Arguments>
+                  </ui:InvokeWorkflowFile>
+                  <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="2000" DelayBefore="2000" DisplayName="select_ContentType" sap2010:WorkflowViewState.IdRef="SelectItem_6" Item="External data">
+                    <ui:SelectItem.Items>
+                      <scg:List x:TypeArguments="x:String" Capacity="16">
+                        <x:String>Select data source type</x:String>
+                        <x:String>Delimited file</x:String>
+                        <x:String>RDBMS</x:String>
+                        <x:String>TSV</x:String>
+                        <x:String>CSV</x:String>
+                        <x:String>Excel sheet</x:String>
+                        <x:String>Fixed length format</x:String>
+                        <x:String>FTP/SFTP</x:String>
+                        <x:String>REMOTE_DATA</x:String>
+                        <x:String>NOSQL</x:String>
+                      </scg:List>
+                    </ui:SelectItem.Items>
+                    <ui:SelectItem.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="6db505df9009c0f0d9114efec68a707f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='connectionForm' tag='SELECT' /&gt;" WaitForReady="INTERACTIVE" />
+                    </ui:SelectItem.Target>
+                  </ui:SelectItem>
+                  <ui:ForEach x:TypeArguments="x:String" DisplayName="Get Connection Name" sap2010:WorkflowViewState.IdRef="ForEach`1_20" Values="[ExternalDataConnectionNameList]">
+                    <ui:ForEach.Body>
+                      <ActivityAction x:TypeArguments="x:String">
+                        <ActivityAction.Argument>
+                          <DelegateInArgument x:TypeArguments="x:String" Name="item" />
+                        </ActivityAction.Argument>
+                        <Sequence DisplayName="Body" sap2010:WorkflowViewState.IdRef="Sequence_53">
+                          <If Condition="[item.Contains(connectionType)]" sap2010:WorkflowViewState.IdRef="If_47">
+                            <If.Then>
+                              <Assign sap2010:WorkflowViewState.IdRef="Assign_17">
+                                <Assign.To>
+                                  <OutArgument x:TypeArguments="x:String">[connectionName]</OutArgument>
+                                </Assign.To>
+                                <Assign.Value>
+                                  <InArgument x:TypeArguments="x:String">[item]</InArgument>
+                                </Assign.Value>
+                              </Assign>
+                            </If.Then>
+                          </If>
+                        </Sequence>
+                      </ActivityAction>
+                    </ui:ForEach.Body>
+                  </ui:ForEach>
+                  <Sequence DisplayName="enter_Data_External Data" sap2010:WorkflowViewState.IdRef="Sequence_54">
+                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_External Data" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_79" UnSafe="False" WorkflowFileName="DataSourcePage\DS_ContentTypes\ExternalData_DS.xaml">
                       <ui:InvokeWorkflowFile.Arguments>
-                        <scg:Dictionary x:TypeArguments="x:String, Argument" />
+                        <InArgument x:TypeArguments="x:String" x:Key="ConnectionType">[connectionType]</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="ConnectionName" />
                       </ui:InvokeWorkflowFile.Arguments>
                     </ui:InvokeWorkflowFile>
-                  </If.Then>
-                </If>
-                <If Condition="[connectionType.Contains(&quot;AMAZONS3&quot;)]" DisplayName="Configure AMAZONS3" sap2010:WorkflowViewState.IdRef="If_49">
-                  <If.Then>
-                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Configue_AmazonExternalConnector workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_81" UnSafe="False" WorkflowFileName="ConnectionPage\ExternalConnectors\ConfigureExternalConnection\Configue_AmazonExternalConnector.xaml">
+                    <If Condition="[connectionType.Contains(&quot;SALESFORCE&quot;)]" DisplayName="Configure SALESFORCE" sap2010:WorkflowViewState.IdRef="If_48">
+                      <If.Then>
+                        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Configue_SalesforceExternalConnector workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_80" UnSafe="False" WorkflowFileName="ConnectionPage\ExternalConnectors\ConfigureExternalConnection\Configue_SalesforceExternalConnector.xaml">
+                          <ui:InvokeWorkflowFile.Arguments>
+                            <scg:Dictionary x:TypeArguments="x:String, Argument" />
+                          </ui:InvokeWorkflowFile.Arguments>
+                        </ui:InvokeWorkflowFile>
+                      </If.Then>
+                    </If>
+                    <If Condition="[connectionType.Contains(&quot;AMAZONS3&quot;)]" DisplayName="Configure AMAZONS3" sap2010:WorkflowViewState.IdRef="If_49">
+                      <If.Then>
+                        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Configue_AmazonExternalConnector workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_81" UnSafe="False" WorkflowFileName="ConnectionPage\ExternalConnectors\ConfigureExternalConnection\Configue_AmazonExternalConnector.xaml">
+                          <ui:InvokeWorkflowFile.Arguments>
+                            <scg:Dictionary x:TypeArguments="x:String, Argument" />
+                          </ui:InvokeWorkflowFile.Arguments>
+                        </ui:InvokeWorkflowFile>
+                      </If.Then>
+                    </If>
+                    <If Condition="[connectionType.Contains(&quot;FACEBOOKPAGE&quot;)]" DisplayName="Configure FACEBOOKPAGE" sap2010:WorkflowViewState.IdRef="If_50">
+                      <If.Then>
+                        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Configue_FacebookExternalConnector workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_82" UnSafe="False" WorkflowFileName="ConnectionPage\ExternalConnectors\ConfigureExternalConnection\Configue_FacebookExternalConnector.xaml">
+                          <ui:InvokeWorkflowFile.Arguments>
+                            <scg:Dictionary x:TypeArguments="x:String, Argument" />
+                          </ui:InvokeWorkflowFile.Arguments>
+                        </ui:InvokeWorkflowFile>
+                      </If.Then>
+                    </If>
+                    <If Condition="[connectionType.Contains(&quot;DROPBOX&quot;)]" DisplayName="Configure DROPBOX" sap2010:WorkflowViewState.IdRef="If_51">
+                      <If.Then>
+                        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Configue_Dropbox_ExternalConnector workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_83" UnSafe="False" WorkflowFileName="ConnectionPage\ExternalConnectors\ConfigureExternalConnection\Configue_Dropbox_ExternalConnector.xaml">
+                          <ui:InvokeWorkflowFile.Arguments>
+                            <scg:Dictionary x:TypeArguments="x:String, Argument" />
+                          </ui:InvokeWorkflowFile.Arguments>
+                        </ui:InvokeWorkflowFile>
+                      </If.Then>
+                    </If>
+                    <If Condition="[connectionType.Contains(&quot;HECKYL&quot;)]" DisplayName="Configure HECKYL" sap2010:WorkflowViewState.IdRef="If_52">
+                      <If.Then>
+                        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Configue_HeckylExternalConnector workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_84" UnSafe="False" WorkflowFileName="ConnectionPage\ExternalConnectors\ConfigureExternalConnection\Configue_HeckylExternalConnector.xaml">
+                          <ui:InvokeWorkflowFile.Arguments>
+                            <scg:Dictionary x:TypeArguments="x:String, Argument" />
+                          </ui:InvokeWorkflowFile.Arguments>
+                        </ui:InvokeWorkflowFile>
+                      </If.Then>
+                    </If>
+                    <If Condition="[connectionType.Contains(&quot;PROBE42&quot;)]" DisplayName="Configure PROBE42" sap2010:WorkflowViewState.IdRef="If_53">
+                      <If.Then>
+                        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Configue_ProbeExternalConnector workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_85" UnSafe="False" WorkflowFileName="ConnectionPage\ExternalConnectors\ConfigureExternalConnection\Configue_ProbeExternalConnector.xaml">
+                          <ui:InvokeWorkflowFile.Arguments>
+                            <scg:Dictionary x:TypeArguments="x:String, Argument" />
+                          </ui:InvokeWorkflowFile.Arguments>
+                        </ui:InvokeWorkflowFile>
+                      </If.Then>
+                    </If>
+                    <If Condition="[connectionType.Contains(&quot;AZUREBLOB&quot;)]" DisplayName="Configure AZUREBLOB" sap2010:WorkflowViewState.IdRef="If_54">
+                      <If.Then>
+                        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Configue_Azure_Append_AppendExternalConnector workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_86" UnSafe="False" WorkflowFileName="ConnectionPage\ExternalConnectors\ConfigureExternalConnection\Configue_Azure_Append_AppendExternalConnector.xaml">
+                          <ui:InvokeWorkflowFile.Arguments>
+                            <scg:Dictionary x:TypeArguments="x:String, Argument" />
+                          </ui:InvokeWorkflowFile.Arguments>
+                        </ui:InvokeWorkflowFile>
+                      </If.Then>
+                    </If>
+                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_LoadDataSource" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_87" UnSafe="False" WorkflowFileName="DataSourcePage\LoadDataSource.xaml">
                       <ui:InvokeWorkflowFile.Arguments>
-                        <scg:Dictionary x:TypeArguments="x:String, Argument" />
+                        <InArgument x:TypeArguments="x:String" x:Key="dataSourceName">[dsName]</InArgument>
                       </ui:InvokeWorkflowFile.Arguments>
                     </ui:InvokeWorkflowFile>
-                  </If.Then>
-                </If>
-                <If Condition="[connectionType.Contains(&quot;FACEBOOKPAGE&quot;)]" DisplayName="Configure FACEBOOKPAGE" sap2010:WorkflowViewState.IdRef="If_50">
-                  <If.Then>
-                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Configue_FacebookExternalConnector workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_82" UnSafe="False" WorkflowFileName="ConnectionPage\ExternalConnectors\ConfigureExternalConnection\Configue_FacebookExternalConnector.xaml">
-                      <ui:InvokeWorkflowFile.Arguments>
-                        <scg:Dictionary x:TypeArguments="x:String, Argument" />
-                      </ui:InvokeWorkflowFile.Arguments>
-                    </ui:InvokeWorkflowFile>
-                  </If.Then>
-                </If>
-                <If Condition="[connectionType.Contains(&quot;DROPBOX&quot;)]" DisplayName="Configure DROPBOX" sap2010:WorkflowViewState.IdRef="If_51">
-                  <If.Then>
-                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Configue_Dropbox_ExternalConnector workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_83" UnSafe="False" WorkflowFileName="ConnectionPage\ExternalConnectors\ConfigureExternalConnection\Configue_Dropbox_ExternalConnector.xaml">
-                      <ui:InvokeWorkflowFile.Arguments>
-                        <scg:Dictionary x:TypeArguments="x:String, Argument" />
-                      </ui:InvokeWorkflowFile.Arguments>
-                    </ui:InvokeWorkflowFile>
-                  </If.Then>
-                </If>
-                <If Condition="[connectionType.Contains(&quot;HECKYL&quot;)]" DisplayName="Configure HECKYL" sap2010:WorkflowViewState.IdRef="If_52">
-                  <If.Then>
-                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Configue_HeckylExternalConnector workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_84" UnSafe="False" WorkflowFileName="ConnectionPage\ExternalConnectors\ConfigureExternalConnection\Configue_HeckylExternalConnector.xaml">
-                      <ui:InvokeWorkflowFile.Arguments>
-                        <scg:Dictionary x:TypeArguments="x:String, Argument" />
-                      </ui:InvokeWorkflowFile.Arguments>
-                    </ui:InvokeWorkflowFile>
-                  </If.Then>
-                </If>
-                <If Condition="[connectionType.Contains(&quot;PROBE42&quot;)]" DisplayName="Configure PROBE42" sap2010:WorkflowViewState.IdRef="If_53">
-                  <If.Then>
-                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Configue_ProbeExternalConnector workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_85" UnSafe="False" WorkflowFileName="ConnectionPage\ExternalConnectors\ConfigureExternalConnection\Configue_ProbeExternalConnector.xaml">
-                      <ui:InvokeWorkflowFile.Arguments>
-                        <scg:Dictionary x:TypeArguments="x:String, Argument" />
-                      </ui:InvokeWorkflowFile.Arguments>
-                    </ui:InvokeWorkflowFile>
-                  </If.Then>
-                </If>
-                <If Condition="[connectionType.Contains(&quot;AZUREBLOB&quot;)]" DisplayName="Configure AZUREBLOB" sap2010:WorkflowViewState.IdRef="If_54">
-                  <If.Then>
-                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Configue_Azure_Append_AppendExternalConnector workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_86" UnSafe="False" WorkflowFileName="ConnectionPage\ExternalConnectors\ConfigureExternalConnection\Configue_Azure_Append_AppendExternalConnector.xaml">
-                      <ui:InvokeWorkflowFile.Arguments>
-                        <scg:Dictionary x:TypeArguments="x:String, Argument" />
-                      </ui:InvokeWorkflowFile.Arguments>
-                    </ui:InvokeWorkflowFile>
-                  </If.Then>
-                </If>
-                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_LoadDataSource" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_87" UnSafe="False" WorkflowFileName="DataSourcePage\LoadDataSource.xaml">
-                  <ui:InvokeWorkflowFile.Arguments>
-                    <InArgument x:TypeArguments="x:String" x:Key="dataSourceName">[dsName]</InArgument>
-                  </ui:InvokeWorkflowFile.Arguments>
-                </ui:InvokeWorkflowFile>
+                  </Sequence>
+                </Sequence>
               </Sequence>
             </Sequence>
           </ActivityAction>
@@ -436,7 +465,7 @@
         </ui:ForEach.Body>
       </ui:ForEach>
     </Sequence>
-    <sads:DebugSymbol.Symbol>d25EOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX0xvY2FsXE1vc2FpY19SZWdyZXNzaW9uU3VpdGVfVUlQYXRoXERhdGFTb3VyY2VQYWdlXENyZWF0ZUV4dGVybmFsRGF0YUNvbm5lY3RvcnMueGFtbFgBbgF8AQQB6wEB8wEBAwGgAQHJAQECSQO4Aw4CAQFPBbYDEAIBAlAHWxcCAXJcB2AfAgFuYQduFwIBbW8HdhACAWl3B34QAgFlfweSAhQCAQyTAgekAxcCAQulAwe1AxQCAQNeRl5TAgFwXLEBXNEBAgFvdEN0oQECAWxxRHFcAgFqfDx8UQIBaHk9eUoCAWZ/hwF/oQECAWOFAQ2PAhgCAQ2lA44BpQOdAQIBCasDDbIDGAIBBIcBPocBmgECAQ6JAQ+RAScCAVeSAQ+SAb4BAgFSkwEPlwEnAgFQmAEPqgEfAgFLqwEPwQEcAgE+wgEPjgIaAgEQrAMPsQMnAgEFjwFKjwFYAgFhiwFSiwFaAgFfjQFOjQFbAgFdjgFRjgFZAgFbjAFLjAFVAgFZiQG4AYkB2QECAViSAUaSAVUCAVWSAbEBkgG7AQIBU5MBvQGTAesBAgFRmAFEmAFKAgFOmAFXmAFdAgFNmAGzAZgBwgECAUyoAaIBqAGKAgIBT6sBjgGrAbABAgFJsQEVvgEgAgE/wwERyQEpAgE4ygER0gEWAgEz0wER2wEWAgEu3AER5AEWAgEp5QER7QEWAgEk7gER9gEWAgEf9wER/wEWAgEagAIRiAIWAgEViQIRjQIpAgERrgNQrgNWAgEHrAPDAawD4QECAQayARe9ARwCAUDFAVPFAWMCATzHAW3HAY0BAgE6wwG8AcMB8QECATnKAR/KAVICATTMARXQAS0CATbTAR/TAVACAS/VARXZAS0CATHcAR/cAVQCASreARXiAS0CASzlAR/lAU8CASXnARXrAS0CASfuAR/uAU4CASDwARX0AS0CASL3AR/3AU8CARv5ARX9AS0CAR2AAh+AAlECARaCAhWGAi0CARiLAlOLAlsCAROJAr0BiQLhAQIBErIBJbIBRgIBQbQBG7sBJAIBRMwB4gHMAcsCAgE31QHeAdUBwwICATLeAeAB3gHHAgIBLecB4AHnAccCAgEo8AHeAfABwwICASP5Ad0B+QHBAgIBHoIC6wGCAt0CAgEZuQFGuQFMAgFHtgFHtgFXAgFF</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d25EOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX0xvY2FsXE1vc2FpY19SZWdyZXNzaW9uU3VpdGVfVUlQYXRoXERhdGFTb3VyY2VQYWdlXENyZWF0ZUV4dGVybmFsRGF0YUNvbm5lY3RvcnMueGFtbGMBbgF8AQQB6wEB8wEBAwGgAQHJAQECSQPVAw4CAQFPBdMDEAIBAlAHWxcDAYEBXAdgHwIBfWEHbhcCAXxvB3YQAgF4dwd+EAIBdH8HrwIUAgEMsAIHwQMXAgELwgMH0gMUAgEDXkZeUwIBf1yxAVzRAQIBfnRDdKEBAgF7cURxXAIBeXw8fFECAXd5PXlKAgF1f4cBf6EBAgFyhQENrAIYAgENwgOOAcIDnQECAQnIAw3PAxgCAQSGAQ+rAhoCAQ7JAw/OAycCAQWHARGgAR4CAWOhARGqAhwCAQ/LA1DLA1YCAQfJA8MByQPhAQIBBocBjAGHAa4BAgFwjQEXnQEiAgFkowFCowGeAQIBEKUBE60BKwIBV64BE64BwgECAVKvAROzASsCAVC0ARPGASMCAUvHARPdASACAT7eAROpAh4CARKOARmcAR4CAWWrAU6rAVwCAWGnAVanAV4CAV+pAVKpAV8CAV2qAVWqAV0CAVuoAU+oAVkCAVmlAbwBpQHdAQIBWK4BSq4BWQIBVa4BtQGuAb8BAgFTrwHBAa8B7wECAVG0AUi0AU4CAU60AVu0AWECAU20AbcBtAHGAQIBTMQBpgHEAY4CAgFPxwGSAccBtAECAUnNARnaASQCAT/fARXkAS0CATrlARXtARoCATXuARX2ARoCATD3ARX/ARoCASuAAhWIAhoCASaJAhWRAhoCASGSAhWaAhoCARybAhWjAhoCARekAhWoAi0CAROOASeOAVICAWaQAR2aASgCAWnOARvZASACAUDhAVfhAWcCATzfAcAB3wH1AQIBO+UBI+UBVgIBNucBGesBMQIBOO4BI+4BVAIBMfABGfQBMQIBM/cBI/cBWAIBLPkBGf0BMQIBLoACI4ACUwIBJ4ICGYYCMQIBKYkCI4kCUgIBIosCGY8CMQIBJJICI5ICUwIBHZQCGZgCMQIBH5sCI5sCVQIBGJ0CGaECMQIBGqYCV6YCXwIBFaQCwQGkAuUBAgEUkQEfmAEoAgFrmQEfmQFVAgFqzgEpzgFKAgFB0AEf1wEoAgFE5wHmAecBzwICATnwAeIB8AHHAgIBNPkB5AH5AcsCAgEvggLkAYICywICASqLAuIBiwLHAgIBJZQC4QGUAsUCAgEgnQLvAZ0C4QICARuWAUqWAVoCAW6TAUuTAVsCAWzVAUrVAVACAUfSAUvSAVsCAUU=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -456,7 +485,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CommentOut_18" sap:VirtualizedContainerService.HintSize="374,51">
+      <sap2010:ViewStateData Id="CommentOut_18" sap:VirtualizedContainerService.HintSize="287,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
@@ -464,7 +493,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="374,51">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="287,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -473,10 +502,43 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="Assign_15" sap:VirtualizedContainerService.HintSize="287,60" />
-      <sap2010:ViewStateData Id="CommentOut_20" sap:VirtualizedContainerService.HintSize="374,51" />
-      <sap2010:ViewStateData Id="Assign_9" sap:VirtualizedContainerService.HintSize="374,60" />
-      <sap2010:ViewStateData Id="Assign_13" sap:VirtualizedContainerService.HintSize="374,60" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_77" sap:VirtualizedContainerService.HintSize="336,51">
+      <sap2010:ViewStateData Id="CommentOut_20" sap:VirtualizedContainerService.HintSize="287,51" />
+      <sap2010:ViewStateData Id="Assign_9" sap:VirtualizedContainerService.HintSize="287,60" />
+      <sap2010:ViewStateData Id="Assign_13" sap:VirtualizedContainerService.HintSize="287,60" />
+      <sap2010:ViewStateData Id="Assign_18" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Break_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Sequence_59" sap:VirtualizedContainerService.HintSize="264,246">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_55" sap:VirtualizedContainerService.HintSize="464,394">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_56" sap:VirtualizedContainerService.HintSize="486,518">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ForEach`1_21" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_77" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -484,8 +546,8 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="AddToCollection`1_7" sap:VirtualizedContainerService.HintSize="336,22" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_78" sap:VirtualizedContainerService.HintSize="336,51">
+      <sap2010:ViewStateData Id="AddToCollection`1_7" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_78" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -493,7 +555,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="SelectItem_6" sap:VirtualizedContainerService.HintSize="336,51">
+      <sap2010:ViewStateData Id="SelectItem_6" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -518,7 +580,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_20" sap:VirtualizedContainerService.HintSize="336,51">
+      <sap2010:ViewStateData Id="ForEach`1_20" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
@@ -612,7 +674,23 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_54" sap:VirtualizedContainerService.HintSize="336,939">
+      <sap2010:ViewStateData Id="Sequence_54" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_55" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_57" sap:VirtualizedContainerService.HintSize="222,266">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -620,7 +698,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_55" sap:VirtualizedContainerService.HintSize="358,1489">
+      <sap2010:ViewStateData Id="Sequence_58" sap:VirtualizedContainerService.HintSize="244,390">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -628,7 +706,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_17" sap:VirtualizedContainerService.HintSize="374,1623">
+      <sap2010:ViewStateData Id="ForEach`1_17" sap:VirtualizedContainerService.HintSize="287,524">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
@@ -804,7 +882,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CommentOut_22" sap:VirtualizedContainerService.HintSize="374,51" />
+      <sap2010:ViewStateData Id="CommentOut_22" sap:VirtualizedContainerService.HintSize="287,51" />
       <sap2010:ViewStateData Id="InvokeWorkflowFile_30" sap:VirtualizedContainerService.HintSize="314,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -820,7 +898,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_6" sap:VirtualizedContainerService.HintSize="374,51">
+      <sap2010:ViewStateData Id="ForEach`1_6" sap:VirtualizedContainerService.HintSize="287,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
@@ -828,7 +906,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="396,2402">
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="309,1303">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -836,14 +914,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="418,2526">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="331,1427">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CreateNewDataSource_1" sap:VirtualizedContainerService.HintSize="458,2646">
+      <sap2010:ViewStateData Id="CreateNewDataSource_1" sap:VirtualizedContainerService.HintSize="371,1507">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="ShouldCollapseAll">True</x:Boolean>
