@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="VerifyFlow" mva:VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="VerifyFlow_1"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="VerifyFlow"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -9,6 +9,13 @@
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:ui="http://schemas.uipath.com/workflow/activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="LogReportFilePath" Type="InArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>VerifyFlow_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -106,30 +113,66 @@
     </ui:ImageFound>
     <If Condition="[imageForFlowValidation]" DisplayName="If (Flow Navigation is correct)" sap2010:WorkflowViewState.IdRef="If_2">
       <If.Then>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Trace" Message="SUCCESS: Flow- Periodic screen validated" />
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Trace" Message="SUCCESS: Flow- Periodic screen validated" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke GenerteLogsApplicationScopeUtility workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_FLow_periodic_TCNo_1_SUCCESS</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">True</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="LogMessage">D_FLow_periodic_TCNo_1_SUCCESS: Flow- Periodic screen validated and breadcum is displayed</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportFilePath]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="FAILED: Could not verify Flow- Periodic Screen" />
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="FAILED: Could not verify Flow- Periodic Screen" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke GenerteLogsApplicationScopeUtility workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_FLow_periodic_TCNo_1_FAILED</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">False</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="LogMessage">D_FLow_periodic_TCNo_1_ERROR: Flow- Periodic screen not validated and breadcum is not displayed</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportFilePath]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d0hEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcTmF2aWdhdGVUb0Zsb3dQYWdlLnhhbWwROwN0DgIBAUIFUxUCARFUBWIQAgEPYwVqFQIBCWsFcgoCAQJRX1GPAQIBE04zTjgCARJgmAFgggICARBoSmh6AgEOaIUBaIsBAgENYzpjVAIBC2UzZTgCAQprE2stAgEDbQltpAECAQdwCXCqAQIBBW13baEBAgEIcHdwpwECAQY=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0hEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcTmF2aWdhdGVUb0Zsb3dQYWdlLnhhbWwfQgOPAQ4CAQFJBVoVAgEhWwVpEAIBH2oFcRUCARlyBY0BCgIBAlhfWI8BAgEjVTNVOAIBImeYAWeCAgIBIG9Kb3oCAR5vhQFviwECAR1qOmpUAgEbbDNsOAIBGnITci0CAQN0CX4UAgEPgQEJiwEUAgEFdQt1pgECARd2C30jAgEQggELggGsAQIBDYMBC4oBIwIBBnV5daMBAgEYe0l7XAIBFXhNeGsCARR5VHlYAgETekl6ogECARJ21QF2hgICARGCAXmCAakBAgEOiAFJiAFcAgELhQFNhQFqAgEKhgFUhgFZAgEJhwFJhwGoAQIBCIMB1QGDAYYCAgEH</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="ClickImage_1" sap:VirtualizedContainerService.HintSize="653,106" />
-      <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="653,106" />
-      <sap2010:ViewStateData Id="ImageFound_1" sap:VirtualizedContainerService.HintSize="653,106" />
+      <sap2010:ViewStateData Id="ClickImage_1" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="ImageFound_1" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="653,239" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="675,801">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,342">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="VerifyFlow_1" sap:VirtualizedContainerService.HintSize="715,881" />
+      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="697,490" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="719,1052">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="VerifyFlow_1" sap:VirtualizedContainerService.HintSize="759,1132" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
