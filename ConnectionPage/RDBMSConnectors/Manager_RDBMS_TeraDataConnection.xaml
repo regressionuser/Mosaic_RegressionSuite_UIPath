@@ -78,6 +78,9 @@
         <Variable x:TypeArguments="x:String" Default="Test@123" Name="Teradata_Password" />
       </Sequence.Variables>
       <Sequence DisplayName="Sequence: New Connection Test" sap2010:WorkflowViewState.IdRef="Sequence_7">
+        <Sequence.Variables>
+          <Variable x:TypeArguments="x:Boolean" Name="TestConnectionMessageBox" />
+        </Sequence.Variables>
         <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
           <Assign.To>
             <OutArgument x:TypeArguments="x:String">[NewTeraDataConnectionName]</OutArgument>
@@ -173,7 +176,12 @@
             <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="7ca27e57136745b9464618fa1ec49965" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Test' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
           </ui:Click.Target>
         </ui:Click>
-        <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get test Connection message" sap2010:WorkflowViewState.IdRef="GetValue_11">
+        <ui:UiElementExists DisplayName="Element Exists" Exists="[TestConnectionMessageBox]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
+          <ui:UiElementExists.Target>
+            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='DIV' parentclass='toast-bottom-right' parentid='toast-container' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+          </ui:UiElementExists.Target>
+        </ui:UiElementExists>
+        <ui:GetValue ContinueOnError="True" DisplayName="Get test Connection message" sap2010:WorkflowViewState.IdRef="GetValue_11">
           <ui:GetValue.Target>
             <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="0cecf135d38b3b6fbcb044472e100553" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='DIV' parentclass='toast-bottom-right' parentid='toast-container' /&gt;" TimeoutMS="100000" WaitForReady="COMPLETE" />
           </ui:GetValue.Target>
@@ -181,145 +189,165 @@
             <OutArgument x:TypeArguments="x:String">[TestConnectionMessageCheck]</OutArgument>
           </ui:GetValue.Value>
         </ui:GetValue>
-        <If Condition="[TestConnectionMessageCheck.Contains(&quot;is valid&quot;)]" DisplayName="verify_TestConnectionMessage" sap2010:WorkflowViewState.IdRef="If_15">
+        <If Condition="[TestConnectionMessageBox]" sap2010:WorkflowViewState.IdRef="If_16">
           <If.Then>
-            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_25">
-              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_16" Level="Info" Message="SUCCESS: Test Connection Validated SuccessFully" />
-              <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click image 'chrome.exe  MOSAIC'" sap2010:WorkflowViewState.IdRef="ClickImage_9" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
-                <ui:ClickImage.CursorPosition>
-                  <ui:CursorPosition Position="Center">
-                    <ui:CursorPosition.OffsetX>
-                      <InArgument x:TypeArguments="x:Int32" />
-                    </ui:CursorPosition.OffsetX>
-                    <ui:CursorPosition.OffsetY>
-                      <InArgument x:TypeArguments="x:Int32" />
-                    </ui:CursorPosition.OffsetY>
-                  </ui:CursorPosition>
-                </ui:ClickImage.CursorPosition>
-                <ui:ClickImage.Image>
-                  <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAABsAAAARCAYAAAAsT9czAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADiSURBVEhLYzDoKvqPD+u05WEVJwXrdRSAMcmW1W9cgsInJA7CZFm2/Ni+/4eunP/fv2sdihoQHyS+7NheFHEYJtmyzOXT/h8EGggyFNnCkjXz4GIgeZA6ZP0gDLcMZBghDNIAMuTA5bNwg0G4b+c6FDEQG69l6BLoGGYZCIN8gW4hskUgeWS9MEyWZSAMsfAcmkXncFoEwoPfMohFdAhG9AQC8g0oRaKKUSmBgAzBlfRhwUow6aNLoGPkYCSUqdedOowiDsNkWQbCuIql9m0r/0fO78EqR7Zl5OBRy6iIi/4DALBwPI6K2LojAAAAAElFTkSuQmCC" />
-                </ui:ClickImage.Image>
-                <ui:ClickImage.Target>
-                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
-                </ui:ClickImage.Target>
-              </ui:ClickImage>
-              <ui:ClickImage ContinueOnError="{x:Null}" ClickType="CLICK_SINGLE" DelayBefore="3000" DelayMS="2000" DisplayName="Click image 'Create Connection Button'" sap2010:WorkflowViewState.IdRef="ClickImage_12" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
-                <ui:ClickImage.CursorPosition>
-                  <ui:CursorPosition Position="Center">
-                    <ui:CursorPosition.OffsetX>
-                      <InArgument x:TypeArguments="x:Int32" />
-                    </ui:CursorPosition.OffsetX>
-                    <ui:CursorPosition.OffsetY>
-                      <InArgument x:TypeArguments="x:Int32" />
-                    </ui:CursorPosition.OffsetY>
-                  </ui:CursorPosition>
-                </ui:ClickImage.CursorPosition>
-                <ui:ClickImage.Image>
-                  <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAAEcAAAAiCAYAAAANicT2AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANxSURBVGhD7ZlJTxRRFEb9Ie71D7g2rk1cmBgXxhiNcevChdEYEhNJXGCioAucRRSN4jwgJCggEECGjgLN1AwtQzND0w30wLXOI1XpLvuBTZcu5H3Jl66qN1S90/feV0ntECOtDJwNZOBsoDQ4T9tGZdelatmZV7VtzfrhgNLgbHcwtuGA0uBk6rhdjQwcjZGBozEycDRGBo7GyMDRGBk4GiPP4Fys6JHJ8Kqsra3PFY0l5IVvXHbn/513p2Ol7cqZ2rww8gTOubfdMh+NiW90QQ7d/SZ7CmrlWfuYrMSTcr9pJOOYXN07uaScqc0LI0/gNA3NyZQVNUcftjnXiJie0JIyx/mVvXK9dlCKLH8NzMjhe62qX94Hv9QOzEilf1JOl/9wxuMjJW3y5vuEtIzMy+3GYQX9wM1mKW35KROLK8occ82+Z0H1gDQOzqpxjE+dLxujnOHsL26S4FxULcDdBoBTT3zqoessALFEUiKrCfGHwnKyzKeii/QjAkZmo7IcS0phTUCNvfYloPoGpiPSPDwn4ZWEdI4vytnXXdIanLfO48ock17cA8hcY/6QBY5oJqrdz/UnRjnDAcD4wopafKZ227TzT9vRdf5dtywux6WkOajOWRwLtSOtvGNMPnVPqmPai+uHVP8L7/3q3J1WN+oGFcDLVX3qfF9RgwzNRDd9Lp3RP4WTuhjSgUipsAA8t0Bg4DCXnXKAfNAUVG2MJ8quWhFFmxtOTf+0ihTSyZ6vb2rrdQnlDOfgnRYZsxZUH5j9rc2dVqkPWtY6qgo217omwo5JDVKVSAEG115au95mcGgncrpT5sIfu0JOn2yMPCvIwbllpzBigKQWZDccdjEWY6eJ2/RNrWNAob8ODgV9amlVjj/qcK7lYuQJHHacJat4Ej3kOjCoJRRUeyt3w6Egsxj+aaAyhlT43DctewvrFdTBmYhq4/WAIktBt+EAjprC/VKfgZ2QXQ0zF7XLvmc2Rp7AwVesLZSct+V+CXTDwbw4AiiRXJO4ZcYzD21s/fZ8tPdPRdScpBvt/AIrFdithmFVtJkLswGcedXp3C8bI8/g2KbOZPvmqhsD2BOPO5zocJvalGkc1+yivlUjz+H8L0YGjsbIwNEYGTgaIwNHY2TgaIwMHI1RGhzzxXPdGb94mm/lG3wrN0qXgaOVyC8jiSVycKLZjgAAAABJRU5ErkJggg==" />
-                </ui:ClickImage.Image>
-                <ui:ClickImage.Target>
-                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
-                </ui:ClickImage.Target>
-              </ui:ClickImage>
-              <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Create Connection Message'" sap2010:WorkflowViewState.IdRef="GetValue_12">
-                <ui:GetValue.Target>
-                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="72a4e8e6aca62dc33e1437a994dc3ebf" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='DIV' parentclass='toast-bottom-right' parentid='toast-container' /&gt;" WaitForReady="INTERACTIVE" />
-                </ui:GetValue.Target>
-                <ui:GetValue.Value>
-                  <OutArgument x:TypeArguments="x:String">[CreateConnectionMessageCheck]</OutArgument>
-                </ui:GetValue.Value>
-              </ui:GetValue>
-            </Sequence>
+            <If Condition="[TestConnectionMessageCheck.Contains(&quot;is valid&quot;)]" DisplayName="verify_TestConnectionMessage" sap2010:WorkflowViewState.IdRef="If_15">
+              <If.Then>
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_25">
+                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_16" Level="Info" Message="SUCCESS: Test Connection Validated SuccessFully" />
+                  <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click image 'chrome.exe  MOSAIC'" sap2010:WorkflowViewState.IdRef="ClickImage_9" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+                    <ui:ClickImage.CursorPosition>
+                      <ui:CursorPosition Position="Center">
+                        <ui:CursorPosition.OffsetX>
+                          <InArgument x:TypeArguments="x:Int32" />
+                        </ui:CursorPosition.OffsetX>
+                        <ui:CursorPosition.OffsetY>
+                          <InArgument x:TypeArguments="x:Int32" />
+                        </ui:CursorPosition.OffsetY>
+                      </ui:CursorPosition>
+                    </ui:ClickImage.CursorPosition>
+                    <ui:ClickImage.Image>
+                      <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAABsAAAARCAYAAAAsT9czAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADiSURBVEhLYzDoKvqPD+u05WEVJwXrdRSAMcmW1W9cgsInJA7CZFm2/Ni+/4eunP/fv2sdihoQHyS+7NheFHEYJtmyzOXT/h8EGggyFNnCkjXz4GIgeZA6ZP0gDLcMZBghDNIAMuTA5bNwg0G4b+c6FDEQG69l6BLoGGYZCIN8gW4hskUgeWS9MEyWZSAMsfAcmkXncFoEwoPfMohFdAhG9AQC8g0oRaKKUSmBgAzBlfRhwUow6aNLoGPkYCSUqdedOowiDsNkWQbCuIql9m0r/0fO78EqR7Zl5OBRy6iIi/4DALBwPI6K2LojAAAAAElFTkSuQmCC" />
+                    </ui:ClickImage.Image>
+                    <ui:ClickImage.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                    </ui:ClickImage.Target>
+                  </ui:ClickImage>
+                  <ui:ClickImage ContinueOnError="{x:Null}" ClickType="CLICK_SINGLE" DelayBefore="3000" DelayMS="2000" DisplayName="Click image 'Create Connection Button'" sap2010:WorkflowViewState.IdRef="ClickImage_12" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+                    <ui:ClickImage.CursorPosition>
+                      <ui:CursorPosition Position="Center">
+                        <ui:CursorPosition.OffsetX>
+                          <InArgument x:TypeArguments="x:Int32" />
+                        </ui:CursorPosition.OffsetX>
+                        <ui:CursorPosition.OffsetY>
+                          <InArgument x:TypeArguments="x:Int32" />
+                        </ui:CursorPosition.OffsetY>
+                      </ui:CursorPosition>
+                    </ui:ClickImage.CursorPosition>
+                    <ui:ClickImage.Image>
+                      <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAAEcAAAAiCAYAAAANicT2AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANxSURBVGhD7ZlJTxRRFEb9Ie71D7g2rk1cmBgXxhiNcevChdEYEhNJXGCioAucRRSN4jwgJCggEECGjgLN1AwtQzND0w30wLXOI1XpLvuBTZcu5H3Jl66qN1S90/feV0ntECOtDJwNZOBsoDQ4T9tGZdelatmZV7VtzfrhgNLgbHcwtuGA0uBk6rhdjQwcjZGBozEycDRGBo7GyMDRGBk4GiPP4Fys6JHJ8Kqsra3PFY0l5IVvXHbn/513p2Ol7cqZ2rww8gTOubfdMh+NiW90QQ7d/SZ7CmrlWfuYrMSTcr9pJOOYXN07uaScqc0LI0/gNA3NyZQVNUcftjnXiJie0JIyx/mVvXK9dlCKLH8NzMjhe62qX94Hv9QOzEilf1JOl/9wxuMjJW3y5vuEtIzMy+3GYQX9wM1mKW35KROLK8occ82+Z0H1gDQOzqpxjE+dLxujnOHsL26S4FxULcDdBoBTT3zqoessALFEUiKrCfGHwnKyzKeii/QjAkZmo7IcS0phTUCNvfYloPoGpiPSPDwn4ZWEdI4vytnXXdIanLfO48ock17cA8hcY/6QBY5oJqrdz/UnRjnDAcD4wopafKZ227TzT9vRdf5dtywux6WkOajOWRwLtSOtvGNMPnVPqmPai+uHVP8L7/3q3J1WN+oGFcDLVX3qfF9RgwzNRDd9Lp3RP4WTuhjSgUipsAA8t0Bg4DCXnXKAfNAUVG2MJ8quWhFFmxtOTf+0ihTSyZ6vb2rrdQnlDOfgnRYZsxZUH5j9rc2dVqkPWtY6qgo217omwo5JDVKVSAEG115au95mcGgncrpT5sIfu0JOn2yMPCvIwbllpzBigKQWZDccdjEWY6eJ2/RNrWNAob8ODgV9amlVjj/qcK7lYuQJHHacJat4Ej3kOjCoJRRUeyt3w6Egsxj+aaAyhlT43DctewvrFdTBmYhq4/WAIktBt+EAjprC/VKfgZ2QXQ0zF7XLvmc2Rp7AwVesLZSct+V+CXTDwbw4AiiRXJO4ZcYzD21s/fZ8tPdPRdScpBvt/AIrFdithmFVtJkLswGcedXp3C8bI8/g2KbOZPvmqhsD2BOPO5zocJvalGkc1+yivlUjz+H8L0YGjsbIwNEYGTgaIwNHY2TgaIwMHI1RGhzzxXPdGb94mm/lG3wrN0qXgaOVyC8jiSVycKLZjgAAAABJRU5ErkJggg==" />
+                    </ui:ClickImage.Image>
+                    <ui:ClickImage.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                    </ui:ClickImage.Target>
+                  </ui:ClickImage>
+                  <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Create Connection Message'" sap2010:WorkflowViewState.IdRef="GetValue_12">
+                    <ui:GetValue.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="72a4e8e6aca62dc33e1437a994dc3ebf" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='DIV' parentclass='toast-bottom-right' parentid='toast-container' /&gt;" WaitForReady="INTERACTIVE" />
+                    </ui:GetValue.Target>
+                    <ui:GetValue.Value>
+                      <OutArgument x:TypeArguments="x:String">[CreateConnectionMessageCheck]</OutArgument>
+                    </ui:GetValue.Value>
+                  </ui:GetValue>
+                  <If Condition="[CreateConnectionMessageCheck.Contains(&quot;successfully&quot;)]" DisplayName="If Connection Creation Message Check" sap2010:WorkflowViewState.IdRef="If_9">
+                    <If.Then>
+                      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_26">
+                        <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click image 'chrome.exe  MOSAIC'" sap2010:WorkflowViewState.IdRef="ClickImage_10" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+                          <ui:ClickImage.CursorPosition>
+                            <ui:CursorPosition Position="Center">
+                              <ui:CursorPosition.OffsetX>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetX>
+                              <ui:CursorPosition.OffsetY>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetY>
+                            </ui:CursorPosition>
+                          </ui:ClickImage.CursorPosition>
+                          <ui:ClickImage.Image>
+                            <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAABsAAAARCAYAAAAsT9czAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADiSURBVEhLYzDoKvqPD+u05WEVJwXrdRSAMcmW1W9cgsInJA7CZFm2/Ni+/4eunP/fv2sdihoQHyS+7NheFHEYJtmyzOXT/h8EGggyFNnCkjXz4GIgeZA6ZP0gDLcMZBghDNIAMuTA5bNwg0G4b+c6FDEQG69l6BLoGGYZCIN8gW4hskUgeWS9MEyWZSAMsfAcmkXncFoEwoPfMohFdAhG9AQC8g0oRaKKUSmBgAzBlfRhwUow6aNLoGPkYCSUqdedOowiDsNkWQbCuIql9m0r/0fO78EqR7Zl5OBRy6iIi/4DALBwPI6K2LojAAAAAElFTkSuQmCC" />
+                          </ui:ClickImage.Image>
+                          <ui:ClickImage.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                          </ui:ClickImage.Target>
+                        </ui:ClickImage>
+                        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_19" Level="Info" Message="[&quot;SUCCESS: Connection Created  Successfully with Connection Name:  &quot;+TeradataConnectionName]" />
+                        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_20" Level="Info" Message="[&quot;INFO: Newly Created Connection Name for type:  is &quot;+NewTeraDataConnectionName]" />
+                      </Sequence>
+                    </If.Then>
+                    <If.Else>
+                      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_21">
+                        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_18" Level="Error" Message="[&quot;Create &quot;+TeradataConnectionName +&quot; Failed with Error&quot; +CreateConnectionMessageCheck]" />
+                        <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click image 'chrome.exe  MOSAIC'" sap2010:WorkflowViewState.IdRef="ClickImage_4" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+                          <ui:ClickImage.CursorPosition>
+                            <ui:CursorPosition Position="Center">
+                              <ui:CursorPosition.OffsetX>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetX>
+                              <ui:CursorPosition.OffsetY>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetY>
+                            </ui:CursorPosition>
+                          </ui:ClickImage.CursorPosition>
+                          <ui:ClickImage.Image>
+                            <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAABcAAAARCAYAAAA2cze9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADcSURBVDhPYzhvq/cfHZ+21MIQIxWftdb5P8wNv9FWi8InJA7CRBl+b82y/w+PHPx/e0ovihoQHyR+b/VSFHEYJmj4taJ0oAEHwIYgW3CjpgQuBpIHqUPWD8Jgw0EGYcMgBWDDD+1HMghkQQ+qGJCN03B0QRCGGQ7CYFeiWYBsMEgeWS8MEx+hIAsOI4IHjIF8XAaD8MAbDjaYFsGCEaFA14KTILIYkE1WhIINx5UU4cGEJymiC4IwcrAQykT3N61FEYdh4iMURza/1df2/0pyOFY5og0nB9PYcJ3/ADbvu0lDS7FJAAAAAElFTkSuQmCC" />
+                          </ui:ClickImage.Image>
+                          <ui:ClickImage.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                          </ui:ClickImage.Target>
+                        </ui:ClickImage>
+                        <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'Cancel BUTTON'" sap2010:WorkflowViewState.IdRef="Click_12" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                          <ui:Click.CursorPosition>
+                            <ui:CursorPosition Position="Center">
+                              <ui:CursorPosition.OffsetX>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetX>
+                              <ui:CursorPosition.OffsetY>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetY>
+                            </ui:CursorPosition>
+                          </ui:Click.CursorPosition>
+                          <ui:Click.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="28cb6ce79e6479fe89172d5f8005252a" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+                          </ui:Click.Target>
+                        </ui:Click>
+                      </Sequence>
+                    </If.Else>
+                  </If>
+                </Sequence>
+              </If.Then>
+              <If.Else>
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_28">
+                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_27">
+                    <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click image 'chrome.exe  MOSAIC'" sap2010:WorkflowViewState.IdRef="ClickImage_11" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+                      <ui:ClickImage.CursorPosition>
+                        <ui:CursorPosition Position="Center">
+                          <ui:CursorPosition.OffsetX>
+                            <InArgument x:TypeArguments="x:Int32" />
+                          </ui:CursorPosition.OffsetX>
+                          <ui:CursorPosition.OffsetY>
+                            <InArgument x:TypeArguments="x:Int32" />
+                          </ui:CursorPosition.OffsetY>
+                        </ui:CursorPosition>
+                      </ui:ClickImage.CursorPosition>
+                      <ui:ClickImage.Image>
+                        <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAABcAAAARCAYAAAA2cze9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADcSURBVDhPYzhvq/cfHZ+21MIQIxWftdb5P8wNv9FWi8InJA7CRBl+b82y/w+PHPx/e0ovihoQHyR+b/VSFHEYJmj4taJ0oAEHwIYgW3CjpgQuBpIHqUPWD8Jgw0EGYcMgBWDDD+1HMghkQQ+qGJCN03B0QRCGGQ7CYFeiWYBsMEgeWS8MEx+hIAsOI4IHjIF8XAaD8MAbDjaYFsGCEaFA14KTILIYkE1WhIINx5UU4cGEJymiC4IwcrAQykT3N61FEYdh4iMURza/1df2/0pyOFY5og0nB9PYcJ3/ADbvu0lDS7FJAAAAAElFTkSuQmCC" />
+                      </ui:ClickImage.Image>
+                      <ui:ClickImage.Target>
+                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                      </ui:ClickImage.Target>
+                    </ui:ClickImage>
+                    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_17" Level="Error" Message="[&quot;ERROR: Test &quot;+TeradataConnectionName +&quot;  Validation Failed&quot;]" />
+                    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'Cancel BUTTON'" sap2010:WorkflowViewState.IdRef="Click_11" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                      <ui:Click.CursorPosition>
+                        <ui:CursorPosition Position="Center">
+                          <ui:CursorPosition.OffsetX>
+                            <InArgument x:TypeArguments="x:Int32" />
+                          </ui:CursorPosition.OffsetX>
+                          <ui:CursorPosition.OffsetY>
+                            <InArgument x:TypeArguments="x:Int32" />
+                          </ui:CursorPosition.OffsetY>
+                        </ui:CursorPosition>
+                      </ui:Click.CursorPosition>
+                      <ui:Click.Target>
+                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="28cb6ce79e6479fe89172d5f8005252a" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+                      </ui:Click.Target>
+                    </ui:Click>
+                  </Sequence>
+                </Sequence>
+              </If.Else>
+            </If>
           </If.Then>
           <If.Else>
-            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_28">
-              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_27">
-                <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click image 'chrome.exe  MOSAIC'" sap2010:WorkflowViewState.IdRef="ClickImage_11" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
-                  <ui:ClickImage.CursorPosition>
-                    <ui:CursorPosition Position="Center">
-                      <ui:CursorPosition.OffsetX>
-                        <InArgument x:TypeArguments="x:Int32" />
-                      </ui:CursorPosition.OffsetX>
-                      <ui:CursorPosition.OffsetY>
-                        <InArgument x:TypeArguments="x:Int32" />
-                      </ui:CursorPosition.OffsetY>
-                    </ui:CursorPosition>
-                  </ui:ClickImage.CursorPosition>
-                  <ui:ClickImage.Image>
-                    <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAABcAAAARCAYAAAA2cze9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADcSURBVDhPYzhvq/cfHZ+21MIQIxWftdb5P8wNv9FWi8InJA7CRBl+b82y/w+PHPx/e0ovihoQHyR+b/VSFHEYJmj4taJ0oAEHwIYgW3CjpgQuBpIHqUPWD8Jgw0EGYcMgBWDDD+1HMghkQQ+qGJCN03B0QRCGGQ7CYFeiWYBsMEgeWS8MEx+hIAsOI4IHjIF8XAaD8MAbDjaYFsGCEaFA14KTILIYkE1WhIINx5UU4cGEJymiC4IwcrAQykT3N61FEYdh4iMURza/1df2/0pyOFY5og0nB9PYcJ3/ADbvu0lDS7FJAAAAAElFTkSuQmCC" />
-                  </ui:ClickImage.Image>
-                  <ui:ClickImage.Target>
-                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
-                  </ui:ClickImage.Target>
-                </ui:ClickImage>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_17" Level="Error" Message="[&quot;ERROR: Test &quot;+TeradataConnectionName +&quot;  Validation Failed&quot;]" />
-                <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'Cancel BUTTON'" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
-                  <ui:Click.CursorPosition>
-                    <ui:CursorPosition Position="Center">
-                      <ui:CursorPosition.OffsetX>
-                        <InArgument x:TypeArguments="x:Int32" />
-                      </ui:CursorPosition.OffsetX>
-                      <ui:CursorPosition.OffsetY>
-                        <InArgument x:TypeArguments="x:Int32" />
-                      </ui:CursorPosition.OffsetY>
-                    </ui:CursorPosition>
-                  </ui:Click.CursorPosition>
-                  <ui:Click.Target>
-                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="28cb6ce79e6479fe89172d5f8005252a" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
-                  </ui:Click.Target>
-                  <sap2010:WorkflowViewState.IdRef>Click_11</sap2010:WorkflowViewState.IdRef>
-                </ui:Click>
-              </Sequence>
-            </Sequence>
-          </If.Else>
-        </If>
-      </Sequence>
-      <If Condition="[CreateConnectionMessageCheck.Contains(&quot;successfully&quot;)]" DisplayName="If Connection Creation Message Check" sap2010:WorkflowViewState.IdRef="If_9">
-        <If.Then>
-          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_26">
-            <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click image 'chrome.exe  MOSAIC'" sap2010:WorkflowViewState.IdRef="ClickImage_10" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
-              <ui:ClickImage.CursorPosition>
-                <ui:CursorPosition Position="Center">
-                  <ui:CursorPosition.OffsetX>
-                    <InArgument x:TypeArguments="x:Int32" />
-                  </ui:CursorPosition.OffsetX>
-                  <ui:CursorPosition.OffsetY>
-                    <InArgument x:TypeArguments="x:Int32" />
-                  </ui:CursorPosition.OffsetY>
-                </ui:CursorPosition>
-              </ui:ClickImage.CursorPosition>
-              <ui:ClickImage.Image>
-                <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAABsAAAARCAYAAAAsT9czAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADiSURBVEhLYzDoKvqPD+u05WEVJwXrdRSAMcmW1W9cgsInJA7CZFm2/Ni+/4eunP/fv2sdihoQHyS+7NheFHEYJtmyzOXT/h8EGggyFNnCkjXz4GIgeZA6ZP0gDLcMZBghDNIAMuTA5bNwg0G4b+c6FDEQG69l6BLoGGYZCIN8gW4hskUgeWS9MEyWZSAMsfAcmkXncFoEwoPfMohFdAhG9AQC8g0oRaKKUSmBgAzBlfRhwUow6aNLoGPkYCSUqdedOowiDsNkWQbCuIql9m0r/0fO78EqR7Zl5OBRy6iIi/4DALBwPI6K2LojAAAAAElFTkSuQmCC" />
-              </ui:ClickImage.Image>
-              <ui:ClickImage.Target>
-                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
-              </ui:ClickImage.Target>
-            </ui:ClickImage>
-            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_19" Level="Info" Message="[&quot;SUCCESS: Connection Created  Successfully with Connection Name:  &quot;+TeradataConnectionName]" />
-            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_20" Level="Info" Message="[&quot;INFO: Newly Created Connection Name for type:  is &quot;+NewTeraDataConnectionName]" />
-          </Sequence>
-        </If.Then>
-        <If.Else>
-          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_21">
-            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_18" Level="Error" Message="[&quot;Create &quot;+TeradataConnectionName +&quot; Failed with Error&quot; +CreateConnectionMessageCheck]" />
-            <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click image 'chrome.exe  MOSAIC'" sap2010:WorkflowViewState.IdRef="ClickImage_4" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
-              <ui:ClickImage.CursorPosition>
-                <ui:CursorPosition Position="Center">
-                  <ui:CursorPosition.OffsetX>
-                    <InArgument x:TypeArguments="x:Int32" />
-                  </ui:CursorPosition.OffsetX>
-                  <ui:CursorPosition.OffsetY>
-                    <InArgument x:TypeArguments="x:Int32" />
-                  </ui:CursorPosition.OffsetY>
-                </ui:CursorPosition>
-              </ui:ClickImage.CursorPosition>
-              <ui:ClickImage.Image>
-                <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAABcAAAARCAYAAAA2cze9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADcSURBVDhPYzhvq/cfHZ+21MIQIxWftdb5P8wNv9FWi8InJA7CRBl+b82y/w+PHPx/e0ovihoQHyR+b/VSFHEYJmj4taJ0oAEHwIYgW3CjpgQuBpIHqUPWD8Jgw0EGYcMgBWDDD+1HMghkQQ+qGJCN03B0QRCGGQ7CYFeiWYBsMEgeWS8MEx+hIAsOI4IHjIF8XAaD8MAbDjaYFsGCEaFA14KTILIYkE1WhIINx5UU4cGEJymiC4IwcrAQykT3N61FEYdh4iMURza/1df2/0pyOFY5og0nB9PYcJ3/ADbvu0lDS7FJAAAAAElFTkSuQmCC" />
-              </ui:ClickImage.Image>
-              <ui:ClickImage.Target>
-                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
-              </ui:ClickImage.Target>
-            </ui:ClickImage>
             <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'Cancel BUTTON'" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
               <ui:Click.CursorPosition>
                 <ui:CursorPosition Position="Center">
@@ -334,19 +362,19 @@
               <ui:Click.Target>
                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="28cb6ce79e6479fe89172d5f8005252a" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
               </ui:Click.Target>
-              <sap2010:WorkflowViewState.IdRef>Click_12</sap2010:WorkflowViewState.IdRef>
+              <sap2010:WorkflowViewState.IdRef>Click_13</sap2010:WorkflowViewState.IdRef>
             </ui:Click>
-          </Sequence>
-        </If.Else>
-      </If>
+          </If.Else>
+        </If>
+      </Sequence>
     </Sequence>
-    <sads:DebugSymbol.Symbol>d29EOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxDb25uZWN0aW9uUGFnZVxSREJNU0Nvbm5lY3RvcnNcTWFuYWdlcl9SREJNU19UZXJhRGF0YUNvbm5lY3Rpb25Db25uZWN0aW9uLnhhbWxXAXEBnAEBAkUD2AIOAgEBRgXWAhACAQJKNkpoAgEHSzZLRwIBBkw2TDoCAQVNNk1LAgEETjZOQAIBA1AHlAISAgEglQIH1QIMAgEJUQlYEgIBY1kJXRcCAV1eCWwZAgFabQl9GQIBV34JggEXAgFTgwEJhwEXAgFPiAEJlgEUAgFNlwEJmwEXAgFJnAEJoAEXAgFFoQEJrwEUAgFCsAEJtwEXAgE9uAEJkwIOAgEhlQIVlQJYAgEKlwILrAIWAgEWrwIL0wIWAgEMVjRWSgIBZlM1U1ACAWRbnAFbhAICAWJZd1l9AgFhWZ0CWboCAgFfWWhZbgIBXl7AAV7HAQIBW2qcAWqHAgIBXG23AW3BAQIBWHucAXuHAgIBWYABnAGAAfMBAgFWfqYCfrwCAgFUhQGcAYUB9gECAVKDAaQCgwG5AgIBUJQBnAGUAfQBAgFOmQGcAZkB9AECAUyXAaUClwG6AgIBSp4BnAGeAfcBAgFInAGjApwBvAICAUatAZwBrQGHAgIBRKEBS6EBUQIBQ7UBNbUBUQIBPrIBhwGyAY4CAgFBsgGZArIBoQICAUC4ARe4AVQCASK6AQ3oARgCAS7rAQ2RAhgCASSYAg2pAh0CAR2qAg2qAuYBAgEaqwINqwLaAQIBF7ACDbAC6wECARKxAg3CAh0CAQ/DAg3SAhgCAQ27AQ+7AbEBAgE7vAEPzQEfAgE4zgEP3wEfAgEz4AEP5wEdAgEv7AEPkAIaAgElpwJnpwKXAQIBH6QCO6QCQAIBHqoCe6oC4wECARurAnurAtcBAgEYsAJ8sALoAQIBE8ACZ8AClwECARG9Aju9AkACARDPAqABzwKNAgIBDrsBfbsBrgECATzLAWnLAZkBAgE6yAE9yAFCAgE5zgFtzgFzAgE1zgFezgFkAgE03QFp3QGZAQIBN9oBPdoBQgIBNuUBO+UBWQIBMOIBogHiAakCAgEy7QER/gEhAgEr/wER/wHXAQIBKIACEY8CHAIBJvwBa/wBmwECAS35AT/5AUQCASz/AYAB/wHUAQIBKYwCpAGMApECAgEn</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2VEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxDb25uZWN0aW9uUGFnZVxSREJNU0Nvbm5lY3RvcnNcTWFuYWdlcl9SREJNU19UZXJhRGF0YUNvbm5lY3Rpb24ueGFtbGABcQGcAQECRQP0Ag4CAQFGBfICEAIBAko2SmgCAQdLNktHAgEGTDZMOgIBBU02TUsCAQRONk5AAgEDUAfxAhICAQlUCVsSAgFuXAlgFwIBaGEJbxkCAWVwCYABGQIBYoEBCYUBFwIBXoYBCYoBFwIBWosBCZkBFAIBWJoBCZ4BFwIBVJ8BCaMBFwIBUKQBCbIBFAIBTbMBCbcBHgIBSLgBCb8BFwIBQsABCfACDgIBClk0WUoCAXFWNVZQAgFvXpwBXoQCAgFtXHdcfQIBbFydAly6AgIBalxoXG4CAWlhwAFhxwECAWZtnAFthwICAWdwtwFwwQECAWN+nAF+hwICAWSDAZwBgwHzAQIBYYEBpgKBAbwCAgFfiAGcAYgB9gECAV2GAaQChgG5AgIBW5cBnAGXAfQBAgFZnAGcAZwB9AECAVeaAaUCmgG6AgIBVaEBnAGhAfcBAgFTnwGjAp8BvAICAVGwAZwBsAGHAgIBT6QBS6QBUQIBTrUBTrUB1QECAUy1AeABtQHmAQIBS7MBQbMBXQIBSb0BNb0BUQIBRLgBJrgBLAIBQ7oBhwG6AY4CAgFHugGZAroBoQICAUbAARfAATMCAQvCAQ3cAhICAQ/fAg3uAhgCAQ3CARvCAVgCARDEARGyAhwCARy1AhHaAhwCARLrAqAB6wKNAgIBDsUBE8UBtQECAUDGARPXASMCAT3YARPpASMCATjqARPxASECATTyAROxAhgCAR22AhPZAh4CARPFAYEBxQGyAQIBQdUBbdUBnQECAT/SAUHSAUYCAT7YAXHYAXcCATrYAWLYAWgCATnnAW3nAZ0BAgE85AFB5AFGAgE77wE/7wFdAgE17AGmAewBrQICATfyASHyAWQCAR70AReJAiICASqMAhevAiICASC3AhXIAiUCARnJAhXJAtsBAgEWygIV2AIgAgEU9QEZhgIpAgExhwIZhwLyAQIBLogCGYgC5gECASuNAhmNAvcBAgEmjgIZnwIpAgEjoAIZrgIkAgEhxgJvxgKfAQIBG8MCQ8MCSAIBGskChAHJAtgBAgEX1gKoAdYClQICARWEAnOEAqMBAgEzgQJHgQJMAgEyhwKHAYcC7wECAS+IAocBiALjAQIBLI0CiAGNAvQBAgEnnQJznQKjAQIBJZoCR5oCTAIBJKwCrAGsApkCAgEi</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="719,60" />
-      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="719,134" />
-      <sap2010:ViewStateData Id="SelectItem_3" sap:VirtualizedContainerService.HintSize="719,134" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="1058,60" />
+      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="1058,134" />
+      <sap2010:ViewStateData Id="SelectItem_3" sap:VirtualizedContainerService.HintSize="1058,134" />
       <sap2010:ViewStateData Id="SelectItem_5" sap:VirtualizedContainerService.HintSize="719,134" />
       <sap2010:ViewStateData Id="TypeInto_4" sap:VirtualizedContainerService.HintSize="719,134">
         <sap:WorkflowViewStateService.ViewState>
@@ -371,15 +399,16 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TypeInto_5" sap:VirtualizedContainerService.HintSize="719,134">
+      <sap2010:ViewStateData Id="TypeInto_5" sap:VirtualizedContainerService.HintSize="1058,134">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Click_7" sap:VirtualizedContainerService.HintSize="719,106" />
-      <sap2010:ViewStateData Id="GetValue_11" sap:VirtualizedContainerService.HintSize="719,106">
+      <sap2010:ViewStateData Id="Click_7" sap:VirtualizedContainerService.HintSize="1058,106" />
+      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="1058,68" />
+      <sap2010:ViewStateData Id="GetValue_11" sap:VirtualizedContainerService.HintSize="1058,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
@@ -418,7 +447,43 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_25" sap:VirtualizedContainerService.HintSize="336,653">
+      <sap2010:ViewStateData Id="ClickImage_10" sap:VirtualizedContainerService.HintSize="314,106">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_19" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_20" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Sequence_26" sap:VirtualizedContainerService.HintSize="336,492">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_18" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="ClickImage_4" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Click_12" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_21" sap:VirtualizedContainerService.HintSize="336,507">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_25" sap:VirtualizedContainerService.HintSize="336,744">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -449,7 +514,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_15" sap:VirtualizedContainerService.HintSize="719,801">
+      <sap2010:ViewStateData Id="If_15" sap:VirtualizedContainerService.HintSize="719,892">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
@@ -457,7 +522,9 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="741,2681">
+      <sap2010:ViewStateData Id="Click_13" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="If_16" sap:VirtualizedContainerService.HintSize="1058,1040" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="1080,3028">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -465,27 +532,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ClickImage_10" sap:VirtualizedContainerService.HintSize="314,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_19" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="LogMessage_20" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="Sequence_26" sap:VirtualizedContainerService.HintSize="336,492">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_18" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="ClickImage_4" sap:VirtualizedContainerService.HintSize="314,106" />
-      <sap2010:ViewStateData Id="Click_12" sap:VirtualizedContainerService.HintSize="314,106" />
-      <sap2010:ViewStateData Id="Sequence_21" sap:VirtualizedContainerService.HintSize="336,507">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1102,3152">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -493,29 +540,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="741,655">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="763,3500">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="785,3624">
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="1124,3276">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Manager_ConnectionHome_1" sap:VirtualizedContainerService.HintSize="825,4144">
+      <sap2010:ViewStateData Id="Manager_ConnectionHome_1" sap:VirtualizedContainerService.HintSize="1164,3356">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="ShouldCollapseAll">False</x:Boolean>
