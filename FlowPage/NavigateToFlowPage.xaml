@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="VerifyFlow"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="VerifyFlow" this:VerifyFlow.LogReportFilePath="D:\UIPath\Mosaic_RegressionSuite_UIPath\Reports\LogFiles\Flow\NavigateToFlowPageRandom" this:VerifyFlow.PeriodicOrStreams="Periodic"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -7,10 +7,12 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:this="clr-namespace:"
  xmlns:ui="http://schemas.uipath.com/workflow/activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="LogReportFilePath" Type="InArgument(x:String)" />
+    <x:Property Name="PeriodicOrStreams" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -88,62 +90,115 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:ClickImage.Target>
     </ui:ClickImage>
-    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Periodic Tab" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
-      <ui:Click.CursorPosition>
-        <ui:CursorPosition Position="Center">
-          <ui:CursorPosition.OffsetX>
-            <InArgument x:TypeArguments="x:Int32" />
-          </ui:CursorPosition.OffsetX>
-          <ui:CursorPosition.OffsetY>
-            <InArgument x:TypeArguments="x:Int32" />
-          </ui:CursorPosition.OffsetY>
-        </ui:CursorPosition>
-      </ui:Click.CursorPosition>
-      <ui:Click.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="94f87248cfc5882e9fe0e9818a2fb7a2" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Periodic' parentid='app' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
-      </ui:Click.Target>
-    </ui:Click>
-    <ui:ImageFound DisplayName="Verify Navigation" Found="[imageForFlowValidation]" sap2010:WorkflowViewState.IdRef="ImageFound_1">
-      <ui:ImageFound.Image>
-        <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAAIUAAAAVCAYAAABovC1/AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUWSURBVGhD7ZiBa9tGFMb3XwsjAiKIEJd4YIoJSY2STSEm2CEedtd5qwrJZkNcarlNSE3mLfOKmZ3UpRWpIFPMt3fSyT5bjiM7oWtAPxDofNLTvXffvXvnbxARMUYkiogAkSgiAkSiiAhwP6K4smFZVuCyHaBXXoe61+APPjD6Duxxn65438zYaJ800evz5kw0kF9aR+U9u7+LnXDciyi6zxOQYjLUJXXkypMW3L6tI/7kA+PcQEKSIKtDn2TyM0Eit/kjobmsYj2mIH/G2zNxBF1KwDin2zvZCcf9iWLFQJe3RR6+KPhk+NgmdEWC9orS4BdDEMUXYCCK33/ZxjOzBetf/sMMzCIK+8yAtiRDYitwKYVig6+5VgmJxwbaXgtOPQNVq8DibetQQ3y3ATYV1kkeiQXJs7GsodLxnpnI6c/Y/qmG1qdr/sMMTBIFcbQlIfHc89ZpHwj+CGNp5KGu5pBPq9Sn07SKWwDR78HMJijzkB8s+2xV0RW2hKGP1JfVkRqMY8xOpwr9W+/70kIC+RM/YvMzEMXnf2owcjrWnmxgx6ihPYPt0KL4WEGKUp9e94w770pIyknP2T6thlgKFbfLgbnJAjJsVzVanS9JElcmtFgCpTaTh4PefgrScnEgpgCfO6gZu9CfrGEja6A2i2OTRNFvobgsIVUmO3bVHUu+6dm0XulQ/LEc6zR+Bdphm2oRm0Y6utqbuwqkZAmeGxbMLQXKjid6L06C3TrZHbwr2Ok3kVsU4tlm8aSYfXSbcxPcPq46+PPQwM53aeg/Hg9W6jTciWdKFS8uBFEUvRdJSFrVc5zDVp1aaNGdMPFMIIs5FClwbptWR8YXjFWhPZUCdmp5dtxikAX9FvpX6PxRhZHdQFp/huMwjrmiUJDczCCzwy5asSplBMpobFVbZRLkiD/ChDFRjCwUURTMHxVF5raP+y0NVSpkg3ES3xXuTzKQHpWEbzhovsig8o4352RMFNew/vYyRjpN20m9gzDFdthM0chSmhO2EobY7waZ7h0KqJKlKvU0B4UFp1WEKti3zw6gP1bcoi++mof5gXdM4fpTy8sY6TRtJ6/RCeOYO1Eq9H0TZp1dDbTeDwU4cTHQlTmhzmmi+HCA5GCSfYb9Ykw8JovCFc8Ncb8LA1FcvClgO72Gte0CfmtckDzCE1YUrhPfm+69D0ujym7Ta1AWSCmUIbKUEo/ZDyw9aig9TSL+lG8QDh1/L/m0UJboljUo9A63EOT8NQqZNG2L2yiU3+JilprphprCx/VtzJ8Bt2aKOEpiLcR859tlME6TReF+YyRTsPB4fwXchYEoWuY+3nbnO4SHFYUb5BjVEH4wLLYnK8id8jZZMFZotcWoMONFV4MEIomplmUPRYfpnwnPqKCLZSjMN/BXDfsNynjznOtvEQXaRcTJH6++IZw2DvYqXsE4VRRUYbAaguLiueGg9UMc0iovrLldP06sVhiOQ7Dj1ldxOp7y77snoziKNxZY4QjWFHMQWhREr55DQpahLLH0r2K9PPpWq0DV+qY53E8bTARiJrDR2KOqnWyozIZM6f1lj/fdM7eJghj6o7pjWf+17Y19qigIuwWDTibyggqVThnySh7+QYzRZX/60clEXpSphslAfzRBFIRNp5yR74/Fcx7uRRTz4FyGKA6nQgWmv418BcztD22HN/5LyorokMn77vEc8r+JIuLrJRJFRIBIFBEBIlFEBIhEEREgEkXEGMB/4HHu75nTWqsAAAAASUVORK5CYII=" />
-      </ui:ImageFound.Image>
-      <ui:ImageFound.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
-      </ui:ImageFound.Target>
-    </ui:ImageFound>
-    <If Condition="[imageForFlowValidation]" DisplayName="If (Flow Navigation is correct)" sap2010:WorkflowViewState.IdRef="If_2">
+    <If Condition="[PeriodicOrStreams.Equals(&quot;Periodic&quot;)]" sap2010:WorkflowViewState.IdRef="If_3">
       <If.Then>
-        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Trace" Message="SUCCESS: Flow- Periodic screen validated" />
-          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke GenerteLogsApplicationScopeUtility workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
-            <ui:InvokeWorkflowFile.Arguments>
-              <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_FLow_periodic_TCNo_1_SUCCESS</InArgument>
-              <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">True</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="LogMessage">D_FLow_periodic_TCNo_1_SUCCESS: Flow- Periodic screen validated and breadcum is displayed</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportFilePath]</InArgument>
-            </ui:InvokeWorkflowFile.Arguments>
-          </ui:InvokeWorkflowFile>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Periodic Tab" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="94f87248cfc5882e9fe0e9818a2fb7a2" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Periodic' parentid='app' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+          <ui:ImageFound DisplayName="Verify Navigation" Found="[imageForFlowValidation]" sap2010:WorkflowViewState.IdRef="ImageFound_1">
+            <ui:ImageFound.Image>
+              <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAAIUAAAAVCAYAAABovC1/AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAUWSURBVGhD7ZiBa9tGFMb3XwsjAiKIEJd4YIoJSY2STSEm2CEedtd5qwrJZkNcarlNSE3mLfOKmZ3UpRWpIFPMt3fSyT5bjiM7oWtAPxDofNLTvXffvXvnbxARMUYkiogAkSgiAkSiiAhwP6K4smFZVuCyHaBXXoe61+APPjD6Duxxn65438zYaJ800evz5kw0kF9aR+U9u7+LnXDciyi6zxOQYjLUJXXkypMW3L6tI/7kA+PcQEKSIKtDn2TyM0Eit/kjobmsYj2mIH/G2zNxBF1KwDin2zvZCcf9iWLFQJe3RR6+KPhk+NgmdEWC9orS4BdDEMUXYCCK33/ZxjOzBetf/sMMzCIK+8yAtiRDYitwKYVig6+5VgmJxwbaXgtOPQNVq8DibetQQ3y3ATYV1kkeiQXJs7GsodLxnpnI6c/Y/qmG1qdr/sMMTBIFcbQlIfHc89ZpHwj+CGNp5KGu5pBPq9Sn07SKWwDR78HMJijzkB8s+2xV0RW2hKGP1JfVkRqMY8xOpwr9W+/70kIC+RM/YvMzEMXnf2owcjrWnmxgx6ihPYPt0KL4WEGKUp9e94w770pIyknP2T6thlgKFbfLgbnJAjJsVzVanS9JElcmtFgCpTaTh4PefgrScnEgpgCfO6gZu9CfrGEja6A2i2OTRNFvobgsIVUmO3bVHUu+6dm0XulQ/LEc6zR+Bdphm2oRm0Y6utqbuwqkZAmeGxbMLQXKjid6L06C3TrZHbwr2Ok3kVsU4tlm8aSYfXSbcxPcPq46+PPQwM53aeg/Hg9W6jTciWdKFS8uBFEUvRdJSFrVc5zDVp1aaNGdMPFMIIs5FClwbptWR8YXjFWhPZUCdmp5dtxikAX9FvpX6PxRhZHdQFp/huMwjrmiUJDczCCzwy5asSplBMpobFVbZRLkiD/ChDFRjCwUURTMHxVF5raP+y0NVSpkg3ES3xXuTzKQHpWEbzhovsig8o4352RMFNew/vYyRjpN20m9gzDFdthM0chSmhO2EobY7waZ7h0KqJKlKvU0B4UFp1WEKti3zw6gP1bcoi++mof5gXdM4fpTy8sY6TRtJ6/RCeOYO1Eq9H0TZp1dDbTeDwU4cTHQlTmhzmmi+HCA5GCSfYb9Ykw8JovCFc8Ncb8LA1FcvClgO72Gte0CfmtckDzCE1YUrhPfm+69D0ujym7Ta1AWSCmUIbKUEo/ZDyw9aig9TSL+lG8QDh1/L/m0UJboljUo9A63EOT8NQqZNG2L2yiU3+JilprphprCx/VtzJ8Bt2aKOEpiLcR859tlME6TReF+YyRTsPB4fwXchYEoWuY+3nbnO4SHFYUb5BjVEH4wLLYnK8id8jZZMFZotcWoMONFV4MEIomplmUPRYfpnwnPqKCLZSjMN/BXDfsNynjznOtvEQXaRcTJH6++IZw2DvYqXsE4VRRUYbAaguLiueGg9UMc0iovrLldP06sVhiOQ7Dj1ldxOp7y77snoziKNxZY4QjWFHMQWhREr55DQpahLLH0r2K9PPpWq0DV+qY53E8bTARiJrDR2KOqnWyozIZM6f1lj/fdM7eJghj6o7pjWf+17Y19qigIuwWDTibyggqVThnySh7+QYzRZX/60clEXpSphslAfzRBFIRNp5yR74/Fcx7uRRTz4FyGKA6nQgWmv418BcztD22HN/5LyorokMn77vEc8r+JIuLrJRJFRIBIFBEBIlFEBIhEEREgEkXEGMB/4HHu75nTWqsAAAAASUVORK5CYII=" />
+            </ui:ImageFound.Image>
+            <ui:ImageFound.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+            </ui:ImageFound.Target>
+          </ui:ImageFound>
+          <If Condition="[imageForFlowValidation]" DisplayName="If (Flow Navigation is correct)" sap2010:WorkflowViewState.IdRef="If_2">
+            <If.Then>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Trace" Message="D_FLow_periodic_TCNo_1_SUCCESS: Flow- Periodic screen validated" />
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke GenerteLogsApplicationScopeUtility workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_FLow_periodic_TCNo_1_SUCCESS</InArgument>
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">True</InArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="LogMessage">D_FLow_periodic_TCNo_1_SUCCESS: Flow- Periodic screen validated and breadcum is displayed</InArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportFilePath]</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+              </Sequence>
+            </If.Then>
+            <If.Else>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="D_FLow_periodic_TCNo_1_FAILED: Could not verify Flow- Periodic Screen" />
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke GenerteLogsApplicationScopeUtility workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_FLow_periodic_TCNo_1_FAILED</InArgument>
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">False</InArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="LogMessage">D_FLow_periodic_TCNo_1_ERROR: Flow- Periodic screen not validated and breadcum is not displayed</InArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportFilePath]</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+              </Sequence>
+            </If.Else>
+          </If>
         </Sequence>
       </If.Then>
       <If.Else>
-        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="FAILED: Could not verify Flow- Periodic Screen" />
-          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke GenerteLogsApplicationScopeUtility workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
-            <ui:InvokeWorkflowFile.Arguments>
-              <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_FLow_periodic_TCNo_1_FAILED</InArgument>
-              <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">False</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="LogMessage">D_FLow_periodic_TCNo_1_ERROR: Flow- Periodic screen not validated and breadcum is not displayed</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportFilePath]</InArgument>
-            </ui:InvokeWorkflowFile.Arguments>
-          </ui:InvokeWorkflowFile>
-        </Sequence>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="User didn't select Flow Periodic. Moving to Flow- Streams" />
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d0hEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcTmF2aWdhdGVUb0Zsb3dQYWdlLnhhbWwfQgOPAQ4CAQFJBVoVAgEhWwVpEAIBH2oFcRUCARlyBY0BCgIBAlhfWI8BAgEjVTNVOAIBImeYAWeCAgIBIG9Kb3oCAR5vhQFviwECAR1qOmpUAgEbbDNsOAIBGnITci0CAQN0CX4UAgEPgQEJiwEUAgEFdQt1pgECARd2C30jAgEQggELggGsAQIBDYMBC4oBIwIBBnV5daMBAgEYe0l7XAIBFXhNeGsCARR5VHlYAgETekl6ogECARJ21QF2hgICARGCAXmCAakBAgEOiAFJiAFcAgELhQFNhQFqAgEKhgFUhgFZAgEJhwFJhwGoAQIBCIMB1QGDAYYCAgEH</sads:DebugSymbol.Symbol>
+    <If Condition="[PeriodicOrStreams.Equals(&quot;Streams&quot;)]" sap2010:WorkflowViewState.IdRef="If_5">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
+          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Periodic Tab" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="a9bbf93a09fb02026ee182e9b0b83425" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Streams' parentid='app' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+          <ui:ImageFound DisplayName="Verify Navigation" Found="[imageForFlowValidation]" sap2010:WorkflowViewState.IdRef="ImageFound_2">
+            <ui:ImageFound.Image>
+              <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAAHUAAAAbCAYAAABC+sCWAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAVLSURBVGhD7ZdNTxtXFIb7L/orWGaXZXZZdpdldlmyGtAIaRSNaC1BEYocFIKmESZYCFCMMAuDXREcG8KXKTjFQgQ0lSzPgA32AIMdY70913MdbMAfUFqV0TzSSPfzXPu+95x77g9wsB2OqDbEEdWGOKLaEEdUG+KIakMcUW2II6oNaSDqN+SNc2SvfqcF6stBCR0gmLFGPkhKRWTUBGIbCahHRd5oDxqImkVfIIVHQQ0/haq+yBH0cp+OyTQf+tDQQugXRUivFHiH3XB1iZDHtmDy7uSiF4E/DV57eDQVtW+PV2t4yKIaiA4IcE2rvE6UVPh/EaCsWR67NSKgN6iXyw+R+xG1dIaVFR2PafyP9L1YOoZaYh3nCC9q6PvKQjbjBJMLOpS/LnjdwPt5Hf5DKhZP4I9qeMRszGpoX8shbw26gUMsT/nwMaGhUF7nNmQQ6hfQH671REONIaF9ga9bhiQKELpkyENRGp1BdEiG54MPvdRuiV1EMqxAZuME8nIlCr3yO0wVIUWGKFBfp4jeDwkeAbidmRCUbpHmCRDdAajJGCZ+5fVuBbQFnNo1pFc+JCqhpAn3IOoFNlc1tH3MQGUHvWgivKTh6edsWRR9S8eTVb6BWhrPyOb3eipNIT0N5jPqhoYni8fIss05yeH17yn8vFM5DNc53vmEae8Q3rwdxXRkG4ffeEcLmHEPpE4ZgzOxG+/TWk/VEeqhje33YzdtwKSfZK4oEHp82GV/o2QgNizBNZOkShGxdxQFplQqEWYMHkmAJ84qlh2JDkCmvE9JBJhdyYPlLDXQHb875YLwLmbNTfrhor4YXyMxXtXXhKaiMs+7/CpCVovKyhrep1iZk87geeAA4XMqVwnHBO7YSKOjUo9fCr6zRqJGjqHnuReblJRVyg24yKmIR6YxOjSE0Qjb2NYopmPwDbggdjIPccNfdYfeJKolDMMK38pK1fbSIRF6QjTykuKpAcMwsEwiW7au2qGWWRJqZIvXiGo7+z5IEvNcvg45i3HaiqT34anZI7RXh+Iy1aIbeD3HyqeYZKE2d45gmB2CAsIRZp8Lx0L4mo5ncyw509H3xWgQfjmlArSE5bFDHgrHXy+FaRnyEH3NC1enhIkdq6mxqNxzWXit/jq9SFCvue+H+6UEmSVhY1646a6uK2qwt76oRGbDR/MpNIsS+kcWoP534ZeXD8odFsYROqgtyPd4czWFjvU02ucz5R+c3SbxNjLom+XeTCE8f3qOfOUg5ujJNE9ztsudN1DAXngSnrdv8Nt4COvJW4hpJBAYC2H3SmSPDV8K2Yqong1erSFJCRcdDqYu59LWLUUtkGeaFS81KDTT2IEouUhz7kHUAlaWUni6ZN2h7H27s053bPiIRnH2DtFGtp5vnVr1HPPuFNoo3FpzmPdS/x+8n1qD5MUv4me8fpVjxJfWoeaah+frsI2nRGl6F0YluTHo7ntZm/26ZuuJShZmKGz2B5Cs7HlyAb4IG7+LCUkiwS2XKqaXoZDdu4hqRNxUDnxPwMzPg7RmiNKt5tyDqMSZgckIZa5z9I5l4XM+jc1qPc6PIbF793tmZ8K/cMUTD44ghfi7mGw8DqexU0/Tfwp5q98tl7NTWabwVpOl0q+jzZUo4xTdbIOvi4FSBrHxXogUFtl8UR7EAlfYjHshs3ua3sGC7IHiFiCXn0+39NSSjijLoitrdNG9v99a/G0g6h0o5ltKbhqSrwrD/zZ0n5r1kg8Kf5XoVxc2/8ZB9drvQN016nO/ojr8L3BEtSGOqDbEEdWGOKLaEEdUG+KIakMcUW0H8DdvpNbMPG8aegAAAABJRU5ErkJggg==" />
+            </ui:ImageFound.Image>
+            <ui:ImageFound.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+            </ui:ImageFound.Target>
+          </ui:ImageFound>
+          <If Condition="[imageForFlowValidation]" DisplayName="If (Flow Navigation is correct)" sap2010:WorkflowViewState.IdRef="If_4">
+            <If.Then>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Trace" Message="D_FLow_Streaming_TCNo_1_SUCCESS: Flow- Streams screen validated" />
+              </Sequence>
+            </If.Then>
+            <If.Else>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Error" Message="D_FLow_periodic_TCNo_1_FAILED: Could not verify Flow- Streams Screen" />
+              </Sequence>
+            </If.Else>
+          </If>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="User didn't select Flow-Streams. Selected Periodic" />
+      </If.Else>
+    </If>
+    <sads:DebugSymbol.Symbol>d0hEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcTmF2aWdhdGVUb0Zsb3dQYWdlLnhhbWw6AWIBuQEBAwHdAQHmAQECRAPGAQ4CAQFLBVwVAgE+XQWYAQoCARmZAQXEAQoCAQJaX1qPAQIBQFczVzgCAT9dE11FAgEaXwmTARQCAR6WAQmWAbQBAgEcmQETmQFEAgEDmwEJvwEUAgEHwgEJwgGtAQIBBWALbhYCATxvC3YbAgE2dwuSARACAR+WAXaWAbEBAgEdnAELqgEWAgEXqwELsgEbAgERswELvgEQAgEIwgF2wgGqAQIBBmyeAWyIAgIBPXRQdIABAgE7dIsBdJEBAgE6b0BvWgIBOHE5cT4CATd3GXczAgEgeQ+DARoCASyGAQ+QARoCASKoAZ4BqAGHAgIBGLABULABgAECARawAYsBsAGRAQIBFasBQKsBWgIBE60BOa0BPgIBErMBGbMBMwIBCbUBD7cBGgIBDroBD7wBGgIBC3oResMBAgE0exGCASkCAS2HARGHAckBAgEqiAERjwEpAgEjtgERtgHDAQIBD7sBEbsByAECAQx6f3rAAQIBNYABT4ABYgIBMn1TfXECATF+Wn5eAgEwf09/qAECAS972wF7jAICAS6HAX+HAcYBAgErjQFPjQFiAgEoigFTigFwAgEniwFaiwFfAgEmjAFPjAGuAQIBJYgB2wGIAYwCAgEktgF/tgHAAQIBELsBf7sBxQECAQ0=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="ClickImage_1" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="ClickImage_1" sap:VirtualizedContainerService.HintSize="1058,106" />
       <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="ImageFound_1" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
@@ -165,14 +220,51 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="697,490" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="719,1052">
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="719,906">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="VerifyFlow_1" sap:VirtualizedContainerService.HintSize="759,1132" />
+      <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="1058,1054" />
+      <sap2010:ViewStateData Id="Click_2" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="ImageFound_2" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="LogMessage_6" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,215">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_7" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="336,215">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="697,363" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="719,779">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_8" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="1058,927" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1080,2291">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="VerifyFlow_1" sap:VirtualizedContainerService.HintSize="1120,2451" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
