@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Generic_VerifyDropdownList"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Generic_VerifyDropdownList" this:Generic_VerifyDropdownList.TC_No="Generic"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -7,12 +7,14 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:this="clr-namespace:"
  xmlns:ui="http://schemas.uipath.com/workflow/activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="ListItems" Type="InArgument(scg:IEnumerable(ui:UiElement))" />
     <x:Property Name="Expected_DropDownList" Type="InArgument(scg:IEnumerable(x:String))" />
     <x:Property Name="SuccessFlag" Type="OutArgument(x:Boolean)" />
+    <x:Property Name="TC_No" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -121,7 +123,7 @@
     <If Condition="[Actual_DropDownValueList.Count = Expected_DropDownList.Count]" sap2010:WorkflowViewState.IdRef="If_1">
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_8">
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;SUCCESS: Count of dropdown list matched&quot;+ vbNewLine+&#xD;&#xA;&quot;The actual count obtained From web Is: &quot;+Actual_DropDownValueList.Count.ToString+&quot; While the expected count Is: &quot;+Expected_DropDownList.Count.ToString]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[TC_No+&quot;_LOG: Count of dropdown list matched&quot;+ vbNewLine+&#xA;&quot;The actual count obtained From web Is: &quot;+Actual_DropDownValueList.Count.ToString+&quot; While the expected count is: &quot;+Expected_DropDownList.Count.ToString]" />
           <While sap2010:WorkflowViewState.IdRef="While_2" Condition="[Element_Counter&lt;Actual_DropDownValueList.Count]">
             <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
               <Assign sap2010:WorkflowViewState.IdRef="Assign_6">
@@ -135,12 +137,12 @@
               <If Condition="[Actual_DropDownValueList(Element_Counter).Trim.ToString.Equals(Expected_DropDownList(Element_Counter).Trim.ToString)]" sap2010:WorkflowViewState.IdRef="If_4">
                 <If.Then>
                   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
-                    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Trace" Message="[&quot;SUCCESS: Element Matched. Actual List item is: &quot;+Actual_DropDownValueList(element_counter).Trim.ToString+&quot; While the expected item is: &quot;+Expected_DropDownList(element_counter).Trim.ToString]" />
+                    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[TC_No+ &quot;_SUCCESS: Element Matched. Actual List item is: &quot;+Actual_DropDownValueList(element_counter).Trim.ToString+&quot; While the expected item is: &quot;+Expected_DropDownList(element_counter).Trim.ToString]" />
                   </Sequence>
                 </If.Then>
                 <If.Else>
                   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_10">
-                    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="[&quot;FAILED: Element Mis-Matched. Actual List item is: &quot;+Actual_DropDownValueList(element_counter).Trim.ToString+&quot; While the expected item is: &quot;+Expected_DropDownList(element_counter).Trim.ToString]" />
+                    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="[TC_No+&quot;_FAILED: Element Mis-Matched. Actual List item is: &quot;+Actual_DropDownValueList(element_counter).Trim.ToString+&quot; While the expected item is: &quot;+Expected_DropDownList(element_counter).Trim.ToString]" />
                     <Assign sap2010:WorkflowViewState.IdRef="Assign_10">
                       <Assign.To>
                         <OutArgument x:TypeArguments="x:Boolean">[SuccessFlag]</OutArgument>
@@ -149,7 +151,7 @@
                         <InArgument x:TypeArguments="x:Boolean">False</InArgument>
                       </Assign.Value>
                     </Assign>
-                    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[&quot;LOG : boolean flag is &quot;+SuccessFlag.ToString]" />
+                    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Trace" Message="[&quot;LOG : boolean flag is &quot;+SuccessFlag.ToString]" />
                   </Sequence>
                 </If.Else>
               </If>
@@ -167,7 +169,7 @@
       </If.Then>
       <If.Else>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_9">
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[&quot;FAILED: Count of dropdown list did not match&quot;+ vbNewLine+&#xD;&#xA;&quot;The actual count obtained From web Is: &quot;+Actual_DropDownValueList.Count.ToString+&quot; While the expected count Is: &quot;+Expected_DropDownList.Count.ToString]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[TC_No+&quot;_FAILED: Count of dropdown list did not match&quot;+ vbNewLine+&#xA;&quot;The actual count obtained From web Is: &quot;+Actual_DropDownValueList.Count.ToString+&quot; While the expected count Is: &quot;+Expected_DropDownList.Count.ToString]" />
           <Assign sap2010:WorkflowViewState.IdRef="Assign_9">
             <Assign.To>
               <OutArgument x:TypeArguments="x:Boolean">[SuccessFlag]</OutArgument>
@@ -180,7 +182,7 @@
         </Sequence>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d09EOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcR2VuZXJpY1xHZW5lcmljX1ZlcmlmeURyb3Bkb3duTGlzdC54YW1sN0cDuAEOAgEBTQVUDgIBRlUFaBICATlpBXAOAgE1cQV4DgIBMXkFtgEKAgECUjpSTwIBSU87T1UCAUdVfFWJAQIBRVsLZRYCATpuL24wAgE4azBrQQIBNnYxdjUCATRzMnM/AgEyeRN5UwIBA3sJpgEUAgEOqQEJtAEUAgEEXA1jHwIBP2QNZNQBAgE7fAt88wICAS99C6UBEwIBD6oBC6oB+QICAQyrAQuyARQCAQizAQuzAbcBAgEFXENcSwIBQl5AXlMCAUBhZ2FvAgFDZERkYAIBPWS8AWTRAQIBPHx4fPACAgEwfg2kARgCARN9Rn17AgEQqgF5qgH2AgIBDbABN7ABPAIBC60BOK0BRQIBCbMBebMBtAECAQZ/D4YBGAIBKIcBD5sBFAIBGZwBD6MBGAIBFIQBOoQBnwECASyBATuBAWYCASmHAR2HAZUBAgEaiQETiwEeAgEljgETmQEeAgEboQE5oQFMAgEXngE6ngFLAgEVigEVigHcAgIBJo8BFY8B3wICASOQARWXAR4CAR+YARWYAcABAgEcigGDAYoB2QICASePAYMBjwHcAgIBJJUBQZUBRgIBIpIBQpIBTwIBIJgBggGYAb0BAgEd</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d09EOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcR2VuZXJpY1xHZW5lcmljX1ZlcmlmeURyb3Bkb3duTGlzdC54YW1sOAF2AX4BAkkDugEOAgEBTwVWDgIBRlcFahICATlrBXIOAgE1cwV6DgIBMXsFuAEKAgECVDpUTwIBSVE7UVUCAUdXfFeJAQIBRV0LZxYCATpwL3AwAgE4bTBtQQIBNngxeDUCATR1MnU/AgEyexN7UwIBA30JqAEUAgEOqwEJtgEUAgEEXg1lHwIBP2YNZtQBAgE7fgt+8QICAS9/C6cBEwIBD6wBC6wB+wICAQytAQu0ARQCAQi1AQu1AbcBAgEFXkNeSwIBQmBAYFMCAUBjZ2NvAgFDZkRmYAIBPWa8AWbRAQIBPH54fu4CAgEwgAENpgEYAgETf0Z/ewIBEKwBeawB+AICAQ2yATeyATwCAQuvATivAUUCAQm1AXm1AbQBAgEGgQEPiAEYAgEoiQEPnQEUAgEZngEPpQEYAgEUhgE6hgGfAQIBLIMBO4MBZgIBKYkBHYkBlQECARqLARONAR4CASWQARObAR4CARujATmjAUwCARegATqgAUsCARWMARWMAeMCAgEmkQEVkQHmAgIBI5IBFZkBHgIBH5oBFZoBwQECARyMAYIBjAHgAgIBJ5EBgwGRAeMCAgEklwFBlwFGAgEilAFClAFPAgEgmgGDAZoBvgECAR0=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -252,7 +254,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Generic_VerifyDropdownList_1" sap:VirtualizedContainerService.HintSize="1190,2839" />
+      <sap2010:ViewStateData Id="Generic_VerifyDropdownList_1" sap:VirtualizedContainerService.HintSize="1190,2599" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
