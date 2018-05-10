@@ -7,6 +7,7 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:swa="clr-namespace:System.Windows.Automation;assembly=UIAutomationTypes"
  xmlns:this="clr-namespace:"
  xmlns:ui="http://schemas.uipath.com/workflow/activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
@@ -42,6 +43,7 @@
       <x:String>UiPath.Core</x:String>
       <x:String>UiPath.Core.Activities</x:String>
       <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Windows.Automation</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -64,6 +66,7 @@
       <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
       <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+      <AssemblyReference>UIAutomationTypes</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="ImportFlow" sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -81,6 +84,9 @@
       <Variable x:TypeArguments="x:String" Name="ValidFileName" />
       <Variable x:TypeArguments="x:String" Name="DummyFileName" />
       <Variable x:TypeArguments="ui:UiElement" Name="UiElement_ImportFlowPopupTitle" />
+      <Variable x:TypeArguments="ui:UiElement" Name="UiElement_ImportPopup_NextButton" />
+      <Variable x:TypeArguments="ui:UiElement" Name="UiElement_ImportPopup_CancelButton" />
+      <Variable x:TypeArguments="ui:UiElement" Name="UiElement_ImportPopup_Title" />
     </Sequence.Variables>
     <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_2">
       <ui:CommentOut.Body>
@@ -153,10 +159,10 @@
     </ui:ImageFound>
     <If Condition="[imageForImportFlow]" DisplayName="If (Verify Import flow button image exists)" sap2010:WorkflowViewState.IdRef="If_1">
       <If.Then>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Trace" Message="SUCCESS: Found Import flow Button" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Trace" Message="D_FLow_periodic_TCNo_10_LOG: Import flow Button is Visible on UI" />
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="FAILED: Could not find Import Flow button" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="D_FLow_periodic_TCNo_10_FAILED: Could not find Import Flow button" />
       </If.Else>
     </If>
     <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Import Flow Button" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
@@ -195,12 +201,112 @@
     </ui:CommentOut>
     <If Condition="[UiElement_ImportFlowPopupTitle.IsVisible]" DisplayName="If (Verify Import flow popup)" sap2010:WorkflowViewState.IdRef="If_2">
       <If.Then>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="SUCCESS: Successfully clicked Import flow button and Import flow popup opened" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="D_FLow_periodic_TCNo_10_SUCCESS: Import flow button is enabled and Clickable. Successfully clicked Import flow button and Import flow popup opened" />
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="FAILED: Error while clicking Import flow button" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="D_FLow_periodic_TCNo_10_FAILED: Error while clicking Import flow button. The Import flow popup window didn't open." />
       </If.Else>
     </If>
+    <ui:WaitUiElementAppear DisplayName="Find Element 'INPUT'" FoundElement="[UiElement_ImportPopup_Title]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_2" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="00fa705d1df22dc4e461737a8da8ac61" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='H4' aaname='Import flow' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:WaitUiElementAppear DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_ImportPopup_NextButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_3" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="02ac6b6cc1f40b8979102738a9b72b27" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Next' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <ui:WaitUiElementAppear DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_ImportPopup_CancelButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_4" WaitActive="False" WaitVisible="False">
+      <ui:WaitUiElementAppear.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="2feb677a6bd067592c08d8f5996d6b67" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:WaitUiElementAppear.Target>
+    </ui:WaitUiElementAppear>
+    <If Condition="[UiElement_ImportPopup_Title.IsVisible and UiElement_ImportPopup_NextButton.IsVisible and UiElement_ImportPopup_CancelButton.IsVisible]" sap2010:WorkflowViewState.IdRef="If_8">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_15" Level="Info" Message="D_FLow_periodic_TCNo_11_SUCCESS: Successfully verified the UI of Import flow popup" />
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_16" Level="Error" Message="[&quot;D_FLow_periodic_TCNo_11_FAILED: Errors while verifying the UI of import flow popup &quot;+vbNewLine+&#xA;&quot;Visibility of Title on import flow popup is &quot;+UiElement_ImportPopup_Title.IsVisible.ToString +vbNewLine+&#xA;&quot;Visibility of Next button on import flow popup is &quot;+UiElement_ImportPopup_NextButton.IsVisible.ToString +vbNewLine+&#xA;&quot;Visibility of Cancel button on import flow popup is &quot;+UiElement_ImportPopup_CancelButton.IsVisible.ToString]" />
+      </If.Else>
+    </If>
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_8" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[UiElement_ImportPopup_CancelButton]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <TryCatch DisplayName="Try catch" sap2010:WorkflowViewState.IdRef="TryCatch_2">
+      <TryCatch.Try>
+        <ui:WaitUiElementAppear DisplayName="Find Element 'INPUT'" FoundElement="[UiElement_ImportPopup_Title]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_6" WaitActive="False" WaitVisible="False">
+          <ui:WaitUiElementAppear.Target>
+            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="00fa705d1df22dc4e461737a8da8ac61" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='H4' aaname='Import flow' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+          </ui:WaitUiElementAppear.Target>
+        </ui:WaitUiElementAppear>
+      </TryCatch.Try>
+      <TryCatch.Catches>
+        <Catch x:TypeArguments="ui:ActivityTimeoutException" sap2010:WorkflowViewState.IdRef="Catch`1_3">
+          <ActivityAction x:TypeArguments="ui:ActivityTimeoutException">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="ui:ActivityTimeoutException" Name="exception" />
+            </ActivityAction.Argument>
+          </ActivityAction>
+        </Catch>
+      </TryCatch.Catches>
+    </TryCatch>
+    <If Condition="[UiElement_ImportPopup_Title.IsVisible.ToString.Equals(&quot;False&quot;)]" sap2010:WorkflowViewState.IdRef="If_9">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_21" Level="Info" Message="D_FLow_periodic_TCNo_26_SUCCESS: Cancel button functionality validated on Import flow screen" />
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_22" Level="Info" Message="D_FLow_periodic_TCNo_26_FAILED: Could not verify cancel button functionality on Import flow screen" />
+      </If.Else>
+    </If>
+    <ui:Click DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="2000" DisplayName="Click Import Flow Button" sap2010:WorkflowViewState.IdRef="Click_9" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="f09e50c20daefe5144ac186154b1438b" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Import flow' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_10">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_16">
+          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_7" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_ImportPopup_NextButton]" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
     <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Next Button" sap2010:WorkflowViewState.IdRef="ClickImage_5" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
       <ui:ClickImage.CursorPosition>
         <ui:CursorPosition Position="Center">
@@ -230,7 +336,7 @@
     <If Condition="[ErrorMsgForBlankImport.Contains(&quot;Please choose flow file to import&quot;)]" DisplayName="If (Verify error message when no import file is passed)" sap2010:WorkflowViewState.IdRef="If_3">
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Trace" Message="[&quot;SUCCESS: Error message verified for blank import. Message is: &quot;+ErrorMsgForBlankImport]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_12_SUCCESS: Error message verified for blank import i.e when user does not select any file and click on 'Next' button. Message is: &quot;+ErrorMsgForBlankImport]" />
           <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click close 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_3" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
             <ui:Click.CursorPosition>
               <ui:CursorPosition Position="Center">
@@ -249,7 +355,7 @@
         </Sequence>
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="FAILED: Could not verify/find error message for blank import" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="[&quot;D_FLow_periodic_TCNo_12_FAILED: Could not verify error message for blank import i.e when user does not select any file and click on 'Next' button. Message is: &quot;+ErrorMsgForBlankImport]" />
       </If.Else>
     </If>
     <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Choose file" sap2010:WorkflowViewState.IdRef="ClickImage_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
@@ -304,7 +410,7 @@
     <If Condition="[ErrorMsgForInvalidFileFormat.Contains(&quot;Please select .json file only&quot;)]" DisplayName="If (Verify error message for invalid file)" sap2010:WorkflowViewState.IdRef="If_6">
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Info" Message="[&quot;SUCCESS: Error message verified for invalid format. Message is: &quot;+ErrorMsgForInvalidFileFormat]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_14_SUCCESS: Error message verified when user tries to upload file with invalid format. Message is: &quot;+ErrorMsgForInvalidFileFormat]" />
           <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click close 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_5" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
             <ui:Click.CursorPosition>
               <ui:CursorPosition Position="Center">
@@ -323,7 +429,7 @@
         </Sequence>
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Error" Message="FAILED: Could not verify/find error message for invalid format" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Error" Message="[&quot;D_FLow_periodic_TCNo_14_FAILED: Could not verify error message when user tries to upload file with invalid format. Message is: &quot;+ErrorMsgForInvalidFileFormat]" />
       </If.Else>
     </If>
     <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click choose file button" sap2010:WorkflowViewState.IdRef="ClickImage_9" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
@@ -393,6 +499,44 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:ClickImage.Target>
     </ui:ClickImage>
+    <TryCatch DisplayName="Try catch" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+      <TryCatch.Variables>
+        <Variable x:TypeArguments="ui:UiElement" Name="UiElement_JsonParseErrorMessage" />
+        <Variable x:TypeArguments="swa:ElementNotAvailableException" Name="JsonParceException" />
+      </TryCatch.Variables>
+      <TryCatch.Try>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_15">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="ui:GenericValue" Name="GetErrorMessage_JsonParse" />
+          </Sequence.Variables>
+          <ui:WaitUiElementAppear DisplayName="Find Element 'DIV  topTipMaxiqId22'" FoundElement="[UiElement_JsonParseErrorMessage]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_5" WaitActive="False" WaitVisible="False">
+            <ui:WaitUiElementAppear.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="e3a7047b063b63f827e81ddc79625928" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='topTipMaxiqId*' tag='DIV' /&gt;" TimeoutMS="4000" WaitForReady="INTERACTIVE" />
+            </ui:WaitUiElementAppear.Target>
+          </ui:WaitUiElementAppear>
+          <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text" sap2010:WorkflowViewState.IdRef="GetValue_8">
+            <ui:GetValue.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[UiElement_JsonParseErrorMessage]" TimeoutMS="2000" WaitForReady="INTERACTIVE" />
+            </ui:GetValue.Target>
+            <ui:GetValue.Value>
+              <OutArgument x:TypeArguments="ui:GenericValue">[GetErrorMessage_JsonParse]</OutArgument>
+            </ui:GetValue.Value>
+          </ui:GetValue>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_17" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_17_FAILED: Import flow failed. Getting Error Message: &quot; +GetErrorMessage_JsonParse]" />
+          <TerminateWorkflow DisplayName="Terminate workflow" Exception="[JsonParceException]" sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" Reason="Json parse exception" />
+        </Sequence>
+      </TryCatch.Try>
+      <TryCatch.Catches>
+        <Catch x:TypeArguments="ui:ActivityTimeoutException" sap2010:WorkflowViewState.IdRef="Catch`1_2">
+          <ActivityAction x:TypeArguments="ui:ActivityTimeoutException">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="ui:ActivityTimeoutException" Name="exception" />
+            </ActivityAction.Argument>
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_19" Level="Trace" Message="LOG: Activity timeout Exception caught" />
+          </ActivityAction>
+        </Catch>
+      </TryCatch.Catches>
+    </TryCatch>
     <ui:ImageFound DisplayName="IS_BackButtonPresent" Found="[ImageForBackBtn]" sap2010:WorkflowViewState.IdRef="ImageFound_5">
       <ui:ImageFound.Image>
         <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAADEAAAAXCAYAAACiaac3AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJOSURBVFhH7VVNSxtRFPWH+AP8A266KHQtuC2lFKmUIqUgpauCFFyIGxeCuKrWZUtbFCqUIkWqRfEr8QOjwQ9MsZqoiYmJMRo1p/d4Gd4EJiZjREfJwCHknXvnvXPvO3eq8KMadx0VEV5BRYRX4A0R0w1AbAJYfOfMF0HpIjY/Ie/JnQKZMLDc6hzvBvPNwEkMWO105ovAnYizQ2ClQzdl1Q5Xgew+4HvhnFMqblTEaUo3tNa4Kdfsm5PfGQL2p1TwUI3hhmuBtS7hpoHt78DUU5NjFzH6CAj1AevdmmPlF0B5IniQbByYe63//32RbmWA5BKQmAPOj4G9EeV4sGRA35EMAkeb2tlgW76IizjJP9kDFt6avS6BS0/kZOO0HoS/ROij8r8fALu/JO6zyaFIHmbmObDRI3lJIPBeuZGHcthl4GDBiGDlE7NSmIQrk7sTwcpGfkrFvwFbA1rNzLZMl2cmjl1hLGPiPtO96B+NH6szsZOPdTKRp7fSfzXe5bAo7zrNv9HqWtUPD0p3jvTwTiJSKybXDvIX3ZWryPzoaL6XiqA8Ef4m9QSNzKpy5PIKOeUw5nhHzPzE8PQDjU6eVyjUK+K/qhiuW3FFcHURvEKcQKxcsN2IiM/oRJl9pVfNyqEX2LWtfq2yr1FERVQcecvY5NgJF75waWz7IyZnFzY+mBianFXkc57V7whFBFpsvEwkfihzZyLYD4zX54tgHAvEAnBKcVpZ7y+A0kWUCnbB/7LwfGelydsNXiauX8QtoCLCK6iI8ArugYhq/AeCBAybkA4kZQAAAABJRU5ErkJggg==" />
@@ -419,10 +563,10 @@
     </ui:ImageFound>
     <If Condition="[ImageForBackBtn and ImageForImportBtn and ImageForCancelBtn]" sap2010:WorkflowViewState.IdRef="If_4">
       <If.Then>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="Found Import, Back and Cancel Button" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="D_FLow_periodic_TCNo_15_SUCCESS: Verified 2nd part of UI of Import flow popup after clicking on Next button once. Found Import, Back and Cancel Button on UI" />
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="[&quot;Could not find either Import: Value&quot;+ImageForImportBtn.ToString +&quot;or Cancel button: Value- &quot;+ImageForCancelBtn.ToString+ &quot;or Back Button: Value&quot; +ImageForBackBtn.ToString]" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="[&quot;D_FLow_periodic_TCNo_15_FAILED: Could not verify 2nd part of UI of Import flow popup after clicking on Next button once. Check Error logs below: &quot; +vbNewLine+ &#xA;&quot;Found Import button visibility as: &quot;+ImageForImportBtn.ToString + vbNewLine +&#xA;&quot;Found Back button visibility as: &quot;+ImageForBackBtn.ToString + vbNewLine +&#xA;&quot;Found Cancel button visibility as: &quot;+ImageForCancelBtn.ToString]" />
       </If.Else>
     </If>
     <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Back button Image" sap2010:WorkflowViewState.IdRef="ClickImage_10" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
@@ -443,6 +587,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:ClickImage.Target>
     </ui:ClickImage>
+    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_23" Level="Info" Message="D_FLow_periodic_TCNo_25_SUCCESS: Back button functionality verified successfully" />
     <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Next Button Image" sap2010:WorkflowViewState.IdRef="ClickImage_11" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
       <ui:ClickImage.CursorPosition>
         <ui:CursorPosition Position="Center">
@@ -513,7 +658,7 @@
     <If Condition="[ErrorMsgForInvalidFileFormat.Contains(&quot;Please select .json file only&quot;)]" sap2010:WorkflowViewState.IdRef="If_7">
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Info" Message="[&quot;Error message verified again after re-entering invalid format. Message is: &quot;+ErrorMsgForInvalidFileFormat]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_16_SUCCESS: Error message verified again after re-entering invalid format. Message is: &quot;+ErrorMsgForInvalidFileFormat]" />
           <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_6" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
             <ui:Click.CursorPosition>
               <ui:CursorPosition Position="Center">
@@ -532,7 +677,7 @@
         </Sequence>
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Error" Message="Could not verify/find error message for invalid format" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Error" Message="[&quot;D_FLow_periodic_TCNo_16_FAILED: Could not verify error message after re-entering invalid format after next button is clicked on Import flow popup once. Message is: &quot;+ErrorMsgForInvalidFileFormat]" />
       </If.Else>
     </If>
     <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click image 'chrome.exe  MOSAIC'" sap2010:WorkflowViewState.IdRef="ClickImage_14" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
@@ -594,6 +739,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:ClickImage.Target>
     </ui:ClickImage>
+    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_20" Level="Info" Message="D_FLow_periodic_TCNo_17_and_18_SUCCESS: Flow has been imported successfully" />
     <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_7">
       <ui:CommentOut.Body>
         <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_12">
@@ -651,9 +797,10 @@
         <InArgument x:TypeArguments="x:String" x:Key="FlowName">[FlowName]</InArgument>
         <InArgument x:TypeArguments="x:Boolean" x:Key="Should_i_Click_FilteredFlow" />
         <InArgument x:TypeArguments="x:String" x:Key="LogReportPath">[LogReportPATH]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="TC_ID">19_and_20</InArgument>
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -705,10 +852,54 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CommentOut_6" sap:VirtualizedContainerService.HintSize="675,308" />
+      <sap2010:ViewStateData Id="CommentOut_6" sap:VirtualizedContainerService.HintSize="675,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="675,239" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_2" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_3" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_4" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="LogMessage_15" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_16" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_8" sap:VirtualizedContainerService.HintSize="675,239" />
+      <sap2010:ViewStateData Id="Click_8" sap:VirtualizedContainerService.HintSize="675,68" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_6" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Catch`1_3" sap:VirtualizedContainerService.HintSize="404,21">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TryCatch_2" sap:VirtualizedContainerService.HintSize="675,333" />
+      <sap2010:ViewStateData Id="LogMessage_21" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_22" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="675,239" />
+      <sap2010:ViewStateData Id="Click_9" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="Click_7" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="Sequence_16" sap:VirtualizedContainerService.HintSize="336,192">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_10" sap:VirtualizedContainerService.HintSize="675,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ClickImage_5" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="GetValue_1" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="314,91" />
@@ -742,6 +933,27 @@
       <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="675,134" />
       <sap2010:ViewStateData Id="ClickImage_4" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="ClickImage_6" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_5" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="GetValue_8" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="LogMessage_17" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="Sequence_15" sap:VirtualizedContainerService.HintSize="336,531">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_19" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Catch`1_2" sap:VirtualizedContainerService.HintSize="404,21">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TryCatch_1" sap:VirtualizedContainerService.HintSize="675,758" />
       <sap2010:ViewStateData Id="ImageFound_5" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="ImageFound_3" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="ImageFound_4" sap:VirtualizedContainerService.HintSize="675,106" />
@@ -749,6 +961,7 @@
       <sap2010:ViewStateData Id="LogMessage_8" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="675,239" />
       <sap2010:ViewStateData Id="ClickImage_10" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="LogMessage_23" sap:VirtualizedContainerService.HintSize="675,91" />
       <sap2010:ViewStateData Id="ClickImage_11" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="ClickImage_12" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="TypeInto_3" sap:VirtualizedContainerService.HintSize="675,134" />
@@ -769,6 +982,7 @@
       <sap2010:ViewStateData Id="TypeInto_4" sap:VirtualizedContainerService.HintSize="675,134" />
       <sap2010:ViewStateData Id="ClickImage_15" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="ClickImage_7" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="LogMessage_20" sap:VirtualizedContainerService.HintSize="675,91" />
       <sap2010:ViewStateData Id="GetValue_4" sap:VirtualizedContainerService.HintSize="314,106" />
       <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="336,230">
         <sap:WorkflowViewStateService.ViewState>
@@ -821,14 +1035,14 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="Delay_1" sap:VirtualizedContainerService.HintSize="675,22" />
       <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="675,87" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="697,7769">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="697,10286">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ImportFlow_1" sap:VirtualizedContainerService.HintSize="737,7849" />
+      <sap2010:ViewStateData Id="ImportFlow_1" sap:VirtualizedContainerService.HintSize="737,10406" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
