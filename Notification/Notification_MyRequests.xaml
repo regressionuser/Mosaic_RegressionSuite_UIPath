@@ -51,6 +51,9 @@
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>PresentationCore</AssemblyReference>
       <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="Notification_MyRequests" sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -128,7 +131,7 @@
         <If Condition="[element_MyApprovalsTab.IsVisible And element_MyRequestsTab.IsVisible And element_FilterBox.IsVisible And element_MyApprovalsTable.IsVisible And element_EntriesPerPage.IsVisible And element_First.IsVisible And element_Last.IsVisible]" DisplayName="Verify All elements of My Approval tab" sap2010:WorkflowViewState.IdRef="If_1">
           <If.Then>
             <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="All Elements on My Approval tab are present" />
+              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="D_notification_TCNo_1_9 Notification : SUCESS :All Elements on My Approval tab are present" />
               <ui:FindChildren Children="[enterisePerPageList]" DisplayName="Find children" Filter="&lt;webctrl /&gt;" sap2010:WorkflowViewState.IdRef="FindChildren_1" Scope="FIND_CHILDREN">
                 <ui:FindChildren.Target>
                   <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_EntriesPerPage]" WaitForReady="INTERACTIVE" />
@@ -142,21 +145,23 @@
                   <InArgument x:TypeArguments="scg:IEnumerable(x:String)">[{"3","5","10","15","20"}]</InArgument>
                 </Assign.Value>
               </Assign>
-              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Verify Dropdown" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="FlowPage\Generic_VerifyDropdownList.xaml">
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Verify Dropdown" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Generic\Generic_VerifyDropdownList.xaml">
                 <ui:InvokeWorkflowFile.Arguments>
                   <InArgument x:TypeArguments="scg:IEnumerable(ui:UiElement)" x:Key="ListItems">[enterisePerPageList]</InArgument>
                   <InArgument x:TypeArguments="scg:IEnumerable(x:String)" x:Key="Expected_DropDownList">[setExpected_List]</InArgument>
+                  <OutArgument x:TypeArguments="x:Boolean" x:Key="SuccessFlag" />
+                  <InArgument x:TypeArguments="x:String" x:Key="TC_No">D_notification_TCNo_1_9 Notification :</InArgument>
                 </ui:InvokeWorkflowFile.Arguments>
               </ui:InvokeWorkflowFile>
             </Sequence>
           </If.Then>
           <If.Else>
-            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[&quot;1. My Approval tab : &quot; +element_MyApprovalsTab.IsVisible.ToString+vbNewLine+&#xA;&quot;2. My Request Tab : &quot; + element_MyRequestsTab.IsVisible.ToString+vbNewLine+&#xA;&quot;3. Filter Box : &quot; + element_FilterBox.IsVisible.ToString+vbNewLine+ &#xA;&quot;4. Table : &quot; + element_MyApprovalsTable.IsVisible.ToString+vbNewLine+ &#xA;&quot;5. Enteries Per Page : &quot; +element_EntriesPerPage.IsVisible.ToString+vbNewLine+ &#xA;&quot;6. First : &quot; +element_First.IsVisible.ToString+vbNewLine+ &#xA;&quot;7. Last : &quot; +element_Last.IsVisible.ToString]" />
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[&quot;D_notification_TCNo_1_9 Notification : FAILURE :1. My Approval tab : &quot; +element_MyApprovalsTab.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;2. My Request Tab : &quot; + element_MyRequestsTab.IsVisible.ToString+vbNewLine+&#xD;&#xA;&quot;3. Filter Box : &quot; + element_FilterBox.IsVisible.ToString+vbNewLine+ &#xD;&#xA;&quot;4. Table : &quot; + element_MyApprovalsTable.IsVisible.ToString+vbNewLine+ &#xD;&#xA;&quot;5. Enteries Per Page : &quot; +element_EntriesPerPage.IsVisible.ToString+vbNewLine+ &#xD;&#xA;&quot;6. First : &quot; +element_First.IsVisible.ToString+vbNewLine+ &#xD;&#xA;&quot;7. Last : &quot; +element_Last.IsVisible.ToString]" />
           </If.Else>
         </If>
       </Sequence>
     </Sequence>
-    <sads:DebugSymbol.Symbol>d2lEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aDFcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcTm90aWZpY2F0aW9uXE5vdGlmaWNhdGlvbl9NeVJlcXVlc3RzLnhhbWwxOAOgAQ4CAQE8BUAeAgE6QQVPEAIBNVAFngEQAgECPE48ZwIBPD6YAT7PAgIBO0FCQUgCATlNX014AgE3QTRBOQIBNlEHnQESAgEDXQlhIgIBMWIJZiICAS1nCWsiAgEpbAlwIgIBJXEJdSICASF2CXoiAgEdewl/IgIBGYABCZwBDgIBBF1TXW0CATNfnAFf0wICATJiUmJrAgEvZJwBZNMCAgEuZ05nYwIBK2mcAWmTAgIBKmxVbHECASdunAFuuAICASZxU3FtAgEjc5wBc7cCAgEidkp2WwIBH3icAXiDAgIBHntJe1kCARt9nAF9ggICARqAAReAAYICAgEFggENlwEYAgEImgENmgHDBQIBBoMBD4MBrAECAReEAQ+IASECARKJAQ+QARgCAQ6RAQ+WAScCAQmaAXuaAcAFAgEHgwF8gwGpAQIBGIQBZIQBdwIBFoYBaYYBgwECARSEASmEAUACAROOAUuOAWUCARGLAUyLAV4CAQ+UAWmUAXsCAQyRAbsBkQHlAQIBC5MBYZMBdgIBCg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2lEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aDFcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcTm90aWZpY2F0aW9uXE5vdGlmaWNhdGlvbl9NeVJlcXVlc3RzLnhhbWwyOwOlAQ4CAQE/BUMeAgE7RAVSEAIBNlMFowEQAgECP04/ZwIBPUGYAUHPAgIBPERCREgCATpQX1B4AgE4RDREOQIBN1QHogESAgEDYAlkIgIBMmUJaSICAS5qCW4iAgEqbwlzIgIBJnQJeCICASJ5CX0iAgEefgmCASICARqDAQmhAQ4CAQRgU2BtAgE0YpwBYtMCAgEzZVJlawIBMGecAWfTAgIBL2pOamMCASxsnAFskwICAStvVW9xAgEocZwBcbgCAgEndFN0bQIBJHacAXa3AgIBI3lKeVsCASB7nAF7gwICAR9+SX5ZAgEcgAGcAYABggICARuDAReDAYICAgEFhQENnAEYAgEInwENnwGRBgIBBoYBD4YB2wECARiHAQ+LASECAROMAQ+TARgCAQ+UAQ+bAScCAQmfAXufAY4GAgEHhgF8hgHYAQIBGYcBZIcBdwIBF4kBaYkBgwECARWHASmHAUACARSRAUuRAWUCARKOAUyOAV4CARCZAUiZAW4CAQ6XAWmXAXsCAQyUAbsBlAHkAQIBC5YBYZYBdgIBCg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -203,7 +208,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Notification_MyRequests_1" sap:VirtualizedContainerService.HintSize="781,2586" />
+      <sap2010:ViewStateData Id="Notification_MyRequests_1" sap:VirtualizedContainerService.HintSize="781,2426" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
