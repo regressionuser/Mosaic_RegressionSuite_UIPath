@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="RunExisting_LearnNodeFlow" this:RunExisting_LearnNodeFlow.Should_i_NavigateToFlow_n_RunFlow="True"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="RunExisting_LearnNodeFlow" this:RunExisting_LearnNodeFlow.Should_i_NavigateToFlow_n_RunFlow="True" this:RunExisting_LearnNodeFlow.TC_Numbers="80 to 83, 87, 88, 91"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -16,6 +16,7 @@
     <x:Property Name="StatusView_JobID" Type="InArgument(x:String)" />
     <x:Property Name="LogReportPATH" Type="OutArgument(x:String)" />
     <x:Property Name="Should_i_NavigateToFlow_n_RunFlow" Type="InArgument(x:Boolean)" />
+    <x:Property Name="TC_Numbers" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -108,13 +109,20 @@
                             <InArgument x:TypeArguments="x:String" x:Key="FlowName">[FlowName]</InArgument>
                             <InArgument x:TypeArguments="x:Boolean" x:Key="Should_i_Click_FilteredFlow">True</InArgument>
                             <InArgument x:TypeArguments="x:String" x:Key="LogReportPath">[LogReportPATH]</InArgument>
+                            <InArgument x:TypeArguments="x:String" x:Key="TC_No_ForClickFilteredFlow">[TC_Numbers]</InArgument>
+                            <InArgument x:TypeArguments="x:String" x:Key="TC_ID_ToMatchFilteredFlowName">[TC_Numbers]</InArgument>
                           </ui:InvokeWorkflowFile.Arguments>
                         </ui:InvokeWorkflowFile>
                         <FlowStep.Next>
                           <FlowStep x:Name="__ReferenceID6" sap2010:WorkflowViewState.IdRef="FlowStep_6">
                             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Save_PublishAndRunFlow workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="FlowPage\Save_PublishAndRunFlow.xaml">
                               <ui:InvokeWorkflowFile.Arguments>
-                                <scg:Dictionary x:TypeArguments="x:String, Argument" />
+                                <InArgument x:TypeArguments="x:Boolean" x:Key="RCP_FlowFlag" />
+                                <InArgument x:TypeArguments="x:String" x:Key="rcp_DSname" />
+                                <InArgument x:TypeArguments="x:String" x:Key="DS_nameToMap" />
+                                <InArgument x:TypeArguments="x:String" x:Key="field1ToMap" />
+                                <InArgument x:TypeArguments="x:String" x:Key="field2ToMap" />
+                                <InArgument x:TypeArguments="x:String" x:Key="TC_No">[TC_Numbers]</InArgument>
                               </ui:InvokeWorkflowFile.Arguments>
                             </ui:InvokeWorkflowFile>
                             <FlowStep.Next>
@@ -140,6 +148,8 @@
                                             <InArgument x:TypeArguments="x:String" x:Key="FlowName">[FlowName]</InArgument>
                                             <InArgument x:TypeArguments="x:Boolean" x:Key="Should_i_Click_FilteredFlow">True</InArgument>
                                             <InArgument x:TypeArguments="x:String" x:Key="LogReportPath">[LogReportPATH]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="TC_No_ForClickFilteredFlow">[TC_Numbers]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="TC_ID_ToMatchFilteredFlowName">[TC_Numbers]</InArgument>
                                           </ui:InvokeWorkflowFile.Arguments>
                                         </ui:InvokeWorkflowFile>
                                         <FlowStep.Next>
@@ -147,6 +157,7 @@
                                             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke StatusView workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="FlowPage\StatusView.xaml">
                                               <ui:InvokeWorkflowFile.Arguments>
                                                 <OutArgument x:TypeArguments="x:String" x:Key="Get_StatusView_JobID">[StatusView_JobID]</OutArgument>
+                                                <InArgument x:TypeArguments="x:String" x:Key="TC_No">[TC_Numbers]</InArgument>
                                               </ui:InvokeWorkflowFile.Arguments>
                                             </ui:InvokeWorkflowFile>
                                             <FlowStep.Next>
@@ -205,7 +216,7 @@
     <x:Reference>__ReferenceID8</x:Reference>
     <x:Reference>__ReferenceID9</x:Reference>
     <x:Reference>__ReferenceID10</x:Reference>
-    <sads:DebugSymbol.Symbol>d1pEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcVGVzdENhc2VzXFRlc3RfRmxvd1xSdW5FeGlzdGluZ19MZWFybk5vZGVGbG93LnhhbWwkAZABAZUBAQJHA9EBDwIBAUk0SXUCAQJMOExdAgEveiGAATkCASmDASWHAT0CASWKASmQAUECAR6TAS2XAUUCARqaATGrAUECARlPDVYWAgEUWRFdKQIBEGAVZx4CAQxqGXAxAgEFcx13NQIBA3xifGwCAS1+Yn5xAgEretQBevIBAgEqhQFqhQF5AgEngwHfAYMBgQICASaOAWqOAXkCASOMAWWMAW8CASGKAdsBigH1AQIBII0BeY0BfQIBH5UBdpUBiAECARyTAd8BkwH5AQIBG1Q4VKYBAgEXUTlRSAIBFVtWW2UCARJZywFZ7QECARFlQGVVAgEPYkFiSwIBDW5abmkCAQpsVWxfAgEIassBauUBAgEHbWltbQIBBnPbAXOBAgIBBA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1pEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcVGVzdENhc2VzXFRlc3RfRmxvd1xSdW5FeGlzdGluZ19MZWFybk5vZGVGbG93LnhhbWwrAZABAZUBAQMBwQEB1gEBAkgD3AEPAgEBSjRKdQIBAk04TV0CATuCASGIATkCATWLASWPAT0CATGSASmaAUECASadAS2iAUUCASClATG2AUECAR9QDVcWAgEaWhFeKQIBFmEVaB4CARJrGXMxAgEHdh1/NQIBA4QBYoQBbAIBOYYBYoYBcQIBN4IB1AGCAfIBAgE2jQFqjQF5AgEziwHfAYsBgQICATKWAWqWAXkCAS+XAXeXAYMBAgEtmAF6mAGGAQIBK5QBZZQBbwIBKZIB2wGSAfUBAgEolQF5lQF9AgEnoAFmoAFyAgEknwF2nwGIAQIBIp0B3wGdAfkBAgEhVThVpgECAR1SOVJIAgEbXFZcZQIBGFrLAVrtAQIBF2ZAZlUCARVjQWNLAgETb1pvaQIBEHBncHMCAQ5xanF2AgEMbVVtXwIBCmvLAWvlAQIBCW5pbm0CAQh9Vn1iAgEFdtsBdoECAgEE</sads:DebugSymbol.Symbol>
   </Flowchart>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
