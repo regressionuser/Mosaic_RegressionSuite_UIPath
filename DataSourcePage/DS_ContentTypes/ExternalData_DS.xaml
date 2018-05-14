@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="ExternalData_DS" this:ExternalData_DS.TC_No="External Data Content Type : "
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="ExternalData_DS"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -7,14 +7,12 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
- xmlns:this="clr-namespace:"
  xmlns:ui="http://schemas.uipath.com/workflow/activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="ConnectionType" Type="InArgument(x:String)" />
     <x:Property Name="ConnectionName" Type="InArgument(x:String)" />
     <x:Property Name="ExternalDataConnectionNameList" Type="InArgument(scg:List(x:String))" />
-    <x:Property Name="TC_No" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -86,7 +84,6 @@
       <If Condition="[get_ContentType.Trim.Equals(&quot;External data&quot;)]" DisplayName="verify_ContentType" sap2010:WorkflowViewState.IdRef="If_1">
         <If.Then>
           <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[TC_No +&quot;:SUCESS :External Data content type is selected&quot;]" />
             <ui:UiElementExists DisplayName="is_ExternalConnectionTypeDropdownPresent" Exists="[is_ExternalConnectionTypeDropdownPresent]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
               <ui:UiElementExists.Target>
                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="dcfffa4bf728683d560cb91c8d06cae3" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl name='datasource.externalDataType' tag='SELECT' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
@@ -115,7 +112,7 @@
                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="285ccb68ce92a54c4ab31fadd2b1479f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl name='conncetionName' tag='SELECT' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
               </ui:UiElementExists.Target>
             </ui:UiElementExists>
-            <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="1000" DelayBefore="2000" DisplayName="select_ExternalConnectionName" sap2010:WorkflowViewState.IdRef="SelectItem_5" Item="[ConnectionName]">
+            <ui:SelectItem ContinueOnError="True" DelayAfter="1000" DelayBefore="2000" DisplayName="select_ExternalConnectionName" sap2010:WorkflowViewState.IdRef="SelectItem_5" Item="[ConnectionName]">
               <ui:SelectItem.Items>
                 <scg:List x:TypeArguments="x:String" Capacity="8">
                   <x:String>Select external connection</x:String>
@@ -132,22 +129,15 @@
           </Sequence>
         </If.Then>
         <If.Else>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Error" Message="[TC_No +&quot;:FAILURE : External data content type  is not selected&quot;]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Error" Message="RDBMS  is not selected" />
         </If.Else>
       </If>
     </Sequence>
-    <sads:DebugSymbol.Symbol>d3NEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aDFcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRGF0YVNvdXJjZVBhZ2VcRFNfQ29udGVudFR5cGVzXEV4dGVybmFsRGF0YV9EUy54YW1sHwFgAX4BAkcDjAEOAgEBSAWKARACAQJOB1UVAgEjVgeJAQwCAQNTM1NEAgEkUJoBUIICAgEmVhVWTwIBBFgLhAEWAgEJhwELhwHJAQIBBlkNWcMBAgEgWg1eIgIBG18NcB0CARVxDXUiAgEQdg2DAR0CAQqHAXmHAcYBAgEHWXpZwAECASFciwFc/AECAR9chwJcjQICAR5aX1qLAQIBHF9CX0gCARlfVV9bAgEYX7wBX84BAgEWbqABbpECAgEac4sBc+8BAgEUc/oBc4ACAgETcV9xiwECARF2QnZIAgEOdlV2WwIBDXa8AXbOAQIBC4EBoAGBAYQCAgEP</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1REOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxEYXRhU291cmNlUGFnZVxEU19Db250ZW50VHlwZXNcRXh0ZXJuYWxEYXRhX0RTLnhhbWwdRQOJAQ4CAQFGBYcBEAIBAkwHUxUCASBUB4YBDAIBA1EzUUQCASFOmgFOggICASNUFVRPAgEEVguBARYCAQiEAQuEAZQBAgEGVw1bIgIBG1wNbR0CARVuDXIiAgEQcw2AAR0CAQmEAXmEAZEBAgEHWYsBWfwBAgEfWYcCWY0CAgEeV19XiwECARxcQlxIAgEZXFVcWwIBGFy8AVzOAQIBFmugAWuRAgIBGnCLAXDvAQIBFHD6AXCAAgIBE25fbosBAgERcz5zRAIBDnMsczICAQ1zUXNXAgEMc7gBc8oBAgEKfqABfoQCAgEP</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GetValue_1" sap:VirtualizedContainerService.HintSize="675,106">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91">
+      <sap2010:ViewStateData Id="GetValue_1" sap:VirtualizedContainerService.HintSize="561,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
@@ -186,7 +176,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,855">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,724">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -194,21 +184,15 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91">
+      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="200,51" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="561,872">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="675,1003">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="697,1273">
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="583,1142">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -216,14 +200,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="719,1397">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="605,1266">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="RDBMS_DS_1" sap:VirtualizedContainerService.HintSize="759,1557">
+      <sap2010:ViewStateData Id="RDBMS_DS_1" sap:VirtualizedContainerService.HintSize="645,1426">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="ShouldCollapseAll">True</x:Boolean>
