@@ -69,12 +69,21 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="Test_Update_IngestionMethod" sap2010:WorkflowViewState.IdRef="Sequence_1">
-    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_LoginApp" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_12" UnSafe="False" WorkflowFileName="LoginPage\LoginToApp.xaml">
-      <ui:InvokeWorkflowFile.Arguments>
-        <InArgument x:TypeArguments="x:Boolean" x:Key="validation" />
-        <InArgument x:TypeArguments="x:Boolean" x:Key="functionality">True</InArgument>
-      </ui:InvokeWorkflowFile.Arguments>
-    </ui:InvokeWorkflowFile>
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Default="[System.DateTime.Now.ToString(&quot;yyyy_MM_dd_HH_mm_ss&quot;)]" Name="TodaysDate" />
+    </Sequence.Variables>
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_1">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities">
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_LoginApp" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_12" UnSafe="False" WorkflowFileName="LoginPage\LoginToApp.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="validation" />
+              <InArgument x:TypeArguments="x:Boolean" x:Key="functionality">True</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
     <Sequence DisplayName="Select project" sap2010:WorkflowViewState.IdRef="Sequence_2">
       <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Select Project" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="ProjectPage\SelectProject.xaml">
         <ui:InvokeWorkflowFile.Arguments>
@@ -154,7 +163,13 @@
         <scg:Dictionary x:TypeArguments="x:String, Argument" />
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
-    <sads:DebugSymbol.Symbol>d3hEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX0xvY2FsXE1vc2FpY19SZWdyZXNzaW9uU3VpdGVfVUlQYXRoXFRlc3RDYXNlc1xUZXN0X0RhdGFTb3VyY2VcVGVzdF9VcGRhdGVfSW5nZXN0aW9uTWV0aG9kLnhhbWwuAbcBAcYBAQUB8wEBnQIBBAF+AYwBAQMBzAIB2wIBAkcDngEOAgEBSAVNHQIBME4FVBACAStVBXwQAgEVfQWBAR0CARKCAQWIARACAQ2JAQWNAR0CAQmOAQWSAR0CAQeTAQWXAR0CAQSYAQWcAR0CAQJLR0tLAgEySKsBSMYBAgExTwdTHwIBLFYHXh8CASJfB2MfAgEgZAd2FwIBGncHex8CARZ9yAF9hAICARR/SX9QAgETgwEHhwEfAgEOiwFHiwFPAgELiQGvAYkB1gECAQqOAbcBjgHlAQIBCJMByQGTAYUCAgEGlQFJlQFOAgEFmAGwAZgBzgECAQNRRlFTAgEuT7IBT9IBAgEtXEJcSwIBKVhKWFICASdbSVtOAgEmWUNZTgIBJFaxAVbSAQIBI1+0AV/iAQIBIWQ8ZEICAR5kT2RVAgEdZKsBZLoBAgEbdJoBdIICAgEfeUZ5UwIBGHevAXfhAQIBF4UBSYUBUQIBEIMBsgGDAdYBAgEP</sads:DebugSymbol.Symbol>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke regressionReport workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_14" UnSafe="False" WorkflowFileName="Generic\regressionReport.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="folderPath">C:\Users\10648882\AppData\Local\UiPath\Logs</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="regressionReportPath">["D:\Mosaic_RegressionSuite_UIPath\Reports\DataSource\Test_Update_IngestionMethod_"+TodaysDate+".txt"]</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <sads:DebugSymbol.Symbol>d1tEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxUZXN0Q2FzZXNcVGVzdF9EYXRhU291cmNlXFRlc3RfVXBkYXRlX0luZ2VzdGlvbk1ldGhvZC54YW1sMQG3AQHGAQEFAfMBAZ0CAQQBfgGMAQEDAcwCAdsCAQJHA60BDgIBAUk0SXUCAQJLBVYVAgE2VwVdEAIBMV4FhQEQAgEbhgEFigEdAgEYiwEFkQEQAgETkgEFlgEdAgEPlwEFmwEdAgENnAEFoAEdAgEKoQEFpQEdAgEIpgEFqwEdAgEDWAdcHwIBMl8HZx8CAShoB2wfAgEmbQd/FwIBIIABB4QBHwIBHIYByAGGAYQCAgEaiAFJiAFQAgEZjAEHkAEfAgEUlAFHlAFPAgERkgGvAZIB1gECARCXAbcBlwHlAQIBDpwByQGcAYUCAgEMngFJngFOAgELoQGwAaEBzgECAQmoAUOoAW4CAQepAU2pAbMBAgEFpgG+AaYB3QECAQRaRlpTAgE0WLIBWNIBAgEzZUJlSwIBL2FKYVICAS1kSWROAgEsYkNiTgIBKl+xAV/SAQIBKWi0AWjiAQIBJ208bUICASRtT21VAgEjbasBbboBAgEhfZoBfYICAgElggFGggFTAgEegAGvAYAB4QECAR2OAUmOAVECARaMAbIBjAHWAQIBFQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -166,6 +181,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="314,51" />
       <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -243,14 +259,22 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="InvokeWorkflowFile_13" sap:VirtualizedContainerService.HintSize="314,51" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,939">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_14" sap:VirtualizedContainerService.HintSize="314,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,1030">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Test_Update_IngestionMethod_1" sap:VirtualizedContainerService.HintSize="376,1059">
+      <sap2010:ViewStateData Id="Test_Update_IngestionMethod_1" sap:VirtualizedContainerService.HintSize="376,1190">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="ShouldCollapseAll">True</x:Boolean>
