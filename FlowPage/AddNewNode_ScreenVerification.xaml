@@ -80,14 +80,20 @@
       <Variable x:TypeArguments="x:String" Name="Get_SuccessOrErrorMsg" />
       <Variable x:TypeArguments="x:String" Default="[new Random().Next(1,9999).ToString]" Name="RandomNumber" />
     </Sequence.Variables>
-    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
-      <Assign.To>
-        <OutArgument x:TypeArguments="x:String">[NodeName]</OutArgument>
-      </Assign.To>
-      <Assign.Value>
-        <InArgument x:TypeArguments="x:String">[NodeName+"_"+RandomNumber]</InArgument>
-      </Assign.Value>
-    </Assign>
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_1">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_5">
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:String">[NodeName]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[NodeName+"_"+RandomNumber]</InArgument>
+            </Assign.Value>
+          </Assign>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
     <ui:WaitUiElementAppear DisplayName="Find Element 'H3'" FoundElement="[UiElement_NodePopupTitle]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_1" WaitActive="False" WaitVisible="False">
       <ui:WaitUiElementAppear.Target>
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8d9a3ad7459561f1a743aa1760f0ed81" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='H3' /&gt;" WaitForReady="INTERACTIVE" />
@@ -143,10 +149,10 @@
     </ui:UiElementExists>
     <If Condition="[Get_NodePopupTitle.Contains(&quot;Add node name&quot;) and Is_NodePopup_NameFieldDisplayed and Is_NodePopup_DescriptionDisplayed and Is_NodePopup_SaveBtnDisplayed and Is_NodePopup_CancelBtnDisplayed]" sap2010:WorkflowViewState.IdRef="If_1">
       <If.Then>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_&quot;+TC_No+&quot;_SUCCESS: Add a new node popup verified successfully&quot;+vbNewLine+&#xD;&#xA;&quot;Found new node popup title as &quot;+Get_NodePopupTitle +vbNewLine+&#xD;&#xA;&quot;Status of Node Name Field on UI is: &quot;+Is_NodePopup_NameFieldDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Description field on UI is: &quot;+Is_NodePopup_DescriptionDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Save button on UI is: &quot;+Is_NodePopup_SaveBtnDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Cancel button on UI is: &quot;+Is_NodePopup_CancelBtnDisplayed.ToString]" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_&quot;+TC_No+&quot;_SUCCESS: Add a new node popup verified successfully&quot;+vbNewLine+&#xA;&quot;Found new node popup title as &quot;+Get_NodePopupTitle +vbNewLine+&#xA;&quot;Status of Node Name Field on UI is: &quot;+Is_NodePopup_NameFieldDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Description field on UI is: &quot;+Is_NodePopup_DescriptionDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Save button on UI is: &quot;+Is_NodePopup_SaveBtnDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Cancel button on UI is: &quot;+Is_NodePopup_CancelBtnDisplayed.ToString]" />
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[&quot;D_FLow_periodic_TCNo_&quot;+TC_No+&quot;_FAILED: Add a new node popup verification failed due to one of the below reasons&quot;+vbNewLine+&#xD;&#xA;&quot;Found new node popup title as &quot;+Get_NodePopupTitle.Trim +&quot;While the expected title is 'Add node name'&quot;+vbNewLine+&#xD;&#xA;&quot;Status of Node Name Field on UI is: &quot;+Is_NodePopup_NameFieldDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Description field on UI is: &quot;+Is_NodePopup_DescriptionDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Save button on UI is: &quot;+Is_NodePopup_SaveBtnDisplayed.ToString +vbNewLine+&#xD;&#xA;&quot;Status of Cancel button on UI is: &quot;+Is_NodePopup_CancelBtnDisplayed.ToString]" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[&quot;D_FLow_periodic_TCNo_&quot;+TC_No+&quot;_FAILED: Add a new node popup verification failed due to one of the below reasons&quot;+vbNewLine+&#xA;&quot;Found new node popup title as &quot;+Get_NodePopupTitle.Trim +&quot;While the expected title is 'Add node name'&quot;+vbNewLine+&#xA;&quot;Status of Node Name Field on UI is: &quot;+Is_NodePopup_NameFieldDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Description field on UI is: &quot;+Is_NodePopup_DescriptionDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Save button on UI is: &quot;+Is_NodePopup_SaveBtnDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Cancel button on UI is: &quot;+Is_NodePopup_CancelBtnDisplayed.ToString]" />
       </If.Else>
     </If>
     <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
@@ -306,6 +312,7 @@
             <Variable x:TypeArguments="ui:UiElement" Name="UiElement_PopupCloseBtn" />
           </Sequence.Variables>
           <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_&quot;+TC_No+&quot;_SUCCESS: Node created successfully and success message verified&quot;]" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_&quot;+TC_No+&quot;_INFO: Created Node name is: &quot;+NodeName]" />
           <ui:WaitUiElementAppear DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_PopupCloseBtn]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_8" WaitActive="False" WaitVisible="False">
             <ui:WaitUiElementAppear.Target>
               <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="286af41f1829d64e92879015ca469823" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='topTipMaxiqId*' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
@@ -332,11 +339,26 @@
         <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Trace" Message="[&quot;D_FLow_periodic_TCNo_&quot;+TC_No+&quot;_FAILED: Failed to create new node. The error message recieved from UI is: &quot;+Get_SuccessOrErrorMsg]" />
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d1NEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQWRkTmV3Tm9kZV9TY3JlZW5WZXJpZmljYXRpb24ueGFtbGsBtgEBvgEBAwF/AYsBAQJEA9ACDgIBAVE0UVoCAQJTBVoOAwGXAVsFXx4DAZMBYAVkHgMBjwFlBWkeAwGLAWoFbh4DAYcBbwVzHgMBgwF0BXsTAgF+fAWAARoCAXiBAQWFARoCAXKGAQWKARoCAWyLAQWPARoCAWaQAQWXAQoCAVuYAQWmARACAVinAQWuARMCAVSvAQXPAQoCAULQAQXUARMCAT7VAQXjARACATvkAQXrARMCATfsAQWMAgoCASWNAgWRAhMCASCSAgWWAhMCARyXAgWlAhACARmmAgWtAhMCARWuAgXOAgoCAQNYMFhLAwGaAVUxVTsDAZgBW0pbZgMBlQFdmAFd8QEDAZQBYE5gbAMBkQFimAFi9AEDAZABZU5lbgMBjQFnmAFnhQIDAYwBak1qbgMBiQFsmAFsgAIDAYgBb1BvcwMBhQFxmAFx9wEDAYQBeTF5RQIBf3ZfdnsDAYEBfnZ+fAIBfXw9fGACAXt+Sn5rAgF5gwF4gwF+AgF3gQE9gQFiAgF1gwFKgwFtAgFziAFziAF5AgFxhgE9hgFeAgFviAFKiAFoAgFtjQF1jQF7AgFriwE9iwFgAgFpjQFKjQFqAgFnkAETkAHdAQIBXJIBCZIB7wUCAWSVAQmVAcoGAgFipAFfpAF9AgFZrAExrAFIAgFVqQGYAakB9wECAVevAROvAbIBAgFDsQEJygEUAgFJzQEJzQHmAgIBRdABjgLQAaYCAgFB0gFf0gGCAQIBP+EBX+EBfQIBPOkBMekBSAIBOOYBmAHmAfcBAgE67AET7AGyAQIBJu4BCYcCFAIBLIoCCYoC1wICASiNAo8CjQKbAgIBI48CX48CgAECASGSAo0CkgKlAgIBH5QCX5QCggECAR2jAl+jAn0CARqrAjGrAkgCARaoApgBqAL3AQIBGK4CE64CZAIBBLACCckCFAIBCswCCcwCkwICAQaSAXaSAewFAgFllQF3lQHHBgIBY7UBC7UBmAICAVG2AQu6ASQCAU27AQvJARYCAUrNAXfNAeMCAgFG8gEL8gGIAgIBNPMBC/cBJAIBMPgBC4YCFgIBLYoCd4oC1AICASm0Agu0AvMBAgEStQILuQIkAgEOugILyAIWAgELzAJ3zAKQAgIBB7UBeLUBlQICAVK2AVS2AW8CAU+4AZ4BuAGGAgIBTscBZccBgAECAUvyAXjyAYUCAgE18wFU8wFvAgEy9QGeAfUBhgICATGEAmWEAoABAgEutAJ4tALwAQIBE7UCVLUCbwIBELcCngG3AoYCAgEPxgJlxgKAAQIBDA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1NEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQWRkTmV3Tm9kZV9TY3JlZW5WZXJpZmljYXRpb24ueGFtbGsBtgEBvgEBAwF/AYsBAQJEA9cCDgIBAVE0UVoCAQJTBWAVAwGbAWEFZR4DAZcBZgVqHgMBkwFrBW8eAwGPAXAFdB4DAYsBdQV5HgMBhwF6BYEBEwMBggGCAQWGARoCAXyHAQWLARoCAXaMAQWQARoCAXCRAQWVARoCAWqWAQWdAQoCAV+eAQWsARACAVytAQW0ARMCAVi1AQXVAQoCAUbWAQXaARMCAULbAQXpARACAT/qAQXxARMCATvyAQWSAgoCASmTAgWXAhMCASSYAgWcAhMCASCdAgWrAhACAR2sAgWzAhMCARm0AgXVAgoCAQNhSmFmAwGZAWOYAWPxAQMBmAFmTmZsAwGVAWiYAWj0AQMBlAFrTmtuAwGRAW2YAW2FAgMBkAFwTXBuAwGNAXKYAXKAAgMBjAF1UHVzAwGJAXeYAXf3AQMBiAF/MX9FAwGDAXxffHsDAYUBhAF2hAF8AwGBAYIBPYIBYAIBf4QBSoQBawIBfYkBeIkBfgIBe4cBPYcBYgIBeYkBSokBbQIBd44Bc44BeQIBdYwBPYwBXgIBc44BSo4BaAIBcZMBdZMBewIBb5EBPZEBYAIBbZMBSpMBagIBa5YBE5YB3QECAWCYAQmYAdYFAgFomwEJmwGxBgIBZqoBX6oBfQIBXbIBMbIBSAIBWa8BmAGvAfcBAgFbtQETtQGyAQIBR7cBCdABFAIBTdMBCdMB5gICAUnWAY4C1gGmAgIBRdgBX9gBggECAUPnAV/nAX0CAUDvATHvAUgCATzsAZgB7AH3AQIBPvIBE/IBsgECASr0AQmNAhQCATCQAgmQAtcCAgEskwKPApMCmwICASeVAl+VAoABAgElmAKNApgCpQICASOaAl+aAoIBAgEhqQJfqQJ9AgEesQIxsQJIAgEargKYAa4C9wECARy0AhO0AmQCAQS2AgnQAhQCAQrTAgnTApMCAgEGmAF2mAHTBQIBaZsBd5sBrgYCAWe7AQu7AZgCAgFVvAELwAEkAgFRwQELzwEWAgFO0wF30wHjAgIBSvgBC/gBiAICATj5AQv9ASQCATT+AQuMAhYCATGQAneQAtQCAgEtugILugLzAQIBFrsCC7sC2QECARK8AgvAAiQCAQ7BAgvPAhYCAQvTAnfTApACAgEHuwF4uwGVAgIBVrwBVLwBbwIBU74BngG+AYYCAgFSzQFlzQGAAQIBT/gBePgBhQICATn5AVT5AW8CATb7AZ4B+wGGAgIBNYoCZYoCgAECATK6Ani6AvABAgEXuwJ4uwLWAQIBE7wCVLwCbwIBEL4CngG+AoYCAgEPzQJlzQKAAQIBDA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="675,60" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="264,184">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="675,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="WaitUiElementAppear_2" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="WaitUiElementAppear_3" sap:VirtualizedContainerService.HintSize="675,106" />
@@ -384,9 +406,10 @@
       <sap2010:ViewStateData Id="Click_5" sap:VirtualizedContainerService.HintSize="675,68" />
       <sap2010:ViewStateData Id="GetValue_4" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="LogMessage_7" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_9" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="WaitUiElementAppear_8" sap:VirtualizedContainerService.HintSize="314,106" />
       <sap2010:ViewStateData Id="Click_6" sap:VirtualizedContainerService.HintSize="314,68" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="336,469">
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="336,600">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -394,15 +417,15 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_8" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="675,617" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="697,4874">
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="675,748" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="697,4996">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="AddNewNode_ScreenVerification_1" sap:VirtualizedContainerService.HintSize="737,4954" />
+      <sap2010:ViewStateData Id="AddNewNode_ScreenVerification_1" sap:VirtualizedContainerService.HintSize="737,5076" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
