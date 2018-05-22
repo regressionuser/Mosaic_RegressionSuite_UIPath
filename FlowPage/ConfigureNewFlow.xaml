@@ -2,6 +2,7 @@
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
@@ -11,7 +12,6 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="FlowName" Type="OutArgument(x:String)" />
-    <x:Property Name="LogReportPath" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -67,208 +67,461 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="FlowSequence" sap2010:WorkflowViewState.IdRef="Sequence_2">
-    <Sequence DisplayName="MosaicFlow" sap2010:WorkflowViewState.IdRef="Sequence_1">
-      <Sequence.Variables>
-        <Variable x:TypeArguments="x:Boolean" Name="imageForFlowValidation" />
-        <Variable x:TypeArguments="x:Boolean" Name="Is_ConfigureNewFlowButtonDisplayed" />
-        <Variable x:TypeArguments="x:Boolean" Name="Is_ConfigNewFlowPopupDisplayed" />
-        <Variable x:TypeArguments="x:String" Default="[new Random().Next(1,9999).ToString]" Name="RandomNumber" />
-        <Variable x:TypeArguments="x:String" Name="CreatedFlowName" />
-        <Variable x:TypeArguments="x:String" Name="ErrorMsgForInvalidFlowName" />
-      </Sequence.Variables>
-      <ui:UiElementExists DisplayName="Is_ConfigNewFlowButtonDisplayed" Exists="[Is_ConfigureNewFlowButtonDisplayed]" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
-        <ui:UiElementExists.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="2ea7688155435cde2d5954e9d2164d4e" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Configure new flow' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
-        </ui:UiElementExists.Target>
-      </ui:UiElementExists>
-      <If Condition="[Is_ConfigureNewFlowButtonDisplayed]" DisplayName="If (Verify if Config new flow button is displayed)" sap2010:WorkflowViewState.IdRef="If_2">
-        <If.Then>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Trace" Message="D_FLow_periodic_TCNo_3_LOG: Successfully Found Configure New Flow Button" />
-        </If.Then>
-        <If.Else>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="D_FLow_periodic_TCNo_3_FAILED: Could not find Configure New Flow Button" />
-        </If.Else>
-      </If>
-      <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="1000" DisplayName="Click Config New Flow Button" sap2010:WorkflowViewState.IdRef="ClickImage_7" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
-        <ui:ClickImage.CursorPosition>
-          <ui:CursorPosition Position="Center">
-            <ui:CursorPosition.OffsetX>
-              <InArgument x:TypeArguments="x:Int32" />
-            </ui:CursorPosition.OffsetX>
-            <ui:CursorPosition.OffsetY>
-              <InArgument x:TypeArguments="x:Int32" />
-            </ui:CursorPosition.OffsetY>
-          </ui:CursorPosition>
-        </ui:ClickImage.CursorPosition>
-        <ui:ClickImage.Image>
-          <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAAHgAAAARCAYAAAAWn2hAAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAASYSURBVGhD7VjBahtJEN3/8ifkqh8I6Gx80GVDDtbJYBB78MU4EAR7ECwrDDELxkZgCAgEJiCECQoYCQzCi6UoY41GGWmst6+6ezSt0Uixx0k2CA086J7q7qqu11VdM7/9+2ILG6wvNgSvOTYErzkSCH6JfrGMUeUMXjGH3oI8JbIFjNoDTEc+McCkUkget5bI4L7S0nu/reL+sIpg1ISXOPb7Yp7gfBkTF8Coh0m7hYcR258vMchaY1LCvfIBpwHvcBfOYRleaTtx3Fri9RkC+JicFuDsbaP75hJTtH42wdsYdYDpzQn6s3c5fL3lu6sj008P74br1A8SZWuPOKH/C8GFKh4wgP9mfkBfUoukFdXPYVjvYBowsvlM7xiReTPWpB2/Zsk/lXlYCvBvmZrkXWBS1AtmCp4m/9DMzZfUGPX4fH9FnZwrMu+Tj6BmpfN/mpE90r5rYaLmaod197m2o5dCwKvgXS6aG2KprUae3aXegRbwmcn+amDKjOaacdo3F8Y3W3Dec73rE3w2fQWx0WxNUrTaS4zg/t+XtEePkew5Dm1Ooy+GiOBHnKr7Wo8EtDDaz9AJ23DrdILDFC5yNZ+bqBfRZ0rv/UnjrAMzH8EnmMxkGXjXnHhH0nbY3zmCLwQxkyzOI85bgGt0SpupL6gewSmwXsgWMaajgmpB1Q7ahg5Gr83cECttzcD9SEbEkcaeMa+t4IJXSlbs7sEvyDid8WD1JdsF7xOunrhv7f4fElhM35VddKm7X6KMB1PZklafhYjgU3HWKoIZiXT83ILKAB/jEtsLB+QAPh0zOdf95QRba5i5Azk4jyU4bAuOm4yAxuzEx22YYaWtJUyYaZLtsZwqe/ebGPNwap/YZMSwguD7D1ybhym6FnngZc8fi2yn1GfhCRHM1Md0Nu8syzHPIjhsa6QmWEX04jP9EKvYV9oq9iQ8zFSSGh3JYrStR13T6zK6cqiEoBKzgG2LjRUEe22ubfYawt5/Kn0WIoLtaLQGKAVqcyaCK0zPM7mcdjrmmO1nEfydIjjeX4ZvEkzb3oayGKRWCSSSmFbPxRf0gaob+Am4rBhdQbCK4M4Z03M0fihX1nVJ99PosxARzNQw5CJCpit3D9+pgoV32kNtT/WV4+XOVZ9NGThVXgpMG0PppyY4Vr2zwFF3jSFYfV6FKUxkN+wvIzj8HFH3mRl/ZRWCIVbaGtpzBifcZ6URFT5mrLrOjNwTvyUExwwrCNZtOVA6cLr7F3oPx2EgpdBnwSKYMD8j5NGVHwuYesmqLo1cqmGlgyfJGJaeYCLPvlSRsi7x4HBxQ7CSiS6+FwR31L+MYEJVpMo2XblLBayJsvANW2dVvdgja7lNeFJYmvGqCGPUhX7pvmPaZJQNTX8BqwgmYeoniNjKKlv5vHYwF9FP1mdhnuAQrJC/yAd5kkwg8vzLZFkaZDNKVy+v/5zZKVqD1eXe0/6q9fKvVIWcJHs0dnL48ntE7I/F0/f4GCQT/JMhhE7bVXjFXbin/G6UFHVqVesbpMYvQbDclW61gcltB0G7ga8lc4du8Gz8GgRv8IOwhf8ApRK9rqrS3soAAAAASUVORK5CYII=" />
-        </ui:ClickImage.Image>
-        <ui:ClickImage.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
-        </ui:ClickImage.Target>
-      </ui:ClickImage>
-      <ui:ImageFound DisplayName="Check Config New Flow image exists or not! " Found="[Is_ConfigNewFlowPopupDisplayed]" sap2010:WorkflowViewState.IdRef="ImageFound_2">
-        <ui:ImageFound.Image>
-          <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAArEAAADyCAYAAABaiZ3GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAACiuSURBVHhe7Z2JlxXF/Ud/fy0as0jMophdTaIxmphjQsRg3HdcUBFBRJRFQQQEZRMBEUEHZBGGJWL/zi3fdyyKfm8W541T0/ee8zmvu6u7qrrf8LhTXf3m/xoRERERkcpQYkVERESkOpRYEREREakOJVZEREREqkOJFREREZHqUGJFREREpDrmnMR+/fXXzenTp5sTJ040p06dai5dutQrkVo5d+5cej9PnjzZ/O9//+ttFRERkS4zKYkNmZiNgoi8btiwofn5z3/ezJs3byw/+tGPmieffFL5qZCzZ882//73v5urr7567P3cvHlz+jm87bbbxtZFRESke0xIYg8dOtT86U9/aq666qoxmSAI4hNPPJGk4vtm48aNzTXXXJP6dd111zXXX399Cn1cvHhxby+pha+++iq9b7yfvK933XVXWv/www+VWBERERkssYxurlmzZkwOGeVctGhRc9999yWpiO233357GjX7vqDtP/7xj6kvzz333GUjxCyfP3++tya18MknnzQ/+9nPmh//+MfNzp07e1u/QYkVERGRgRKLPCARjMAuWbLkilvyR48ebX79618nmXj44YeT9H4fhPAQlqV+tm7dmn7ubr755ubMmTO9rd+gxIqIiEhfib1w4UJz5513JlFg5LXfnNJt27Y1P/jBD75Xgfzoo4+aa6+9trnhhhvSfF2pH+SUnz1ktZyuosSKiIhIX4kNMfzpT3/afPzxx72tV8IoGaNlCMXatWt7W7/l8OHDzb333pumIvzwhz9sfvWrX6VR3dHR0d4e38K0AObYEuplJPjWW29N81rnz5/f/P3vf0/zc4PPP/88jQD/4x//SCLNqDEPAiHdq1evTvscOHAgrb/00kvNxYsX07Yc6qNe6o829u3bN3Zc1APRP9qk7ZK2tnhlne1c09dee61ZsGBB6uv27dvTPkFcK+b0cs6///3vmzfeeCP9QjER8j5zzCuvvNLceOON6dr88pe/TH1vu+7AKDrzTfNrwbV/9913L5uesXv37tQGdTNvNSd//8rpJezLMRxLHf2Ic/jrX/+afqb45YhrwjZGZ2E8ic3PJb+W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" />
-        </ui:ImageFound.Image>
-        <ui:ImageFound.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
-        </ui:ImageFound.Target>
-      </ui:ImageFound>
-      <If Condition="[Is_ConfigNewFlowPopupDisplayed]" DisplayName="If (Config new flow popup is displayed)" sap2010:WorkflowViewState.IdRef="If_3">
-        <If.Then>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Trace" Message="D_FLow_periodic_TCNo_3_LOG: Successfully clicked Config new flow button" />
-        </If.Then>
-        <If.Else>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="D_FLow_periodic_TCNo_3_FAILED: Error while clicking config new flow button" />
-        </If.Else>
-      </If>
-      <Assign DisplayName="Assign FlowName with a Random Name" sap2010:WorkflowViewState.IdRef="Assign_1">
-        <Assign.To>
-          <OutArgument x:TypeArguments="x:String">[FlowName]</OutArgument>
-        </Assign.To>
-        <Assign.Value>
-          <InArgument x:TypeArguments="x:String">["AutoFlow_"+RandomNumber]</InArgument>
-        </Assign.Value>
-      </Assign>
-      <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayMS="1000" DisplayName="Enter Flow Description" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_4" SendWindowMessages="False" SimulateType="False" Text="Automated Flow Description">
-        <ui:TypeInto.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8fcbf91f6ade622363adaaeeb0c98a32" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TEXTAREA' /&gt;" WaitForReady="INTERACTIVE" />
-        </ui:TypeInto.Target>
-      </ui:TypeInto>
-      <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="5000" DisplayName="Click Create button" sap2010:WorkflowViewState.IdRef="ClickImage_6" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
-        <ui:ClickImage.CursorPosition>
-          <ui:CursorPosition Position="Center">
-            <ui:CursorPosition.OffsetX>
-              <InArgument x:TypeArguments="x:Int32" />
-            </ui:CursorPosition.OffsetX>
-            <ui:CursorPosition.OffsetY>
-              <InArgument x:TypeArguments="x:Int32" />
-            </ui:CursorPosition.OffsetY>
-          </ui:CursorPosition>
-        </ui:ClickImage.CursorPosition>
-        <ui:ClickImage.Image>
-          <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAADQAAAAWCAYAAACPHL/WAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMISURBVFhH7VZJa1NRFPaH+AP8A24F14I7cSEiiohIUcSVIsVNQaSCpSrUEccqbWnRarXBqoltaDU1g2nSKVPJnLSZm2Y63u/oDa/P99JANlET+Cj33jN9Z3rdtbvbQP8SOoTaHR1C7Y7/i9DZkR/kSeSpViP+lSpV+rySoP39M5ryreLAwCydGbLT3l6j5nsz0CV09Mk8hdJF8ibz7GRPzxTdNvkot1WhSXdMU6dVDFqClC1W6JxIpNZ7M9AlNGYPs/FL465t96bVJIUF0cMPLdQzuUQ3jV7qF/jiSfIdZI48nqdXjgiZvevUO7XKyZD68u1rIEX3zP56NWDDspaiYrlK71wxOj/q5HvowgZsQQ/60pYWdAnZQxmuzr6+6W33yrYAObRhXlTNHc3SyUEbXXztolShRIH1Ai3FchygUcghsL5PHpZFG8/5NzhhznCGfUwsRCmY2qRypUbL8Rxd/50I6GaLZbYfzRTZNnwoY1JClxCCAbTeJEAoIpygPXFGYCvxPDlEMmRV7psDtCGCQMZHrCF6L7Iv3wamfZTZLNPlN24+q1vulsnL56uGZT5jdn3JAvvFWQstE1LKdA07OEC0zrAIHkD74O6GqA5kQP7R7Bq/Qb9QqtTf1ISwgFARtJq0h+o1ikuXkCuSZWWZTQl1yymNIxAEj3ZbEPoS9mCa2wQVAQHcjdrCOxLCO86IRWkP7Sl9qtFwKaBVkHXlPZzIpaAmdPqlnXWQUaWOBGSxDOQZRBCwHiFs03hui44/s9Z1doIuIQw4jGEYDz34xnfXPqxwBeTaVhNCNTHsaSHT/fbXXOAvZqpryEGL0RwvmoN35tgmbGOpSEKoIBbAlYnFui4+E9ig6Ajg43KCZ1H6VEOXEHBhzMlDr/dhVRMCECg2ZFUoQR5AAkAWax4zgV+lWuMFgpYDEegiidhk+ME27u7O+DmJZSEPIB7EpfSpRENCEpibUy9sf8xTI4A0WlB+ZyRg48Rzq+5/G5CHL7Xesaff69+5RmiK0N+EDqF2R4dQe8NAPwG7p4kJhKveLwAAAABJRU5ErkJggg==" />
-        </ui:ClickImage.Image>
-        <ui:ClickImage.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
-        </ui:ClickImage.Target>
-      </ui:ClickImage>
-      <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get error message text on blank flow name" sap2010:WorkflowViewState.IdRef="GetValue_2">
-        <ui:GetValue.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="4f156edca5e3b48c6ae5de42adf47868" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='topTipMaxiqId*' tag='DIV' parentclass='toast toast-error' /&gt;" WaitForReady="INTERACTIVE" />
-        </ui:GetValue.Target>
-        <ui:GetValue.Value>
-          <OutArgument x:TypeArguments="x:String">[ErrorMsgForInvalidFlowName]</OutArgument>
-        </ui:GetValue.Value>
-      </ui:GetValue>
-      <If Condition="[ErrorMsgForInvalidFlowName.Contains(&quot;Application name should not start with&quot;)]" DisplayName="If (Verify if Error message for blank flow is correct)" sap2010:WorkflowViewState.IdRef="If_12">
-        <If.Then>
-          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
-            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_24" Level="Trace" Message="[&quot;D_FLow_periodic_TCNo_3_LOG: Error message verified for Invalid Flow Name. Message is: &quot;+ErrorMsgForInvalidFlowName]" />
-            <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Close error message" sap2010:WorkflowViewState.IdRef="Click_3" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
-              <ui:Click.CursorPosition>
-                <ui:CursorPosition Position="Center">
-                  <ui:CursorPosition.OffsetX>
-                    <InArgument x:TypeArguments="x:Int32" />
-                  </ui:CursorPosition.OffsetX>
-                  <ui:CursorPosition.OffsetY>
-                    <InArgument x:TypeArguments="x:Int32" />
-                  </ui:CursorPosition.OffsetY>
-                </ui:CursorPosition>
-              </ui:Click.CursorPosition>
-              <ui:Click.Target>
-                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d23627ecef7550eb51954a1cb4b8f315" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='topTipMaxiqId*' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
-              </ui:Click.Target>
-            </ui:Click>
-          </Sequence>
-        </If.Then>
-        <If.Else>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_25" Level="Error" Message="[&quot;D_FLow_periodic_TCNo_3_FAILED: Could not verify/find error message for Invalid Flow Name. Message obtained from screen is: &quot;+ErrorMsgForInvalidFlowName]" />
-        </If.Else>
-      </If>
-      <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayMS="1000" DisplayName="Enter Flow Name" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="[FlowName]">
-        <ui:TypeInto.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="be39401dfacfc0ca8cd2251dbcbf7a13" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='INPUT' type='text' /&gt;" WaitForReady="INTERACTIVE" />
-        </ui:TypeInto.Target>
-      </ui:TypeInto>
-      <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayMS="1000" DisplayName="Enter Description" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_2" SendWindowMessages="False" SimulateType="False" Text="Automated Flow Description">
-        <ui:TypeInto.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8fcbf91f6ade622363adaaeeb0c98a32" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TEXTAREA' /&gt;" WaitForReady="INTERACTIVE" />
-        </ui:TypeInto.Target>
-      </ui:TypeInto>
-      <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="5000" DisplayName="Click Create button" sap2010:WorkflowViewState.IdRef="ClickImage_4" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
-        <ui:ClickImage.CursorPosition>
-          <ui:CursorPosition Position="Center">
-            <ui:CursorPosition.OffsetX>
-              <InArgument x:TypeArguments="x:Int32" />
-            </ui:CursorPosition.OffsetX>
-            <ui:CursorPosition.OffsetY>
-              <InArgument x:TypeArguments="x:Int32" />
-            </ui:CursorPosition.OffsetY>
-          </ui:CursorPosition>
-        </ui:ClickImage.CursorPosition>
-        <ui:ClickImage.Image>
-          <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAADQAAAAWCAYAAACPHL/WAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMISURBVFhH7VZJa1NRFPaH+AP8A24F14I7cSEiiohIUcSVIsVNQaSCpSrUEccqbWnRarXBqoltaDU1g2nSKVPJnLSZm2Y63u/oDa/P99JANlET+Cj33jN9Z3rdtbvbQP8SOoTaHR1C7Y7/i9DZkR/kSeSpViP+lSpV+rySoP39M5ryreLAwCydGbLT3l6j5nsz0CV09Mk8hdJF8ibz7GRPzxTdNvkot1WhSXdMU6dVDFqClC1W6JxIpNZ7M9AlNGYPs/FL465t96bVJIUF0cMPLdQzuUQ3jV7qF/jiSfIdZI48nqdXjgiZvevUO7XKyZD68u1rIEX3zP56NWDDspaiYrlK71wxOj/q5HvowgZsQQ/60pYWdAnZQxmuzr6+6W33yrYAObRhXlTNHc3SyUEbXXztolShRIH1Ai3FchygUcghsL5PHpZFG8/5NzhhznCGfUwsRCmY2qRypUbL8Rxd/50I6GaLZbYfzRTZNnwoY1JClxCCAbTeJEAoIpygPXFGYCvxPDlEMmRV7psDtCGCQMZHrCF6L7Iv3wamfZTZLNPlN24+q1vulsnL56uGZT5jdn3JAvvFWQstE1LKdA07OEC0zrAIHkD74O6GqA5kQP7R7Bq/Qb9QqtTf1ISwgFARtJq0h+o1ikuXkCuSZWWZTQl1yymNIxAEj3ZbEPoS9mCa2wQVAQHcjdrCOxLCO86IRWkP7Sl9qtFwKaBVkHXlPZzIpaAmdPqlnXWQUaWOBGSxDOQZRBCwHiFs03hui44/s9Z1doIuIQw4jGEYDz34xnfXPqxwBeTaVhNCNTHsaSHT/fbXXOAvZqpryEGL0RwvmoN35tgmbGOpSEKoIBbAlYnFui4+E9ig6Ajg43KCZ1H6VEOXEHBhzMlDr/dhVRMCECg2ZFUoQR5AAkAWax4zgV+lWuMFgpYDEegiidhk+ME27u7O+DmJZSEPIB7EpfSpRENCEpibUy9sf8xTI4A0WlB+ZyRg48Rzq+5/G5CHL7Xesaff69+5RmiK0N+EDqF2R4dQe8NAPwG7p4kJhKveLwAAAABJRU5ErkJggg==" />
-        </ui:ClickImage.Image>
-        <ui:ClickImage.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
-        </ui:ClickImage.Target>
-      </ui:ClickImage>
-      <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get flow Name when inside the flow" sap2010:WorkflowViewState.IdRef="GetValue_1">
-        <ui:GetValue.Target>
-          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="9b436758f47f1caa31004d5579f63c9d" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' tag='FONT' /&gt;" WaitForReady="INTERACTIVE" />
-        </ui:GetValue.Target>
-        <ui:GetValue.Value>
-          <OutArgument x:TypeArguments="x:String">[CreatedFlowName]</OutArgument>
-        </ui:GetValue.Value>
-      </ui:GetValue>
-      <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Trace" Message="[&quot;D_FLow_periodic_TCNo_3_LOG_ The created Flow name is: &quot;+CreatedFlowName.Trim]" />
-      <If Condition="[CreatedFlowName.Trim.contains(FlowName)]" DisplayName="If (Verify if the flow created has the same name as provided by user)" sap2010:WorkflowViewState.IdRef="If_4">
-        <If.Then>
-          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
-            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_3_SUCCESS: Flow has been created successfully.. Created flow name is: &quot;+CreatedFlowName.Trim]" />
-            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke GenerteLogsApplicationScopeUtility workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
-              <ui:InvokeWorkflowFile.Arguments>
-                <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_FLow_periodic_TCNo_3_SUCCESS</InArgument>
-                <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">True</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="LogMessage" xml:space="preserve">D_FLow_periodic_TCNo_3_SUCCESS: Configure new flow functionality is verified. New flow has been created </InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportPath]</InArgument>
-              </ui:InvokeWorkflowFile.Arguments>
-            </ui:InvokeWorkflowFile>
-          </Sequence>
-        </If.Then>
-        <If.Else>
-          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
-            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="D_FLow_periodic_TCNo_3_FAILED: Flow did not create successfully" />
-            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke GenerteLogsApplicationScopeUtility workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
-              <ui:InvokeWorkflowFile.Arguments>
-                <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_FLow_periodic_TCNo_3_ERROR</InArgument>
-                <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">False</InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="LogMessage" xml:space="preserve">D_FLow_periodic_TCNo_3_ERROR: Could not verify configure new flow functionality. Error while creating new flow. Refer automation logs and Screenshots </InArgument>
-                <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportPath]</InArgument>
-              </ui:InvokeWorkflowFile.Arguments>
-            </ui:InvokeWorkflowFile>
-          </Sequence>
-        </If.Else>
-      </If>
-    </Sequence>
-    <sads:DebugSymbol.Symbol>d0ZEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQ29uZmlndXJlTmV3Rmxvdy54YW1sVkUDgQIOAgEBRgX/ARACAQJLNktcAgEDTwdTHAIBZlQHWwwCAV9cB20XAgFbbgd1FwIBVXYHfQwCAU5+B4UBEAIBSYYBB4oBFQIBRYsBB5wBFwIBQZ0BB6QBFQIBPaUBB70BDAIBMb4BB8IBFQIBLMMBB8cBFQIBKMgBB9kBFwIBJNoBB+EBFQIBIOIBB+IB0wECAR3jAQf+AQwCAQRRhQFR7wECAWpR+gFRgAICAWlPUE92AgFnVBVUOwIBYFYLVsYBAgFkWQtZxQECAWJcaVxvAgFca2FrkQECAV5oNWg6AgFdc0xzfAIBWnOHAXONAQIBWW5WbngCAVdwNXA6AgFWdhV2NwIBT3gLeMUBAgFTewt7yAECAVGDATKDAUwCAUyAATOAAT0CAUqIAZoBiAHqAQIBSIYBeIYBfgIBR4YBmQKGAbUCAgFGiwFpiwFvAgFCmgFhmgGRAQIBRJcBNZcBOgIBQ6IBM6IBTwIBPp8BmgGfAZ8CAgFApQEVpQFwAgEypwELuAEWAgE3uwELuwGjAgIBNMABmgHAAYICAgEwvgF4vgF+AgEvvgGSAr4BngICAS3FAZoBxQHqAQIBK8MBeMMBfgIBKsMBkwLDAa8CAgEpyAFpyAFvAgEl1wFh1wGRAQIBJ9QBNdQBOgIBJt8BM98BRAIBIdwBmgHcAe4BAgEj4gF14gHQAQIBHuMBFeMBQAIBBeUBC+8BFgIBEvIBC/wBFgIBCFZ5VsMBAgFlWXlZwgECAWN4eXjCAQIBVHt5e8UBAgFSqAENqAGAAgIBOqkBDbcBGAIBOLsBersBoAICATXmAQ3mAf0BAgEa5wEN7gElAgET8wEN8wG/AQIBEPQBDfsBJQIBCagBfKgB/QECATu1AaABtQGIAgIBOeYBeuYB+gECARvsAUvsAVoCARjpAU/pAW0CARfqAVbqAVoCARbnAdcB5wGIAgIBFPMBe/MBvAECARH5AUv5AVoCAQ72AU/2AWsCAQ33AVb3AVsCAQz0AdcB9AGIAgIBCg==</sads:DebugSymbol.Symbol>
+    <TryCatch DisplayName="Try catch" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+      <TryCatch.Try>
+        <Sequence DisplayName="MosaicFlow" sap2010:WorkflowViewState.IdRef="Sequence_1">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="x:Boolean" Name="imageForFlowValidation" />
+            <Variable x:TypeArguments="x:Boolean" Name="Is_ConfigureNewFlowButtonDisplayed" />
+            <Variable x:TypeArguments="x:Boolean" Name="Is_ConfigNewFlowPopupDisplayed" />
+            <Variable x:TypeArguments="x:String" Default="[new Random().Next(1,9999).ToString]" Name="RandomNumber" />
+            <Variable x:TypeArguments="x:String" Name="CreatedFlowName" />
+            <Variable x:TypeArguments="x:String" Name="ErrorMsgForInvalidFlowName" />
+            <Variable x:TypeArguments="ui:UiElement" Name="UiElement_ConfigureNewFlowPopupTitle" />
+            <Variable x:TypeArguments="ui:UiElement" Name="UiElement_CreateFlowBtn" />
+            <Variable x:TypeArguments="ui:UiElement" Name="UiElement_CancelBtn" />
+          </Sequence.Variables>
+          <ui:UiElementExists DisplayName="Is_ConfigNewFlowButtonDisplayed" Exists="[Is_ConfigureNewFlowButtonDisplayed]" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
+            <ui:UiElementExists.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="2ea7688155435cde2d5954e9d2164d4e" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Configure new flow' tag='BUTTON' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+            </ui:UiElementExists.Target>
+          </ui:UiElementExists>
+          <If Condition="[Is_ConfigureNewFlowButtonDisplayed]" DisplayName="If (Verify if Config new flow button is displayed)" sap2010:WorkflowViewState.IdRef="If_2">
+            <If.Then>
+              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Trace" Message="D_FLow_periodic_TCNo_3_LOG: Successfully Found Configure New Flow Button" />
+            </If.Then>
+            <If.Else>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="D_FLow_periodic_TCNo_3_FAILED: Could not find Configure New Flow Button" />
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Flow_P_TC3_configNewFlowBtnNotFound</InArgument>
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+              </Sequence>
+            </If.Else>
+          </If>
+          <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="2500" DisplayName="Click Config New Flow Button" sap2010:WorkflowViewState.IdRef="ClickImage_7" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+            <ui:ClickImage.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:ClickImage.CursorPosition>
+            <ui:ClickImage.Image>
+              <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAAHgAAAARCAYAAAAWn2hAAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAASYSURBVGhD7VjBahtJEN3/8ifkqh8I6Gx80GVDDtbJYBB78MU4EAR7ECwrDDELxkZgCAgEJiCECQoYCQzCi6UoY41GGWmst6+6ezSt0Uixx0k2CA086J7q7qqu11VdM7/9+2ILG6wvNgSvOTYErzkSCH6JfrGMUeUMXjGH3oI8JbIFjNoDTEc+McCkUkget5bI4L7S0nu/reL+sIpg1ISXOPb7Yp7gfBkTF8Coh0m7hYcR258vMchaY1LCvfIBpwHvcBfOYRleaTtx3Fri9RkC+JicFuDsbaP75hJTtH42wdsYdYDpzQn6s3c5fL3lu6sj008P74br1A8SZWuPOKH/C8GFKh4wgP9mfkBfUoukFdXPYVjvYBowsvlM7xiReTPWpB2/Zsk/lXlYCvBvmZrkXWBS1AtmCp4m/9DMzZfUGPX4fH9FnZwrMu+Tj6BmpfN/mpE90r5rYaLmaod197m2o5dCwKvgXS6aG2KprUae3aXegRbwmcn+amDKjOaacdo3F8Y3W3Dec73rE3w2fQWx0WxNUrTaS4zg/t+XtEePkew5Dm1Ooy+GiOBHnKr7Wo8EtDDaz9AJ23DrdILDFC5yNZ+bqBfRZ0rv/UnjrAMzH8EnmMxkGXjXnHhH0nbY3zmCLwQxkyzOI85bgGt0SpupL6gewSmwXsgWMaajgmpB1Q7ahg5Gr83cECttzcD9SEbEkcaeMa+t4IJXSlbs7sEvyDid8WD1JdsF7xOunrhv7f4fElhM35VddKm7X6KMB1PZklafhYjgU3HWKoIZiXT83ILKAB/jEtsLB+QAPh0zOdf95QRba5i5Azk4jyU4bAuOm4yAxuzEx22YYaWtJUyYaZLtsZwqe/ebGPNwap/YZMSwguD7D1ybhym6FnngZc8fi2yn1GfhCRHM1Md0Nu8syzHPIjhsa6QmWEX04jP9EKvYV9oq9iQ8zFSSGh3JYrStR13T6zK6cqiEoBKzgG2LjRUEe22ubfYawt5/Kn0WIoLtaLQGKAVqcyaCK0zPM7mcdjrmmO1nEfydIjjeX4ZvEkzb3oayGKRWCSSSmFbPxRf0gaob+Am4rBhdQbCK4M4Z03M0fihX1nVJ99PosxARzNQw5CJCpit3D9+pgoV32kNtT/WV4+XOVZ9NGThVXgpMG0PppyY4Vr2zwFF3jSFYfV6FKUxkN+wvIzj8HFH3mRl/ZRWCIVbaGtpzBifcZ6URFT5mrLrOjNwTvyUExwwrCNZtOVA6cLr7F3oPx2EgpdBnwSKYMD8j5NGVHwuYesmqLo1cqmGlgyfJGJaeYCLPvlSRsi7x4HBxQ7CSiS6+FwR31L+MYEJVpMo2XblLBayJsvANW2dVvdgja7lNeFJYmvGqCGPUhX7pvmPaZJQNTX8BqwgmYeoniNjKKlv5vHYwF9FP1mdhnuAQrJC/yAd5kkwg8vzLZFkaZDNKVy+v/5zZKVqD1eXe0/6q9fKvVIWcJHs0dnL48ntE7I/F0/f4GCQT/JMhhE7bVXjFXbin/G6UFHVqVesbpMYvQbDclW61gcltB0G7ga8lc4du8Gz8GgRv8IOwhf8ApRK9rqrS3soAAAAASUVORK5CYII=" />
+            </ui:ClickImage.Image>
+            <ui:ClickImage.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:ClickImage.Target>
+          </ui:ClickImage>
+          <ui:WaitUiElementAppear DisplayName="Find Element 'H3'" FoundElement="[UiElement_ConfigureNewFlowPopupTitle]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_1" WaitActive="False" WaitVisible="False">
+            <ui:WaitUiElementAppear.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="090e8806bd181c9e2ae742162d260b0d" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' aaname='Configure new flow' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:WaitUiElementAppear.Target>
+          </ui:WaitUiElementAppear>
+          <ui:WaitUiElementAppear DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_CreateFlowBtn]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_4" WaitActive="False" WaitVisible="False">
+            <ui:WaitUiElementAppear.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="805a89104846cb53202c29cc0aa9ea7f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Create' parentid='app' tag='BUTTON' /&gt;" TimeoutMS="60000" WaitForReady="INTERACTIVE" />
+            </ui:WaitUiElementAppear.Target>
+          </ui:WaitUiElementAppear>
+          <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_7">
+            <ui:CommentOut.Body>
+              <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_16">
+                <ui:WaitUiElementAppear DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_CreateFlowBtn]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_2" WaitActive="False" WaitVisible="False">
+                  <ui:WaitUiElementAppear.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="9d10e2d28b5134258ea36283b23165a4" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Create' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+                  </ui:WaitUiElementAppear.Target>
+                </ui:WaitUiElementAppear>
+              </Sequence>
+            </ui:CommentOut.Body>
+          </ui:CommentOut>
+          <ui:WaitUiElementAppear ContinueOnError="True" DisplayName="Find Element 'BUTTON'" FoundElement="[UiElement_CancelBtn]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_3" WaitActive="False" WaitVisible="False">
+            <ui:WaitUiElementAppear.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="018e857caca6d1de3089e11a8337ae43" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Cancel' parentid='app' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:WaitUiElementAppear.Target>
+          </ui:WaitUiElementAppear>
+          <If Condition="[UiElement_ConfigureNewFlowPopupTitle.IsVisible and UiElement_CreateFlowBtn.IsVisible and UiElement_CancelBtn.IsVisible]" sap2010:WorkflowViewState.IdRef="If_13">
+            <If.Then>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_15">
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_26" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_3 LOG :  Config new flow popup verified successfully&quot;+vbNewLine+&#xA;&quot;Found config new flow popup title validation status as &quot;+UiElement_ConfigureNewFlowPopupTitle.IsVisible.ToString +vbNewLine+&#xA;&quot;Status of Create button on UI is: &quot;+UiElement_CreateFlowBtn.IsVisible.ToString +vbNewLine+&#xA;&quot;Status of Cancel button on UI is: &quot;+UiElement_CancelBtn.IsVisible.ToString +vbNewLine]" />
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_8" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Flow_TC_3_CreateFlowPopupValidationSuccess</InArgument>
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">True</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+              </Sequence>
+            </If.Then>
+            <If.Else>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_11">
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_27" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_3 FAILED :  Config new flow popup verification failed due to one or more of the below reasons&quot;+vbNewLine+&#xA;&quot;Found config new flow popup title validation status as &quot;+UiElement_ConfigureNewFlowPopupTitle.IsVisible.ToString +vbNewLine+&#xA;&quot;Status of Create button on UI is: &quot;+UiElement_CreateFlowBtn.IsVisible.ToString +vbNewLine+&#xA;&quot;Status of Cancel button on UI is: &quot;+UiElement_CancelBtn.IsVisible.ToString +vbNewLine]" />
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Flow_P_TC3_configNewFlowPopupVerificationFailure</InArgument>
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+              </Sequence>
+            </If.Else>
+          </If>
+          <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_1">
+            <ui:CommentOut.Body>
+              <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_7">
+                <ui:ImageFound DisplayName="Check Config New Flow image exists or not! " Found="[Is_ConfigNewFlowPopupDisplayed]" sap2010:WorkflowViewState.IdRef="ImageFound_2">
+                  <ui:ImageFound.Image>
+                    <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAArEAAADyCAYAAABaiZ3GAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAACiuSURBVHhe7Z2JlxXF/Ud/fy0as0jMophdTaIxmphjQsRg3HdcUBFBRJRFQQQEZRMBEUEHZBGGJWL/zi3fdyyKfm8W541T0/ee8zmvu6u7qrrf8LhTXf3m/xoRERERkcpQYkVERESkOpRYEREREakOJVZEREREqkOJFREREZHqUGJFREREpDrmnMR+/fXXzenTp5sTJ040p06dai5dutQrkVo5d+5cej9PnjzZ/O9//+ttFRERkS4zKYkNmZiNgoi8btiwofn5z3/ezJs3byw/+tGPmieffFL5qZCzZ882//73v5urr7567P3cvHlz+jm87bbbxtZFRESke0xIYg8dOtT86U9/aq666qoxmSAI4hNPPJGk4vtm48aNzTXXXJP6dd111zXXX399Cn1cvHhxby+pha+++iq9b7yfvK933XVXWv/www+VWBERERkssYxurlmzZkwOGeVctGhRc9999yWpiO233357GjX7vqDtP/7xj6kvzz333GUjxCyfP3++tya18MknnzQ/+9nPmh//+MfNzp07e1u/QYkVERGRgRKLPCARjMAuWbLkilvyR48ebX79618nmXj44YeT9H4fhPAQlqV+tm7dmn7ubr755ubMmTO9rd+gxIqIiEhfib1w4UJz5513JlFg5LXfnNJt27Y1P/jBD75Xgfzoo4+aa6+9trnhhhvSfF2pH+SUnz1ktZyuosSKiIhIX4kNMfzpT3/afPzxx72tV8IoGaNlCMXatWt7W7/l8OHDzb333pumIvzwhz9sfvWrX6VR3dHR0d4e38K0AObYEuplJPjWW29N81rnz5/f/P3vf0/zc4PPP/88jQD/4x//SCLNqDEPAiHdq1evTvscOHAgrb/00kvNxYsX07Yc6qNe6o829u3bN3Zc1APRP9qk7ZK2tnhlne1c09dee61ZsGBB6uv27dvTPkFcK+b0cs6///3vmzfeeCP9QjER8j5zzCuvvNLceOON6dr88pe/TH1vu+7AKDrzTfNrwbV/9913L5uesXv37tQGdTNvNSd//8rpJezLMRxLHf2Ic/jrX/+afqb45YhrwjZGZ2E8ic3PJb+W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" />
+                  </ui:ImageFound.Image>
+                  <ui:ImageFound.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" TimeoutMS="8000" WaitForReady="INTERACTIVE" />
+                  </ui:ImageFound.Target>
+                </ui:ImageFound>
+              </Sequence>
+            </ui:CommentOut.Body>
+          </ui:CommentOut>
+          <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_2">
+            <ui:CommentOut.Body>
+              <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_8">
+                <If Condition="[Is_ConfigNewFlowPopupDisplayed]" DisplayName="If (Config new flow popup is displayed)" sap2010:WorkflowViewState.IdRef="If_3">
+                  <If.Then>
+                    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Trace" Message="D_FLow_periodic_TCNo_3_LOG: Successfully clicked Config new flow button" />
+                  </If.Then>
+                  <If.Else>
+                    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="D_FLow_periodic_TCNo_3_FAILED: Error while clicking config new flow button" />
+                  </If.Else>
+                </If>
+              </Sequence>
+            </ui:CommentOut.Body>
+          </ui:CommentOut>
+          <Assign DisplayName="Assign FlowName with a Random Name" sap2010:WorkflowViewState.IdRef="Assign_1">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:String">[FlowName]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">["AutoFlow_"+RandomNumber]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayMS="1000" DisplayName="Enter Flow Description" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_4" SendWindowMessages="False" SimulateType="False" Text="Automated Flow Description">
+            <ui:TypeInto.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8fcbf91f6ade622363adaaeeb0c98a32" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TEXTAREA' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:TypeInto.Target>
+          </ui:TypeInto>
+          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_4" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_CreateFlowBtn]" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+          <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_3">
+            <ui:CommentOut.Body>
+              <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_9">
+                <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="5000" DisplayName="Click Create button" sap2010:WorkflowViewState.IdRef="ClickImage_6" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+                  <ui:ClickImage.CursorPosition>
+                    <ui:CursorPosition Position="Center">
+                      <ui:CursorPosition.OffsetX>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetX>
+                      <ui:CursorPosition.OffsetY>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetY>
+                    </ui:CursorPosition>
+                  </ui:ClickImage.CursorPosition>
+                  <ui:ClickImage.Image>
+                    <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAADQAAAAWCAYAAACPHL/WAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMISURBVFhH7VZJa1NRFPaH+AP8A24F14I7cSEiiohIUcSVIsVNQaSCpSrUEccqbWnRarXBqoltaDU1g2nSKVPJnLSZm2Y63u/oDa/P99JANlET+Cj33jN9Z3rdtbvbQP8SOoTaHR1C7Y7/i9DZkR/kSeSpViP+lSpV+rySoP39M5ryreLAwCydGbLT3l6j5nsz0CV09Mk8hdJF8ibz7GRPzxTdNvkot1WhSXdMU6dVDFqClC1W6JxIpNZ7M9AlNGYPs/FL465t96bVJIUF0cMPLdQzuUQ3jV7qF/jiSfIdZI48nqdXjgiZvevUO7XKyZD68u1rIEX3zP56NWDDspaiYrlK71wxOj/q5HvowgZsQQ/60pYWdAnZQxmuzr6+6W33yrYAObRhXlTNHc3SyUEbXXztolShRIH1Ai3FchygUcghsL5PHpZFG8/5NzhhznCGfUwsRCmY2qRypUbL8Rxd/50I6GaLZbYfzRTZNnwoY1JClxCCAbTeJEAoIpygPXFGYCvxPDlEMmRV7psDtCGCQMZHrCF6L7Iv3wamfZTZLNPlN24+q1vulsnL56uGZT5jdn3JAvvFWQstE1LKdA07OEC0zrAIHkD74O6GqA5kQP7R7Bq/Qb9QqtTf1ISwgFARtJq0h+o1ikuXkCuSZWWZTQl1yymNIxAEj3ZbEPoS9mCa2wQVAQHcjdrCOxLCO86IRWkP7Sl9qtFwKaBVkHXlPZzIpaAmdPqlnXWQUaWOBGSxDOQZRBCwHiFs03hui44/s9Z1doIuIQw4jGEYDz34xnfXPqxwBeTaVhNCNTHsaSHT/fbXXOAvZqpryEGL0RwvmoN35tgmbGOpSEKoIBbAlYnFui4+E9ig6Ajg43KCZ1H6VEOXEHBhzMlDr/dhVRMCECg2ZFUoQR5AAkAWax4zgV+lWuMFgpYDEegiidhk+ME27u7O+DmJZSEPIB7EpfSpRENCEpibUy9sf8xTI4A0WlB+ZyRg48Rzq+5/G5CHL7Xesaff69+5RmiK0N+EDqF2R4dQe8NAPwG7p4kJhKveLwAAAABJRU5ErkJggg==" />
+                  </ui:ClickImage.Image>
+                  <ui:ClickImage.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                  </ui:ClickImage.Target>
+                </ui:ClickImage>
+              </Sequence>
+            </ui:CommentOut.Body>
+          </ui:CommentOut>
+          <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get error message text on blank flow name" sap2010:WorkflowViewState.IdRef="GetValue_2">
+            <ui:GetValue.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="4f156edca5e3b48c6ae5de42adf47868" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='topTipMaxiqId*' tag='DIV' parentclass='toast toast-error' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:GetValue.Target>
+            <ui:GetValue.Value>
+              <OutArgument x:TypeArguments="x:String">[ErrorMsgForInvalidFlowName]</OutArgument>
+            </ui:GetValue.Value>
+          </ui:GetValue>
+          <If Condition="[ErrorMsgForInvalidFlowName.Contains(&quot;Application name should not start with&quot;)]" DisplayName="If (Verify if Error message for blank flow is correct)" sap2010:WorkflowViewState.IdRef="If_12">
+            <If.Then>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_24" Level="Trace" Message="[&quot;D_FLow_periodic_TCNo_3_LOG: Error message verified for Invalid Flow Name. Message is: &quot;+ErrorMsgForInvalidFlowName]" />
+                <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Close error message" sap2010:WorkflowViewState.IdRef="Click_3" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                  <ui:Click.CursorPosition>
+                    <ui:CursorPosition Position="Center">
+                      <ui:CursorPosition.OffsetX>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetX>
+                      <ui:CursorPosition.OffsetY>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetY>
+                    </ui:CursorPosition>
+                  </ui:Click.CursorPosition>
+                  <ui:Click.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d23627ecef7550eb51954a1cb4b8f315" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='topTipMaxiqId*' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+                  </ui:Click.Target>
+                </ui:Click>
+              </Sequence>
+            </If.Then>
+            <If.Else>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_12">
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_25" Level="Error" Message="[&quot;D_FLow_periodic_TCNo_3_FAILED: Could not verify/find error message for Invalid Flow Name. Message obtained from screen is: &quot;+ErrorMsgForInvalidFlowName]" />
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Flow_P_TC3_ErrorMessageforFlowFailure</InArgument>
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+              </Sequence>
+            </If.Else>
+          </If>
+          <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayMS="1000" DisplayName="Enter Flow Name" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="[FlowName]">
+            <ui:TypeInto.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="be39401dfacfc0ca8cd2251dbcbf7a13" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='app' tag='INPUT' type='text' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:TypeInto.Target>
+          </ui:TypeInto>
+          <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayMS="1000" DisplayName="Enter Description" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_2" SendWindowMessages="False" SimulateType="False" Text="Automated Flow Description">
+            <ui:TypeInto.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8fcbf91f6ade622363adaaeeb0c98a32" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TEXTAREA' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:TypeInto.Target>
+          </ui:TypeInto>
+          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" sap2010:WorkflowViewState.IdRef="Click_5" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[UiElement_CreateFlowBtn]" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+          <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_4">
+            <ui:CommentOut.Body>
+              <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_10">
+                <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" ClickType="CLICK_SINGLE" DelayMS="5000" DisplayName="Click Create button" sap2010:WorkflowViewState.IdRef="ClickImage_4" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+                  <ui:ClickImage.CursorPosition>
+                    <ui:CursorPosition Position="Center">
+                      <ui:CursorPosition.OffsetX>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetX>
+                      <ui:CursorPosition.OffsetY>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetY>
+                    </ui:CursorPosition>
+                  </ui:ClickImage.CursorPosition>
+                  <ui:ClickImage.Image>
+                    <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAADQAAAAWCAYAAACPHL/WAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMISURBVFhH7VZJa1NRFPaH+AP8A24F14I7cSEiiohIUcSVIsVNQaSCpSrUEccqbWnRarXBqoltaDU1g2nSKVPJnLSZm2Y63u/oDa/P99JANlET+Cj33jN9Z3rdtbvbQP8SOoTaHR1C7Y7/i9DZkR/kSeSpViP+lSpV+rySoP39M5ryreLAwCydGbLT3l6j5nsz0CV09Mk8hdJF8ibz7GRPzxTdNvkot1WhSXdMU6dVDFqClC1W6JxIpNZ7M9AlNGYPs/FL465t96bVJIUF0cMPLdQzuUQ3jV7qF/jiSfIdZI48nqdXjgiZvevUO7XKyZD68u1rIEX3zP56NWDDspaiYrlK71wxOj/q5HvowgZsQQ/60pYWdAnZQxmuzr6+6W33yrYAObRhXlTNHc3SyUEbXXztolShRIH1Ai3FchygUcghsL5PHpZFG8/5NzhhznCGfUwsRCmY2qRypUbL8Rxd/50I6GaLZbYfzRTZNnwoY1JClxCCAbTeJEAoIpygPXFGYCvxPDlEMmRV7psDtCGCQMZHrCF6L7Iv3wamfZTZLNPlN24+q1vulsnL56uGZT5jdn3JAvvFWQstE1LKdA07OEC0zrAIHkD74O6GqA5kQP7R7Bq/Qb9QqtTf1ISwgFARtJq0h+o1ikuXkCuSZWWZTQl1yymNIxAEj3ZbEPoS9mCa2wQVAQHcjdrCOxLCO86IRWkP7Sl9qtFwKaBVkHXlPZzIpaAmdPqlnXWQUaWOBGSxDOQZRBCwHiFs03hui44/s9Z1doIuIQw4jGEYDz34xnfXPqxwBeTaVhNCNTHsaSHT/fbXXOAvZqpryEGL0RwvmoN35tgmbGOpSEKoIBbAlYnFui4+E9ig6Ajg43KCZ1H6VEOXEHBhzMlDr/dhVRMCECg2ZFUoQR5AAkAWax4zgV+lWuMFgpYDEegiidhk+ME27u7O+DmJZSEPIB7EpfSpRENCEpibUy9sf8xTI4A0WlB+ZyRg48Rzq+5/G5CHL7Xesaff69+5RmiK0N+EDqF2R4dQe8NAPwG7p4kJhKveLwAAAABJRU5ErkJggg==" />
+                  </ui:ClickImage.Image>
+                  <ui:ClickImage.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+                  </ui:ClickImage.Target>
+                </ui:ClickImage>
+              </Sequence>
+            </ui:CommentOut.Body>
+          </ui:CommentOut>
+          <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get flow Name when inside the flow" sap2010:WorkflowViewState.IdRef="GetValue_1">
+            <ui:GetValue.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="9b436758f47f1caa31004d5579f63c9d" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' tag='FONT' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:GetValue.Target>
+            <ui:GetValue.Value>
+              <OutArgument x:TypeArguments="x:String">[CreatedFlowName]</OutArgument>
+            </ui:GetValue.Value>
+          </ui:GetValue>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Trace" Message="[&quot;D_FLow_periodic_TCNo_3_LOG_ The created Flow name is: &quot;+CreatedFlowName.Trim]" />
+          <If Condition="[CreatedFlowName.Trim.contains(FlowName)]" DisplayName="If (Verify if the flow created has the same name as provided by user)" sap2010:WorkflowViewState.IdRef="If_4">
+            <If.Then>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_3_SUCCESS: Flow has been created successfully.. Created flow name is: &quot;+CreatedFlowName.Trim]" />
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Flow_TC_3_FlowCreationSuccess</InArgument>
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">True</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+                <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_5">
+                  <ui:CommentOut.Body>
+                    <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_13">
+                      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke GenerteLogsApplicationScopeUtility workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+                        <ui:InvokeWorkflowFile.Arguments>
+                          <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_FLow_periodic_TCNo_3_SUCCESS</InArgument>
+                          <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">True</InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="LogMessage" xml:space="preserve">D_FLow_periodic_TCNo_3_SUCCESS: Configure new flow functionality is verified. New flow has been created </InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportPath]</InArgument>
+                        </ui:InvokeWorkflowFile.Arguments>
+                      </ui:InvokeWorkflowFile>
+                    </Sequence>
+                  </ui:CommentOut.Body>
+                </ui:CommentOut>
+              </Sequence>
+            </If.Then>
+            <If.Else>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="D_FLow_periodic_TCNo_3_FAILED: Flow did not create successfully" />
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Flow_TC_3_FlowCreationFailure</InArgument>
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+                <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_6">
+                  <ui:CommentOut.Body>
+                    <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_14">
+                      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke GenerteLogsApplicationScopeUtility workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+                        <ui:InvokeWorkflowFile.Arguments>
+                          <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_FLow_periodic_TCNo_3_ERROR</InArgument>
+                          <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">False</InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="LogMessage" xml:space="preserve">D_FLow_periodic_TCNo_3_ERROR: Could not verify configure new flow functionality. Error while creating new flow. Refer automation logs and Screenshots </InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportPath]</InArgument>
+                        </ui:InvokeWorkflowFile.Arguments>
+                      </ui:InvokeWorkflowFile>
+                    </Sequence>
+                  </ui:CommentOut.Body>
+                </ui:CommentOut>
+              </Sequence>
+            </If.Else>
+          </If>
+        </Sequence>
+      </TryCatch.Try>
+      <TryCatch.Catches>
+        <Catch x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+          <ActivityAction x:TypeArguments="s:Exception">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+            </ActivityAction.Argument>
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_28" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_3 :FAILED and SKIPPED- EXCEPTION OCCURED while executing configure new flow module. Exception is: &quot; +exception.Message.ToString]" />
+          </ActivityAction>
+        </Catch>
+      </TryCatch.Catches>
+    </TryCatch>
+    <sads:DebugSymbol.Symbol>d0ZEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQ29uZmlndXJlTmV3Rmxvdy54YW1sdEUDogMOAgEBRgWgAxACAQJICZQDFAIBBpwDDZwDoQICAQNNOk1gAgEHVAtYIAMBhAFZC2gQAgF4aQt6GwIBdHsLfyQCAXCAAQuEASQCAWuFAQuPARsCAWqQAQuUASQCAWWVAQusARACAVWtAQu6ARsCAVS7AQvIARsCAVPJAQvQARQCAU7RAQvVARkCAUrWAQvkARYCAUflAQv8ARsCAUb9AQuEAhkCAUKFAgulAhACATGmAguqAhkCASyrAguvAhkCASiwAgu+AhYCASW/AgvWAhsCASTXAgveAhkCASDfAgvfAtcBAgEd4AILkwMQAgEInAN7nAOeAgIBBFaJAVbzAQMBiAFW/gFWhAIDAYcBVFRUegMBhQFZGVk/AgF5Ww9bygEDAYIBXg9mGgIBe2ltaXMCAXV4ZXiVAQIBd3U5dT4CAXZ7UHt4AgFyfZ4BfYoCAgFxgAFUgAFvAgFuggGJAYIB9gECAW2CAYECggGIAgIBbJABa5ABggECAWiSAZ4BkgGLAgIBZ5ABM5ABOQIBZpUBGZUBkwECAVaXAQ+fARoCAV6iAQ+qARoCAVfOATbOAVACAVHLATfLAUECAU/TAZ4B0wHuAQIBTdEBfNEBggECAUzRAZ0C0QG5AgIBS+IBZeIBgAECAUiCAjeCAlMCAUP/AZ4B/wGjAgIBRYUCGYUCdAIBMocCD5gCGgIBPJsCD6MCGgIBNKgCngGoAoYCAgEwpgJ8pgKCAQIBL6YClgKmAqICAgEtrQKeAa0C7gECASurAnyrAoIBAgEqqwKXAqsCswICASm8AmW8AoABAgEm3AI33AJIAgEh2QKeAdkC8gECASPfAnnfAtQBAgEe4AIZ4AJEAgEJ4gIP+AIaAgEU+wIPkQMaAgEMW31bxwEDAYMBXxFfywEDAYABYBFlKQIBfJgBEZgBwQQCAWOZARGeASkCAV+jARGjAeoEAgFcpAERqQEpAgFYiAIRiAKEAgIBP4kCEZcCHAIBPZwCEZwCqQICATmdAhGiAikCATXjAhHjAoECAgEa5AIR6QIpAgEW6gIR9wIhAgEV/AIR/ALDAQIBEv0CEYIDKQIBDoMDEZADIQIBDV9/X8gBAwGBAWJSYnUCAX9jV2NcAgF+YMcBYOQBAgF9mAF/mAG+BAIBZJsBUpsBfAIBYpwBV5wBWwIBYZkBxwGZAeQBAgFgowF/owHnBAIBXaYBUqYBggECAVunAVenAVwCAVqkAccBpAHkAQIBWYgCgAGIAoECAgFAlQKkAZUCjAICAT6cAoABnAKmAgIBOp8CUp8CdwIBOKACV6ACXAIBN50CxwGdAuQBAgE24wJ+4wL+AQIBG+YCUuYCbwIBGecCV+cCWwIBGOQCxwHkAuQBAgEX/AJ//ALAAQIBE/8CUv8CbwIBEYADV4ADXAIBEP0CxwH9AuQBAgEP</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="697,239" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="697,490" />
       <sap2010:ViewStateData Id="ClickImage_7" sap:VirtualizedContainerService.HintSize="697,106" />
-      <sap2010:ViewStateData Id="ImageFound_2" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_4" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_2" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_16" sap:VirtualizedContainerService.HintSize="336,230">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_7" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WaitUiElementAppear_3" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="LogMessage_26" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_8" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_15" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_27" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_4" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_13" sap:VirtualizedContainerService.HintSize="697,490" />
+      <sap2010:ViewStateData Id="ImageFound_2" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="336,230">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="LogMessage_6" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="697,239" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="653,238" />
+      <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="675,362">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_2" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="697,60" />
       <sap2010:ViewStateData Id="TypeInto_4" sap:VirtualizedContainerService.HintSize="697,134" />
-      <sap2010:ViewStateData Id="ClickImage_6" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="Click_4" sap:VirtualizedContainerService.HintSize="697,68" />
+      <sap2010:ViewStateData Id="ClickImage_6" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="336,230">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_3" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="GetValue_2" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="LogMessage_24" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="Click_3" sap:VirtualizedContainerService.HintSize="314,106" />
@@ -280,15 +533,55 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_25" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_12" sap:VirtualizedContainerService.HintSize="697,509" />
       <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="697,134" />
       <sap2010:ViewStateData Id="TypeInto_2" sap:VirtualizedContainerService.HintSize="697,134" />
-      <sap2010:ViewStateData Id="ClickImage_4" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="Click_5" sap:VirtualizedContainerService.HintSize="697,68" />
+      <sap2010:ViewStateData Id="ClickImage_4" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="336,230">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_4" sap:VirtualizedContainerService.HintSize="697,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="GetValue_1" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="LogMessage_9" sap:VirtualizedContainerService.HintSize="697,91" />
       <sap2010:ViewStateData Id="LogMessage_7" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_6" sap:VirtualizedContainerService.HintSize="314,87" />
       <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,87" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="336,342">
+      <sap2010:ViewStateData Id="Sequence_13" sap:VirtualizedContainerService.HintSize="336,211">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_5" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="336,433">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -303,30 +596,56 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_7" sap:VirtualizedContainerService.HintSize="314,87" />
       <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="314,87" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,342">
+      <sap2010:ViewStateData Id="Sequence_14" sap:VirtualizedContainerService.HintSize="336,211">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="697,490" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="719,3496">
+      <sap2010:ViewStateData Id="CommentOut_6" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,433">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="741,3620">
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="697,581" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="719,4760">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="MosaicFlow_1" sap:VirtualizedContainerService.HintSize="781,3860" />
+      <sap2010:ViewStateData Id="LogMessage_28" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Catch`1_1" sap:VirtualizedContainerService.HintSize="723,21">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TryCatch_1" sap:VirtualizedContainerService.HintSize="737,4987" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="759,5111">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="MosaicFlow_1" sap:VirtualizedContainerService.HintSize="799,5231" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
