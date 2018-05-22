@@ -93,7 +93,16 @@
         </Sequence>
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[&quot;Snapshots tab under configuration tab exist condition - &quot; +is_Snapshots_Tab_Present.ToString]" />
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[&quot;Snapshots tab under configuration tab exist condition - &quot; +is_Snapshots_Tab_Present.ToString]" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Snapshot_Tab_Exist_condition</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Argument1" />
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
       </If.Else>
     </If>
     <ui:UiElementExists DisplayName="is_From_Date_Label_Exist" Exists="[is_From_Date_Label_Present]" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
@@ -166,14 +175,22 @@
         <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="1.From date label present.&#xA;2.From date field present.&#xA;3.From date calendar present.&#xA;4.To date label present.&#xA;5.To date field present.&#xA;6.To date calendar present.&#xA;7.Search button present." />
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="[&quot;1.From date label exist condition - &quot; +is_From_Date_Label_Present.ToString+ vbNewLine+&#xA;&quot;2.From Date field exist condition - &quot; +is_From_Date_Field_Present.ToString+ vbNewLine+&#xA;&quot;3.From date calendar exist condition - &quot; +is_From_Date_Calendar_Field_Present.ToString+ vbNewLine+&#xA;&quot;4.To date label exist condition - &quot; +is_To_Date_Label_Present.ToString+ vbNewLine+&#xA;&quot;5.To date field exist condition - &quot; +is_To_Date_Field_Present.ToString+ vbNewLine+&#xA;&quot;6.To date calendar exist condition - &quot; +is_To_Date_Calendar_Field_Present.ToString+ vbNewLine+&#xA;&quot;7.Search button exist condition - &quot; +is_Search_Button_Present.ToString+ vbNewLine]" />
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="[&quot;1.From date label exist condition - &quot; +is_From_Date_Label_Present.ToString+ vbNewLine+&#xA;&quot;2.From Date field exist condition - &quot; +is_From_Date_Field_Present.ToString+ vbNewLine+&#xA;&quot;3.From date calendar exist condition - &quot; +is_From_Date_Calendar_Field_Present.ToString+ vbNewLine+&#xA;&quot;4.To date label exist condition - &quot; +is_To_Date_Label_Present.ToString+ vbNewLine+&#xA;&quot;5.To date field exist condition - &quot; +is_To_Date_Field_Present.ToString+ vbNewLine+&#xA;&quot;6.To date calendar exist condition - &quot; +is_To_Date_Calendar_Field_Present.ToString+ vbNewLine+&#xA;&quot;7.Search button exist condition - &quot; +is_Search_Button_Present.ToString+ vbNewLine]" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">All_Elements_on_snpashot_tab</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d2lEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX0xvY2FsXE1vc2FpY19SZWdyZXNzaW9uU3VpdGVfVUlQYXRoXERhdGFTb3VyY2VQYWdlXENvbmZpZ3VyYXRpb25fU25hcHNob3RzLnhhbWw0OgOtAQ4CAQFFBUkaAgFBSgViCgIBNmMFZxoCATFoBWwaAgEsbQV7EAIBKnwFgAEaAgElgQEFhQEaAgEghgEFigEaAgEbiwEFmQEQAgEZmgEFngEaAgEUnwEFowEaAgEPpAEFqwEKAgECR4MBR+8BAgFFR/oBR4ACAgFERUdFYwIBQkoTSi8CATdMCV0UAgE8YAlg5QECATllgwFl9gECATVlgQJlhwICATRjR2NlAgEyaoMBaoICAgEwao0CapMCAgEvaEloZwIBLXmYAXmXAgIBK36DAX7lAQIBKX7wAX72AQIBKHxSfHkCASaDAYMBgwH0AQIBJIMB/wGDAYUCAgEjgQFFgQFhAgEhiAGDAYgBggICAR+IAY0CiAGTAgIBHoYBR4YBYwIBHJcBmAGXAZcCAgEanAGDAZwB5QECARicAfABnAH2AQIBF5oBUJoBdQIBFaEBgwGhAfsBAgEToQGGAqEBjAICARKfAUefAWMCARCkAROkAY4CAgEDpgEJpgHNAgIBDakBCakByQYCAQtNC02rAQIBP04LXBYCAT1gd2DiAQIBOqYBdqYBygICAQ6pAXapAcYGAgEMTXhNqAECAUBangFaigICAT4=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1REOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxEYXRhU291cmNlUGFnZVxEU19UYWJzXENvbmZpZ3VyYXRpb25fU25hcHNob3RzLnhhbWw+OgO+AQ4CAQFFBUkaAgFLSgVrCgIBO2wFcBoCATZxBXUaAgExdgWEARACAS+FAQWJARoCASqKAQWOARoCASWPAQWTARoCASCUAQWiARACAR6jAQWnARoCARmoAQWsARoCARStAQW8AQoCAQJHgwFH7wECAU9H+gFHgAICAU5FR0VjAgFMShNKLwIBPEwJXRQCAUZgCWkUAgE+boMBbvYBAgE6boECbocCAgE5bEdsZQIBN3ODAXOCAgIBNXONAnOTAgIBNHFJcWcCATKCAZgBggGXAgIBMIcBgwGHAeUBAgEuhwHwAYcB9gECAS2FAVKFAXkCASuMAYMBjAH0AQIBKYwB/wGMAYUCAgEoigFFigFhAgEmkQGDAZEBggICASSRAY0CkQGTAgIBI48BR48BYwIBIaABmAGgAZcCAgEfpQGDAaUB5QECAR2lAfABpQH2AQIBHKMBUKMBdQIBGqoBgwGqAfsBAgEYqgGGAqoBjAICAReoAUeoAWMCARWtAROtAY4CAgEDrwEJrwHNAgIBErIBCboBFAIBC00LTasBAgFJTgtcFgIBR2ELYecBAgFDYgtoIwIBP68Bdq8BygICAROzAQuzAcsGAgEQtAELuQEjAgEMTXhNqAECAUpangFaigICAUhheWHkAQIBRGRMZGgCAUJlUWVWAgFBYsEBYt4BAgFAswF4swHIBgIBEbYBTLYBaAIBD7cBUbcBVgIBDrQBwQG0Ad4BAgEN</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="314,106" />
       <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,361">
@@ -184,27 +201,49 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="675,509" />
-      <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_4" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="Click_2" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_5" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_6" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_7" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="Click_3" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_8" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_9" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="675,243" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="697,2376">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="336,342">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Configuration_Snapshots_1" sap:VirtualizedContainerService.HintSize="737,2616" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="697,509" />
+      <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_4" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="Click_2" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_5" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_6" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_7" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="Click_3" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_8" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_9" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="697,494" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="719,2627">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Configuration_Snapshots_1" sap:VirtualizedContainerService.HintSize="759,2707">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

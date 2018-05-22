@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="configuration_AdvSettings" this:configuration_AdvSettings.setHDFSDefineData="True" this:configuration_AdvSettings.selectHDFSFileType="TEXT" this:configuration_AdvSettings.selectCompressType="GZIP" this:configuration_AdvSettings.saveForVisualization="False" this:configuration_AdvSettings.setHBASEDefineData="False" this:configuration_AdvSettings.replaceAllLoadStrategy="False" this:configuration_AdvSettings.appendAllLoadStrategy="True" this:configuration_AdvSettings.setMultiplePrimaryKeyStatus="True" this:configuration_AdvSettings.setFeatureExtraction="True"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="configuration_AdvSettings" this:configuration_AdvSettings.setHDFSDefineData="True" this:configuration_AdvSettings.selectHDFSFileType="TEXT" this:configuration_AdvSettings.selectCompressType="GZIP" this:configuration_AdvSettings.saveForVisualization="False" this:configuration_AdvSettings.setHBASEDefineData="False" this:configuration_AdvSettings.replaceAllLoadStrategy="False" this:configuration_AdvSettings.appendAllLoadStrategy="True" this:configuration_AdvSettings.setMultiplePrimaryKeyStatus="True" this:configuration_AdvSettings.setFeatureExtraction="False"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -125,7 +125,15 @@
         </Sequence>
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="D_Data_TCNo_35  to 49_AdvanceSettings:FAILURE: Adv settings tab under configuration tab does not present." />
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_35">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="D_Data_TCNo_35  to 49_AdvanceSettings:FAILURE: Adv settings tab under configuration tab does not present." />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Adv_Settings_Tab_Exist_Condition</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
       </If.Else>
     </If>
     <If Condition="[setHDFSDefineData]" DisplayName="if" sap2010:WorkflowViewState.IdRef="If_6">
@@ -172,7 +180,7 @@
                 <Sequence.Variables>
                   <Variable x:TypeArguments="x:Boolean" Name="isCheckBoxPresentForSaveVisualization" />
                 </Sequence.Variables>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="D_Data_TCNo_35  to 49_AdvanceSettings:SUCESS:&#xD;&#xA;1. Define data at rest label present.&#xD;&#xA;2.HDFS radio button present&#xD;&#xA;3.File type drop down present.&#xD;&#xA;4.Save button for define data at rest present" />
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="D_Data_TCNo_35  to 49_AdvanceSettings:SUCESS:&#xA;1. Define data at rest label present.&#xA;2.HDFS radio button present&#xA;3.File type drop down present.&#xA;4.Save button for define data at rest present" />
                 <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Select item 'SELECT'" sap2010:WorkflowViewState.IdRef="SelectItem_3" Item="[selectHDFSFileType]">
                   <ui:SelectItem.Items>
                     <scg:List x:TypeArguments="x:String" Capacity="4">
@@ -198,7 +206,7 @@
                 <If Condition="[isCompressionTypeDropDownPresent And isCheckBoxPresentForSaveVisualization]" sap2010:WorkflowViewState.IdRef="If_8">
                   <If.Then>
                     <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
-                      <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Info" Message="D_Data_TCNo_35  to 49_AdvanceSettings:SUCESS: 1.Compression type drop down present.&#xD;&#xA;2.Check box for Save Visualization present" />
+                      <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Info" Message="D_Data_TCNo_35  to 49_AdvanceSettings:SUCESS: 1.Compression type drop down present.&#xA;2.Check box for Save Visualization present" />
                       <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="500" DelayBefore="1000" DisplayName="Select item 'SELECT'" sap2010:WorkflowViewState.IdRef="SelectItem_4" Item="[selectCompressType]">
                         <ui:SelectItem.Items>
                           <scg:List x:TypeArguments="x:String" Capacity="4">
@@ -279,13 +287,29 @@
                     </Sequence>
                   </If.Then>
                   <If.Else>
-                    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Error" Message="[&quot;1.Compression Type drop down exist condition - &quot; +isCompressionTypeDropDownPresent.ToString+ &quot;, does not present. &quot; +&#xD;&#xA;&quot;D_Data_TCNo_35  to 49_AdvanceSettings:FAILURE:2.Check box For Save Visualization exist condition - &quot; +isCheckBoxPresentForSaveVisualization.ToString+ &quot;, does Not present.&quot;]" />
+                    <Sequence sap2010:WorkflowViewState.IdRef="Sequence_37">
+                      <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Error" Message="[&quot;1.Compression Type drop down exist condition - &quot; +isCompressionTypeDropDownPresent.ToString+ &quot;, does not present. &quot; +&#xA;&quot;D_Data_TCNo_35  to 49_AdvanceSettings:FAILURE:2.Check box For Save Visualization exist condition - &quot; +isCheckBoxPresentForSaveVisualization.ToString+ &quot;, does Not present.&quot;]" />
+                      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_9" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+                        <ui:InvokeWorkflowFile.Arguments>
+                          <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Save_For_Visualize_Exist_Condition</InArgument>
+                          <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+                        </ui:InvokeWorkflowFile.Arguments>
+                      </ui:InvokeWorkflowFile>
+                    </Sequence>
                   </If.Else>
                 </If>
               </Sequence>
             </If.Then>
             <If.Else>
-              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Error" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings:FAILURE:1.Define data at rest label exist condition is - &quot; +isDefineDataAtRestLabelPresent.ToString+ &quot;, does not present.&quot; +&#xD;&#xA;&quot;2.HDFS radio button exist condition - &quot; +isHDFSRadioButtonPresent.ToString+ &quot;, does not present&quot; +&#xD;&#xA;&quot;3.File Type drop down exist condition - &quot; +isSelectFileTypeDropDownPresent.ToString+ &quot;, does not present.&quot; +&#xD;&#xA;&quot;4.Save button for define data at rest exist condition - &quot; +isSaveButtonForDefineDataPresent.ToString+ &quot;, does not present.&quot;]" />
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_36">
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Error" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings:FAILURE:1.Define data at rest label exist condition is - &quot; +isDefineDataAtRestLabelPresent.ToString+ &quot;, does not present.&quot; +&#xA;&quot;2.HDFS radio button exist condition - &quot; +isHDFSRadioButtonPresent.ToString+ &quot;, does not present&quot; +&#xA;&quot;3.File Type drop down exist condition - &quot; +isSelectFileTypeDropDownPresent.ToString+ &quot;, does not present.&quot; +&#xA;&quot;4.Save button for define data at rest exist condition - &quot; +isSaveButtonForDefineDataPresent.ToString+ &quot;, does not present.&quot;]" />
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_8" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Adv_Settings_Tab_All_Elements_Exist_Condition</InArgument>
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+              </Sequence>
             </If.Else>
           </If>
         </Sequence>
@@ -364,7 +388,7 @@
                 <Sequence.Variables>
                   <Variable x:TypeArguments="x:Boolean" Name="isCheckBoxPresentForSaveVisualization" />
                 </Sequence.Variables>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_27" Level="Info" Message="D_Data_TCNo_35  to 49_AdvanceSettings:SUCESS: 1. Define data at rest label present.&#xD;&#xA;2.HBASE radio button present&#xD;&#xA;3.Select primary key drop down present.&#xD;&#xA;4.Select secondary key drop down present.&#xD;&#xA;5.Add button for primary key present.&#xD;&#xA;6.Add button for secondary key present.&#xD;&#xA;7.Save for visualization check box present.&#xD;&#xA;8.Save button for define data at rest present" />
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_27" Level="Info" Message="D_Data_TCNo_35  to 49_AdvanceSettings:SUCESS: 1. Define data at rest label present.&#xA;2.HBASE radio button present&#xA;3.Select primary key drop down present.&#xA;4.Select secondary key drop down present.&#xA;5.Add button for primary key present.&#xA;6.Add button for secondary key present.&#xA;7.Save for visualization check box present.&#xA;8.Save button for define data at rest present" />
                 <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="1000" DelayBefore="1000" DisplayName="Select item 'SELECT'" sap2010:WorkflowViewState.IdRef="SelectItem_13" Item="[selectPrimaryKey]">
                   <ui:SelectItem.Items>
                     <scg:List x:TypeArguments="x:String" Capacity="4">
@@ -418,7 +442,15 @@
               </Sequence>
             </If.Then>
             <If.Else>
-              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_31" Level="Error" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings : FAILURE :1.Define data at rest label exist condition is - &quot; +isDefineDataAtRestLabelPresent.ToString+ &quot;, does not present.&quot; +&#xD;&#xA;&quot;2.HBASE radio button exist condition - &quot; +isHBASERadioButtonPresent.ToString+ &quot;, does not present&quot; +&#xD;&#xA;&quot;3.Select primary key drop down exist condition - &quot; +isSelectPrimaryKeyDropDownPresent.ToString+ &quot;, does not present.&quot; +&#xD;&#xA;&quot;4.Select secondary key drop down exist condition - &quot; +isSelectSecondaryKeyDropDownPresent.ToString+ &quot;, does not present.&quot; +&#xD;&#xA;&quot;5.Add button for primary key exist condition - &quot; +isAddButtonForPrimaryKeyPresent.ToString+ &quot;, does not present.&quot; +&#xD;&#xA;&quot;6.Add button for secondary key exist condition - &quot; +isAddButtonForSecondaryKeyPresent.ToString+ &quot;, does not present.&quot; +&#xD;&#xA;&quot;7.Save for visualize check box exist condition - &quot; +saveForVisualization.ToString+ &quot;, does not present.&quot; +&#xD;&#xA;&quot;8.Save button for define data at rest exist condition - &quot; +isSaveButtonForDefineDataPresent.ToString+ &quot;, does not present.&quot;]" />
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_38">
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_31" Level="Error" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings : FAILURE :1.Define data at rest label exist condition is - &quot; +isDefineDataAtRestLabelPresent.ToString+ &quot;, does not present.&quot; +&#xA;&quot;2.HBASE radio button exist condition - &quot; +isHBASERadioButtonPresent.ToString+ &quot;, does not present&quot; +&#xA;&quot;3.Select primary key drop down exist condition - &quot; +isSelectPrimaryKeyDropDownPresent.ToString+ &quot;, does not present.&quot; +&#xA;&quot;4.Select secondary key drop down exist condition - &quot; +isSelectSecondaryKeyDropDownPresent.ToString+ &quot;, does not present.&quot; +&#xA;&quot;5.Add button for primary key exist condition - &quot; +isAddButtonForPrimaryKeyPresent.ToString+ &quot;, does not present.&quot; +&#xA;&quot;6.Add button for secondary key exist condition - &quot; +isAddButtonForSecondaryKeyPresent.ToString+ &quot;, does not present.&quot; +&#xA;&quot;7.Save for visualize check box exist condition - &quot; +saveForVisualization.ToString+ &quot;, does not present.&quot; +&#xA;&quot;8.Save button for define data at rest exist condition - &quot; +isSaveButtonForDefineDataPresent.ToString+ &quot;, does not present.&quot;]" />
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_10" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Advance_settings_tab_All_Elements</InArgument>
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+              </Sequence>
             </If.Else>
           </If>
           <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
@@ -432,7 +464,7 @@
         </Sequence>
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_32" Level="Warn" Message="D_Data_TCNo_35  to 49_AdvanceSettings : FAILURE : HBASE Define data not set." />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_32" Level="Trace" Message="D_Data_TCNo_35  to 49_AdvanceSettings : FAILURE : HBASE Define data not set." />
       </If.Else>
     </If>
     <If Condition="[setFeatureExtraction]" sap2010:WorkflowViewState.IdRef="If_34">
@@ -474,7 +506,7 @@
             <If Condition="[isFeatureExtractionLabelExist And isFeatureExtractionExists]" sap2010:WorkflowViewState.IdRef="If_35">
               <If.Then>
                 <Sequence sap2010:WorkflowViewState.IdRef="Sequence_33">
-                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_55" Level="Info" Message="D_Data_TCNo_35  to 49_AdvanceSettings : SUCESS : 1.Feature extraction label exist.&#xD;&#xA;2.Select Feature extraction button exist" />
+                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_55" Level="Info" Message="D_Data_TCNo_35  to 49_AdvanceSettings : SUCESS : 1.Feature extraction label exist.&#xA;2.Select Feature extraction button exist" />
                   <ui:Click ClickType="CLICK_SINGLE" DelayBefore="2000" DelayMS="3000" sap2010:WorkflowViewState.IdRef="Click_27" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
                     <ui:Click.CursorPosition>
                       <ui:CursorPosition Position="Center">
@@ -493,7 +525,15 @@
                 </Sequence>
               </If.Then>
               <If.Else>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_56" Level="Info" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings: FAILURE : 1.Feature extraction label condition - &quot; +isFeatureExtractionLabelExist.ToString+ vbNewLine+&#xD;&#xA;&quot;2.Select Feature extraction button condition - &quot; +isFeatureExtractionExists.ToString]" />
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_39">
+                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_56" Level="Error" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings: FAILURE : 1.Feature extraction label condition - &quot; +isFeatureExtractionLabelExist.ToString+ vbNewLine+&#xA;&quot;2.Select Feature extraction button condition - &quot; +isFeatureExtractionExists.ToString]" />
+                  <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_11" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+                    <ui:InvokeWorkflowFile.Arguments>
+                      <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Feature_Extraction_condition</InArgument>
+                      <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+                    </ui:InvokeWorkflowFile.Arguments>
+                  </ui:InvokeWorkflowFile>
+                </Sequence>
               </If.Else>
             </If>
             <ui:WaitUiElementAppear DisplayName="Configure Feature Extraction Header" FoundElement="[UIElement_ConfigureFeatureExtractionHeader]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_3" WaitActive="True" WaitVisible="True">
@@ -541,10 +581,18 @@
             </ui:UiElementExists>
             <If Condition="[actualTextForConfigurationHeader.Contains(&quot;Configure feature extraction&quot;) And &#xA;isSelectFeatureExtractionDropdownExist And&#xA;isSaveBtnExistForSelectFeatureExtraction And&#xA;isCancelButtonExistForFeatureExtractionPopup]" sap2010:WorkflowViewState.IdRef="If_36">
               <If.Then>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_57" Level="Info" Message="D_Data_TCNo_35  to 49_AdvanceSettings : SUCESS : 1.Feature extraction header on pop up matches with expected.&#xD;&#xA;2.Select feature extraction drop down present on pop up.&#xD;&#xA;3.Save button for select feature extraction present on pop up.&#xD;&#xA;4.Cancel button for select feature extraction present on pop up." />
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_57" Level="Info" Message="D_Data_TCNo_35  to 49_AdvanceSettings : SUCESS : 1.Feature extraction header on pop up matches with expected.&#xA;2.Select feature extraction drop down present on pop up.&#xA;3.Save button for select feature extraction present on pop up.&#xA;4.Cancel button for select feature extraction present on pop up." />
               </If.Then>
               <If.Else>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_58" Level="Error" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings: FAILURE : 1.Feature extraction header on pop up does not matches with expected. Actual is - &quot; +actualTextForConfigurationHeader+ &quot; || Expected is - Configure feature extraction&quot; +vbNewLine+&#xD;&#xA;&quot;2.Select feature extraction drop down exist status - &quot; +isSelectFeatureExtractionDropdownExist.ToString+ vbNewLine+&#xD;&#xA;&quot;3.Save button on feature extraction pop up exist condition - &quot; +isSaveBtnExistForSelectFeatureExtraction.ToString+ vbNewLine+&#xD;&#xA;&quot;4.Cancel button on select feature extraction pop up eixist condition - &quot; +isCancelButtonExistForFeatureExtractionPopup.ToString]" />
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_40">
+                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_58" Level="Error" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings: FAILURE : 1.Feature extraction header on pop up does not matches with expected. Actual is - &quot; +actualTextForConfigurationHeader+ &quot; || Expected is - Configure feature extraction&quot; +vbNewLine+&#xA;&quot;2.Select feature extraction drop down exist status - &quot; +isSelectFeatureExtractionDropdownExist.ToString+ vbNewLine+&#xA;&quot;3.Save button on feature extraction pop up exist condition - &quot; +isSaveBtnExistForSelectFeatureExtraction.ToString+ vbNewLine+&#xA;&quot;4.Cancel button on select feature extraction pop up eixist condition - &quot; +isCancelButtonExistForFeatureExtractionPopup.ToString]" />
+                  <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_12" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+                    <ui:InvokeWorkflowFile.Arguments>
+                      <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">All_Elements_On_Adv_Settings_Tab</InArgument>
+                      <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+                    </ui:InvokeWorkflowFile.Arguments>
+                  </ui:InvokeWorkflowFile>
+                </Sequence>
               </If.Else>
             </If>
           </Sequence>
@@ -575,7 +623,7 @@
           <If Condition="[isLoadStatergyLabelPresent And&#xA;isReplaceAllRadioButtonPresent And&#xA;isSaveButtonPresentForLoadStatergy]" sap2010:WorkflowViewState.IdRef="If_27">
             <If.Then>
               <Sequence sap2010:WorkflowViewState.IdRef="Sequence_25">
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_59" Level="Error" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings : SUCESS : 1.Load statergy label exist condition - &quot; +isLoadStatergyLabelPresent.ToString+ &#xD;&#xA;&quot;2.Replace All radio button exist condition - &quot; +isReplaceAllRadioButtonPresent.ToString+&#xD;&#xA;&quot;3.Save button for load statergy exist condition - &quot; +isSaveButtonPresentForLoadStatergy.ToString]" />
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_59" Level="Error" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings : SUCESS : 1.Load statergy label exist condition - &quot; +isLoadStatergyLabelPresent.ToString+ &#xA;&quot;2.Replace All radio button exist condition - &quot; +isReplaceAllRadioButtonPresent.ToString+&#xA;&quot;3.Save button for load statergy exist condition - &quot; +isSaveButtonPresentForLoadStatergy.ToString]" />
                 <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" DisplayName="Click 'SPAN'" sap2010:WorkflowViewState.IdRef="Click_19" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
                   <ui:Click.CursorPosition>
                     <ui:CursorPosition Position="Center">
@@ -609,7 +657,7 @@
               </Sequence>
             </If.Then>
             <If.Else>
-              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_43" Level="Error" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings : FAILURE : 1.Load statergy label exist condition - &quot; +isLoadStatergyLabelPresent.ToString+ &#xD;&#xA;&quot;2.Replace All radio button exist condition - &quot; +isReplaceAllRadioButtonPresent.ToString+&#xD;&#xA;&quot;3.Save button for load statergy exist condition - &quot; +isSaveButtonPresentForLoadStatergy.ToString]" />
+              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_43" Level="Error" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings : FAILURE : 1.Load statergy label exist condition - &quot; +isLoadStatergyLabelPresent.ToString+ &#xA;&quot;2.Replace All radio button exist condition - &quot; +isReplaceAllRadioButtonPresent.ToString+&#xA;&quot;3.Save button for load statergy exist condition - &quot; +isSaveButtonPresentForLoadStatergy.ToString]" />
             </If.Else>
           </If>
           <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
@@ -652,7 +700,7 @@
           <If Condition="[isLoadStatergyLabelPresent And&#xA;isAppendAllRadioButtonPresent And&#xA;isSaveButtonPresentForLoadStatergy]" sap2010:WorkflowViewState.IdRef="If_28">
             <If.Then>
               <Sequence sap2010:WorkflowViewState.IdRef="Sequence_26">
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_60" Level="Info" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings: SUCESS : 1.Load statergy label exist condition - &quot; +isLoadStatergyLabelPresent.ToString+ &#xD;&#xA;&quot;2.Append All radio button exist condition - &quot; +isAppendAllRadioButtonPresent.ToString+&#xD;&#xA;&quot;3.Save button for load statergy exist condition - &quot; +isSaveButtonPresentForLoadStatergy.ToString]" />
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_60" Level="Info" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings: SUCESS : 1.Load statergy label exist condition - &quot; +isLoadStatergyLabelPresent.ToString+ &#xA;&quot;2.Append All radio button exist condition - &quot; +isAppendAllRadioButtonPresent.ToString+&#xA;&quot;3.Save button for load statergy exist condition - &quot; +isSaveButtonPresentForLoadStatergy.ToString]" />
                 <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" DisplayName="Click 'SPAN'" sap2010:WorkflowViewState.IdRef="Click_21" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
                   <ui:Click.CursorPosition>
                     <ui:CursorPosition Position="Center">
@@ -686,7 +734,7 @@
               </Sequence>
             </If.Then>
             <If.Else>
-              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_44" Level="Error" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings: FAILURE : 1.Load statergy label exist condition - &quot; +isLoadStatergyLabelPresent.ToString+ &#xD;&#xA;&quot;2.Append All radio button exist condition - &quot; +isAppendAllRadioButtonPresent.ToString+&#xD;&#xA;&quot;3.Save button for load statergy exist condition - &quot; +isSaveButtonPresentForLoadStatergy.ToString]" />
+              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_44" Level="Error" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings: FAILURE : 1.Load statergy label exist condition - &quot; +isLoadStatergyLabelPresent.ToString+ &#xA;&quot;2.Append All radio button exist condition - &quot; +isAppendAllRadioButtonPresent.ToString+&#xA;&quot;3.Save button for load statergy exist condition - &quot; +isSaveButtonPresentForLoadStatergy.ToString]" />
             </If.Else>
           </If>
           <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
@@ -726,7 +774,7 @@
     <If Condition="[isMemoryOptimizationLabelPresent And&#xA;isChooseBoostLevelLabelPresent And&#xA;isBoostLevelDropDownPresent And&#xA;isSaveButtonForBoostLevelPresent]" sap2010:WorkflowViewState.IdRef="If_32">
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_30">
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_50" Level="Info" Message="D_Data_TCNo_35  to 49_AdvanceSettings: SUCESS : 1.Memory optimization label present.&#xD;&#xA;2.Choose boost level label present.&#xD;&#xA;3.Choose boost level drop down present.&#xD;&#xA;4.Save button for choose boost level present." />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_50" Level="Info" Message="D_Data_TCNo_35  to 49_AdvanceSettings: SUCESS : 1.Memory optimization label present.&#xA;2.Choose boost level label present.&#xA;3.Choose boost level drop down present.&#xA;4.Save button for choose boost level present." />
           <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="500" DelayBefore="1000" DisplayName="Select item 'SELECT'" sap2010:WorkflowViewState.IdRef="SelectItem_12" Item="Level 11">
             <ui:SelectItem.Items>
               <scg:List x:TypeArguments="x:String" Capacity="16">
@@ -769,7 +817,7 @@
         </Sequence>
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_51" Level="Error" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings: FAILURE: 1.Memory optimization label exist condition - &quot; +isMemoryOptimizationLabelPresent.ToString+ &#xD;&#xA;&quot;2.Choose boost level label exist condition - &quot; +isChooseBoostLevelLabelPresent.ToString+&#xD;&#xA;&quot;3.Choose boost lavel drop down exist condition - &quot; +isBoostLevelDropDownPresent.ToString+&#xD;&#xA;&quot;4.Save button for boost lavel exist condition - &quot;+isSaveButtonForBoostLevelPresent.ToString]" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_51" Level="Error" Message="[&quot;D_Data_TCNo_35  to 49_AdvanceSettings: FAILURE: 1.Memory optimization label exist condition - &quot; +isMemoryOptimizationLabelPresent.ToString+ &#xA;&quot;2.Choose boost level label exist condition - &quot; +isChooseBoostLevelLabelPresent.ToString+&#xA;&quot;3.Choose boost lavel drop down exist condition - &quot; +isBoostLevelDropDownPresent.ToString+&#xA;&quot;4.Save button for boost lavel exist condition - &quot;+isSaveButtonForBoostLevelPresent.ToString]" />
       </If.Else>
     </If>
     <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
@@ -780,17 +828,25 @@
         <InArgument x:TypeArguments="x:String" x:Key="TC_No" xml:space="preserve">D_Data_TCNo_35  to 49_AdvanceSettings:</InArgument>
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
-    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="Generic\regressionReport.xaml">
-      <ui:InvokeWorkflowFile.Arguments>
-        <InArgument x:TypeArguments="x:String" x:Key="folderPath">C:\Users\10642593\AppData\Local\UiPath\Logs</InArgument>
-        <InArgument x:TypeArguments="x:String" x:Key="regressionReportPath">["D:\Mosaic_RegressionSuite_UIPath1\Mosaic_RegressionSuite_UIPath\Reports\DataSource\ConfigurationTab\Adv Settings\AdvSettings"+System.DateTime.Now.ToString("yyyy_MM_dd-HH_mm").ToString+".txt"]</InArgument>
-      </ui:InvokeWorkflowFile.Arguments>
-    </ui:InvokeWorkflowFile>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <ui:CommentOut DisplayName="Comment out">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities">
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="Generic\regressionReport.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="folderPath">C:\Users\10642593\AppData\Local\UiPath\Logs</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="regressionReportPath">["D:\Mosaic_RegressionSuite_UIPath1\Mosaic_RegressionSuite_UIPath\Reports\DataSource\ConfigurationTab\Adv Settings\AdvSettings"+System.DateTime.Now.ToString("yyyy_MM_dd-HH_mm").ToString+".txt"]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <sap2010:WorkflowViewState.IdRef>Sequence_41</sap2010:WorkflowViewState.IdRef>
+        </Sequence>
+      </ui:CommentOut.Body>
+      <sap2010:WorkflowViewState.IdRef>CommentOut_1</sap2010:WorkflowViewState.IdRef>
+    </ui:CommentOut>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="1780,106" />
+      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="1824,106" />
       <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="314,106" />
       <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,361">
@@ -801,16 +857,24 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1780,509" />
-      <sap2010:ViewStateData Id="UiElementExists_8" sap:VirtualizedContainerService.HintSize="1419,106" />
-      <sap2010:ViewStateData Id="UiElementExists_13" sap:VirtualizedContainerService.HintSize="1419,106" />
-      <sap2010:ViewStateData Id="Click_8" sap:VirtualizedContainerService.HintSize="1419,106" />
-      <sap2010:ViewStateData Id="UiElementExists_9" sap:VirtualizedContainerService.HintSize="1419,106" />
-      <sap2010:ViewStateData Id="UiElementExists_10" sap:VirtualizedContainerService.HintSize="1419,106" />
-      <sap2010:ViewStateData Id="LogMessage_9" sap:VirtualizedContainerService.HintSize="1058,91" />
-      <sap2010:ViewStateData Id="SelectItem_3" sap:VirtualizedContainerService.HintSize="1058,134" />
-      <sap2010:ViewStateData Id="UiElementExists_11" sap:VirtualizedContainerService.HintSize="1058,106" />
-      <sap2010:ViewStateData Id="UiElementExists_12" sap:VirtualizedContainerService.HintSize="1058,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_7" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_35" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1824,509" />
+      <sap2010:ViewStateData Id="UiElementExists_8" sap:VirtualizedContainerService.HintSize="1463,106" />
+      <sap2010:ViewStateData Id="UiElementExists_13" sap:VirtualizedContainerService.HintSize="1463,106" />
+      <sap2010:ViewStateData Id="Click_8" sap:VirtualizedContainerService.HintSize="1463,106" />
+      <sap2010:ViewStateData Id="UiElementExists_9" sap:VirtualizedContainerService.HintSize="1463,106" />
+      <sap2010:ViewStateData Id="UiElementExists_10" sap:VirtualizedContainerService.HintSize="1463,106" />
+      <sap2010:ViewStateData Id="LogMessage_9" sap:VirtualizedContainerService.HintSize="1080,91" />
+      <sap2010:ViewStateData Id="SelectItem_3" sap:VirtualizedContainerService.HintSize="1080,134" />
+      <sap2010:ViewStateData Id="UiElementExists_11" sap:VirtualizedContainerService.HintSize="1080,106" />
+      <sap2010:ViewStateData Id="UiElementExists_12" sap:VirtualizedContainerService.HintSize="1080,106" />
       <sap2010:ViewStateData Id="LogMessage_10" sap:VirtualizedContainerService.HintSize="697,91" />
       <sap2010:ViewStateData Id="SelectItem_4" sap:VirtualizedContainerService.HintSize="697,134" />
       <sap2010:ViewStateData Id="Click_3" sap:VirtualizedContainerService.HintSize="314,106" />
@@ -841,8 +905,16 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_12" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_8" sap:VirtualizedContainerService.HintSize="1058,1228" />
-      <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="1080,1949">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_9" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_37" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_8" sap:VirtualizedContainerService.HintSize="1080,1228" />
+      <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="1102,1949">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -850,8 +922,16 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_13" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="1419,2101" />
-      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="1441,2955">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_8" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_36" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="1463,2101" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="1485,2955">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -859,16 +939,16 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_14" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="1780,3103" />
-      <sap2010:ViewStateData Id="UiElementExists_26" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_27" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="Click_9" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_28" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_32" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_33" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_34" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_35" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_29" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="1824,3103" />
+      <sap2010:ViewStateData Id="UiElementExists_26" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_27" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="Click_9" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_28" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_32" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_33" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_34" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_35" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_29" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="LogMessage_27" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="SelectItem_13" sap:VirtualizedContainerService.HintSize="314,134" />
       <sap2010:ViewStateData Id="SelectItem_11" sap:VirtualizedContainerService.HintSize="314,134" />
@@ -882,9 +962,17 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_31" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_20" sap:VirtualizedContainerService.HintSize="675,1007" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="675,87" />
-      <sap2010:ViewStateData Id="Sequence_17" sap:VirtualizedContainerService.HintSize="697,2572">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_10" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_38" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_20" sap:VirtualizedContainerService.HintSize="697,1007" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="697,87" />
+      <sap2010:ViewStateData Id="Sequence_17" sap:VirtualizedContainerService.HintSize="719,2572">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -892,11 +980,11 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_32" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_21" sap:VirtualizedContainerService.HintSize="1780,2720" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_2" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_46" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="UiElementExists_47" sap:VirtualizedContainerService.HintSize="675,68" />
+      <sap2010:ViewStateData Id="If_21" sap:VirtualizedContainerService.HintSize="1824,2720" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_2" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_46" sap:VirtualizedContainerService.HintSize="697,68" />
+      <sap2010:ViewStateData Id="UiElementExists_47" sap:VirtualizedContainerService.HintSize="697,68" />
       <sap2010:ViewStateData Id="LogMessage_55" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="Click_27" sap:VirtualizedContainerService.HintSize="314,68" />
       <sap2010:ViewStateData Id="Sequence_33" sap:VirtualizedContainerService.HintSize="336,323">
@@ -907,26 +995,42 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_56" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_35" sap:VirtualizedContainerService.HintSize="675,471" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_3" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="GetValue_8" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_5" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_49" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_6" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_50" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_7" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="UiElementExists_51" sap:VirtualizedContainerService.HintSize="675,68" />
-      <sap2010:ViewStateData Id="LogMessage_57" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="LogMessage_58" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_36" sap:VirtualizedContainerService.HintSize="675,243" />
-      <sap2010:ViewStateData Id="Sequence_32" sap:VirtualizedContainerService.HintSize="697,2402">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_11" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_39" sap:VirtualizedContainerService.HintSize="336,342">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_34" sap:VirtualizedContainerService.HintSize="719,2526">
+      <sap2010:ViewStateData Id="If_35" sap:VirtualizedContainerService.HintSize="697,490" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_3" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="GetValue_8" sap:VirtualizedContainerService.HintSize="697,68" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_5" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_49" sap:VirtualizedContainerService.HintSize="697,68" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_6" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_50" sap:VirtualizedContainerService.HintSize="697,68" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_7" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_51" sap:VirtualizedContainerService.HintSize="697,68" />
+      <sap2010:ViewStateData Id="LogMessage_57" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_58" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_12" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_40" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_36" sap:VirtualizedContainerService.HintSize="697,494" />
+      <sap2010:ViewStateData Id="Sequence_32" sap:VirtualizedContainerService.HintSize="719,2672">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_34" sap:VirtualizedContainerService.HintSize="741,2796">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -934,7 +1038,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_54" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_34" sap:VirtualizedContainerService.HintSize="1780,2674" />
+      <sap2010:ViewStateData Id="If_34" sap:VirtualizedContainerService.HintSize="1824,2944" />
       <sap2010:ViewStateData Id="UiElementExists_36" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="UiElementExists_37" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="UiElementExists_38" sap:VirtualizedContainerService.HintSize="675,106" />
@@ -959,7 +1063,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_42" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_26" sap:VirtualizedContainerService.HintSize="1780,1496" />
+      <sap2010:ViewStateData Id="If_26" sap:VirtualizedContainerService.HintSize="1824,1496" />
       <sap2010:ViewStateData Id="UiElementExists_39" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="UiElementExists_40" sap:VirtualizedContainerService.HintSize="675,106" />
       <sap2010:ViewStateData Id="UiElementExists_41" sap:VirtualizedContainerService.HintSize="675,106" />
@@ -984,33 +1088,70 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_45" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_29" sap:VirtualizedContainerService.HintSize="1780,1496" />
-      <sap2010:ViewStateData Id="UiElementExists_42" sap:VirtualizedContainerService.HintSize="1780,106" />
-      <sap2010:ViewStateData Id="UiElementExists_43" sap:VirtualizedContainerService.HintSize="1780,106" />
-      <sap2010:ViewStateData Id="UiElementExists_44" sap:VirtualizedContainerService.HintSize="1780,106" />
-      <sap2010:ViewStateData Id="UiElementExists_45" sap:VirtualizedContainerService.HintSize="1780,106" />
+      <sap2010:ViewStateData Id="If_29" sap:VirtualizedContainerService.HintSize="1824,1496" />
+      <sap2010:ViewStateData Id="UiElementExists_42" sap:VirtualizedContainerService.HintSize="1824,106" />
+      <sap2010:ViewStateData Id="UiElementExists_43" sap:VirtualizedContainerService.HintSize="1824,106" />
+      <sap2010:ViewStateData Id="UiElementExists_44" sap:VirtualizedContainerService.HintSize="1824,106" />
+      <sap2010:ViewStateData Id="UiElementExists_45" sap:VirtualizedContainerService.HintSize="1824,106" />
       <sap2010:ViewStateData Id="LogMessage_50" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="SelectItem_12" sap:VirtualizedContainerService.HintSize="314,134" />
       <sap2010:ViewStateData Id="Click_25" sap:VirtualizedContainerService.HintSize="314,106" />
       <sap2010:ViewStateData Id="Sequence_30" sap:VirtualizedContainerService.HintSize="336,535">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_51" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_32" sap:VirtualizedContainerService.HintSize="1780,687" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="1780,87" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_6" sap:VirtualizedContainerService.HintSize="1780,87" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1802,14033">
+      <sap2010:ViewStateData Id="If_32" sap:VirtualizedContainerService.HintSize="1824,687">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="1824,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_6" sap:VirtualizedContainerService.HintSize="314,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_41" sap:VirtualizedContainerService.HintSize="336,211">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="configuration_AdvSettings_1" sap:VirtualizedContainerService.HintSize="1842,14273" />
+      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="1824,289" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1846,14505">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="configuration_AdvSettings_1" sap:VirtualizedContainerService.HintSize="1886,14585">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>
+            <x:Boolean x:Key="ShouldCollapseAll">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
