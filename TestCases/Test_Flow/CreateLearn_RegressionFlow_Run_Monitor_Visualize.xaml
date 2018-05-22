@@ -86,7 +86,7 @@
           <FlowStep x:Name="__ReferenceID13" sap2010:WorkflowViewState.IdRef="FlowStep_29">
             <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke NavigateToFlowPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_13" UnSafe="False" WorkflowFileName="FlowPage\NavigateToFlowPage.xaml">
               <ui:InvokeWorkflowFile.Arguments>
-                <InArgument x:TypeArguments="x:String" x:Key="LogReportFilePath">[LogReportPATH]</InArgument>
+                <InArgument x:TypeArguments="x:String" x:Key="PeriodicOrStreams" />
               </ui:InvokeWorkflowFile.Arguments>
             </ui:InvokeWorkflowFile>
             <FlowStep.Next>
@@ -94,7 +94,6 @@
                 <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke ConfigureNewFlow workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_14" UnSafe="False" WorkflowFileName="FlowPage\ConfigureNewFlow.xaml">
                   <ui:InvokeWorkflowFile.Arguments>
                     <OutArgument x:TypeArguments="x:String" x:Key="FlowName">[FlowName]</OutArgument>
-                    <InArgument x:TypeArguments="x:String" x:Key="LogReportPath">[LogReportPATH]</InArgument>
                   </ui:InvokeWorkflowFile.Arguments>
                 </ui:InvokeWorkflowFile>
                 <FlowStep.Next>
@@ -155,6 +154,7 @@
                                                 <InArgument x:TypeArguments="x:String" x:Key="DS_nameToMap" />
                                                 <InArgument x:TypeArguments="x:String" x:Key="field1ToMap" />
                                                 <InArgument x:TypeArguments="x:String" x:Key="field2ToMap" />
+                                                <InArgument x:TypeArguments="x:String" x:Key="TC_No" />
                                               </ui:InvokeWorkflowFile.Arguments>
                                             </ui:InvokeWorkflowFile>
                                             <FlowStep.Next>
@@ -164,13 +164,14 @@
                                                     <InOutArgument x:TypeArguments="x:String" x:Key="sourceName">[FlowName]</InOutArgument>
                                                     <InArgument x:TypeArguments="x:String" x:Key="RunningTabFilteredResult" />
                                                     <InArgument x:TypeArguments="x:String" x:Key="LogReportPath">[LogReportPATH]</InArgument>
+                                                    <InOutArgument x:TypeArguments="x:Boolean" x:Key="JobStatusMonitorPage" />
                                                   </ui:InvokeWorkflowFile.Arguments>
                                                 </ui:InvokeWorkflowFile>
                                                 <FlowStep.Next>
                                                   <FlowStep x:Name="__ReferenceID2" sap2010:WorkflowViewState.IdRef="FlowStep_19">
                                                     <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke NavigateToFlowPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_21" UnSafe="False" WorkflowFileName="FlowPage\NavigateToFlowPage.xaml">
                                                       <ui:InvokeWorkflowFile.Arguments>
-                                                        <InArgument x:TypeArguments="x:String" x:Key="LogReportFilePath">[LogReportPATH]</InArgument>
+                                                        <InArgument x:TypeArguments="x:String" x:Key="PeriodicOrStreams" />
                                                       </ui:InvokeWorkflowFile.Arguments>
                                                     </ui:InvokeWorkflowFile>
                                                     <FlowStep.Next>
@@ -179,7 +180,8 @@
                                                           <ui:InvokeWorkflowFile.Arguments>
                                                             <InArgument x:TypeArguments="x:String" x:Key="FlowName">[FlowName]</InArgument>
                                                             <InArgument x:TypeArguments="x:Boolean" x:Key="Should_i_Click_FilteredFlow">True</InArgument>
-                                                            <InArgument x:TypeArguments="x:String" x:Key="LogReportPath">[LogReportPATH]</InArgument>
+                                                            <InArgument x:TypeArguments="x:String" x:Key="TC_No_ForClickFilteredFlow" />
+                                                            <InArgument x:TypeArguments="x:String" x:Key="TC_ID_ToMatchFilteredFlowName" />
                                                           </ui:InvokeWorkflowFile.Arguments>
                                                         </ui:InvokeWorkflowFile>
                                                         <FlowStep.Next>
@@ -265,7 +267,7 @@
     <x:Reference>__ReferenceID13</x:Reference>
     <x:Reference>__ReferenceID14</x:Reference>
     <x:Reference>__ReferenceID15</x:Reference>
-    <sads:DebugSymbol.Symbol>d3FEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcVGVzdENhc2VzXFRlc3RfRmxvd1xDcmVhdGVMZWFybl9SZWdyZXNzaW9uRmxvd19SdW5fTW9uaXRvcl9WaXN1YWxpemUueGFtbDVHA40CDwIBAUk0SXUCAQJNCVQSAgFDVw1bJQIBP14RYykCATlmFWotAgE2bRl0IgIBMncdezUCAS5+IYIBOQIBKoUBJYwBLgIBJo8BKZQBQQIBIJcBLZ8BRQIBHqIBMagBSQIBGKsBNa8BTQIBFLIBObgBUQIBDbsBPcABVQIBCMMBQdMBUQIBB9YBRdsBXQIBA1I0UqkBAgFGTzVPRAIBRFlSWWECAUFXyAFX6gECAUBhUmFhAgE9YE5gWAIBO17KAV7qAQIBOmhXaGYCAThm0QFm9AECATdyRHJOAgE1b0VvVAIBM3lfeW4CATB32gF3/gECAS+AAWeAAXYCASx+6gF+mgICASuKAVCKAWECASmHAVGHAWQCASeSAXiSAYsBAgEkkQFqkQF5AgEijwHqAY8BkgICASGXAewBlwGSAgIBH6QBcqQBfAIBHKYBcqYBgQECARqiAeUBogGDAgIBGa0Beq0BiQECARarAfABqwGSAgIBFbYBerYBiQECARK0AXW0AX8CARCyAewBsgGGAgIBD7UBiQG1AY0BAgEOvgF2vgF5AgEMvQGGAb0BmAECAQq7AfABuwGKAgIBCdkBjQHZAZwBAgEF1gH+AdYBnQICAQQ=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d3FEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcVGVzdENhc2VzXFRlc3RfRmxvd1xDcmVhdGVMZWFybl9SZWdyZXNzaW9uRmxvd19SdW5fTW9uaXRvcl9WaXN1YWxpemUueGFtbDFHA48CDwIBAUk0SXUCAQJNCVQSAgE7Vw1bJQIBOV4RYikCATVlFWktAgEybBlzIgIBLnYdejUCASp9IYEBOQIBJoQBJYsBLgIBIo4BKZMBQQIBHJYBLZ8BRQIBGqIBMakBSQIBFKwBNbABTQIBErMBOboBUQIBDb0BPcIBVQIBCMUBQdUBUQIBB9gBRd0BXQIBA1I0UqkBAgE+TzVPRAIBPFfIAVfqAQIBOmBOYFgCATdeygFe6gECATZnV2dmAgE0ZdEBZfQBAgEzcURxTgIBMW5FblQCAS94X3huAgEsdtoBdv4BAgErf2d/dgIBKH3qAX2aAgIBJ4kBUIkBYQIBJYYBUYYBZAIBI5EBeJEBiwECASCQAWqQAXkCAR6OAeoBjgGSAgIBHZYB7AGWAZICAgEbpAFypAF8AgEYpgFypgGBAQIBFqIB5QGiAYMCAgEVrAHwAawBkgICARO1AXW1AX8CARCzAewBswGGAgIBD7YBiQG2AY0BAgEOwAF2wAF5AgEMvwGGAb8BmAECAQq9AfABvQGKAgIBCdsBjQHbAZwBAgEF2AH+AdgBnQICAQQ=</sads:DebugSymbol.Symbol>
   </Flowchart>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -544,7 +546,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CreateLearn_RegressionFlow_Run_Monitor_Visualize_1" sap:VirtualizedContainerService.HintSize="767,1146" />
+      <sap2010:ViewStateData Id="CreateLearn_RegressionFlow_Run_Monitor_Visualize_1" sap:VirtualizedContainerService.HintSize="767,1106" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

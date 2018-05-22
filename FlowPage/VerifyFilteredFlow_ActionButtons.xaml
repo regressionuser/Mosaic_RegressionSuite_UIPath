@@ -105,8 +105,7 @@
     </ui:CommentOut>
     <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke NavigateToFlowPage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="FlowPage\NavigateToFlowPage.xaml">
       <ui:InvokeWorkflowFile.Arguments>
-        <InArgument x:TypeArguments="x:String" x:Key="LogReportFilePath" />
-        <InArgument x:TypeArguments="x:String" x:Key="PeriodicOrStreams">[PeriodicOrStreams]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="PeriodicOrStreams" />
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
     <ui:UiElementExists DisplayName="Verify if flow filter is present" Exists="[FlowFilter]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
@@ -116,10 +115,18 @@
     </ui:UiElementExists>
     <If Condition="[FlowFilter]" DisplayName="If (Flow filter is present)" sap2010:WorkflowViewState.IdRef="If_1">
       <If.Then>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Trace" Message="SUCCESS: Flow filter exists on Screen" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Trace" Message="FLOW_GENERIC_SUCCESS: Flow filter exists on Screen" />
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="FAILED: Not able to find Flow filter on the screen" />
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="FLOW_GENERIC_FAILED: Not able to find Flow filter on the screen" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Flow_P_FlowFilterForActionButtonsNotfound</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
       </If.Else>
     </If>
     <ui:TypeInto DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayBefore="2000" DisplayName="Type into FlowName" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="[FlowName]">
@@ -150,7 +157,19 @@
             <Variable x:TypeArguments="swa:ElementNotAvailableException" Name="FilteredException" />
           </Sequence.Variables>
           <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="FAILED: TERMINATING FLOW: Could not filter flow successfully" />
-          <TerminateWorkflow DisplayName="Terminate workflow" Exception="[FilteredException]" sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Flow_P_Generic_FlowFilterError</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_2">
+            <ui:CommentOut.Body>
+              <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_4">
+                <TerminateWorkflow DisplayName="Terminate workflow" Exception="[FilteredException]" sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" />
+              </Sequence>
+            </ui:CommentOut.Body>
+          </ui:CommentOut>
         </Sequence>
       </If.Else>
     </If>
@@ -196,10 +215,26 @@
     </ui:ImageFound>
     <If Condition="[Is_RunFlowButtonDisplayed and Is_CloneFlowButtonDisplayed and Is_ExportFlowButtonDisplayed and Is_ScheduleFlowButtonDisplayed and Is_DeleteFlowButtonDisplayed]" DisplayName="If (Verify if all buttons are present)" sap2010:WorkflowViewState.IdRef="If_3">
       <If.Then>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_4_SUCCESS: All Action Buttons Verified Successfully. Below are the details: &quot;+vbNewLine+&#xA;&quot;Status Of Run button On UI Is: &quot;+Is_RunFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Clone button on UI is: &quot;+Is_CloneFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Export button on UI is: &quot;+Is_ExportFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Schedule button on UI is: &quot;+Is_ScheduleFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Delete button on UI is: &quot;+Is_DeleteFlowButtonDisplayed.ToString]" />
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_4_SUCCESS: All Action Buttons Verified Successfully. Below are the details: &quot;+vbNewLine+&#xA;&quot;Status Of Run button On UI Is: &quot;+Is_RunFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Clone button on UI is: &quot;+Is_CloneFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Export button on UI is: &quot;+Is_ExportFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Schedule button on UI is: &quot;+Is_ScheduleFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Delete button on UI is: &quot;+Is_DeleteFlowButtonDisplayed.ToString]" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Flow_P_TC4_ActionsButtonsValidationSuccess</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">True</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="[&quot;D_FLow_periodic_TCNo_4_FAILED: Error in finding either one or more below Action buttons on UI &quot; +vbNewLine+&#xA;&quot;Status of Run button on UI is: &quot;+Is_RunFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Clone button on UI is: &quot;+Is_CloneFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Export button on UI is: &quot;+Is_ExportFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Schedule button on UI is: &quot;+Is_ScheduleFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Delete button on UI is: &quot;+Is_DeleteFlowButtonDisplayed.ToString]" />
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="[&quot;D_FLow_periodic_TCNo_4_FAILED: Error in finding either one or more below Action buttons on UI &quot; +vbNewLine+&#xA;&quot;Status of Run button on UI is: &quot;+Is_RunFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Clone button on UI is: &quot;+Is_CloneFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Export button on UI is: &quot;+Is_ExportFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Schedule button on UI is: &quot;+Is_ScheduleFlowButtonDisplayed.ToString +vbNewLine+&#xA;&quot;Status of Delete button on UI is: &quot;+Is_DeleteFlowButtonDisplayed.ToString]" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Flow_P_TC4_ActionsButtonsValidationFailure</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
       </If.Else>
     </If>
     <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke ExportFlow workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="FlowPage\ExportFlow.xaml">
@@ -207,12 +242,27 @@
         <scg:Dictionary x:TypeArguments="x:String, Argument" />
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'INPUT'" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="806e4987c040617e264bf200cdcc23ec" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='INPUT' type='text' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
     <ui:TypeInto DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayBefore="2000" DisplayName="Type into FlowName" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_2" SendWindowMessages="False" SimulateType="False" Text="[FlowName]">
       <ui:TypeInto.Target>
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d8b2807502e51f8e313e245cef6263c0" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='top' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:TypeInto.Target>
     </ui:TypeInto>
-    <sads:DebugSymbol.Symbol>d1ZEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcVmVyaWZ5RmlsdGVyZWRGbG93X0FjdGlvbkJ1dHRvbnMueGFtbEgBjgEBlwEBAkcD2AEOAgEBUgVpFQIBWmoFbx0CAVZwBXQaAgFRdQV8CgIBSn0FgQETAgFFggEFhgEeAgFDhwEFjgEXAgE+jwEFnAEKAgEynQEFpAEVAgEspQEFrAEVAgEmrQEFtAEVAgEgtQEFvAEVAgEavQEFxAEVAgEUxQEFzAEKAgEJzQEF0QEdAgEH0gEF1gETAgECbUptXQIBWGq/AWrhAQIBV3KDAXLfAQIBVXLqAXLwAQIBVHBPcF0CAVJ1E3UhAgFLdwl3oQECAU96CXquAQIBTX+YAX/0AQIBSX2TAn2fAgIBR312fXwCAUaEAZgBhAH1AQIBRIcBO4cBQwIBQYkBMYkBQwIBP4wBmAGMAfUBAgFCjwETjwE/AgEzkQEJkQHdAQIBO5QBCZoBFAIBNqIBSqIBegIBMaIBhQGiAYsBAgEwnQFDnQFgAgEunwEznwE4AgEtqgFKqgF6AgErqgGFAaoBiwECASqlAUWlAWQCASinATOnATgCASeyAUqyAXoCASWyAYUBsgGLAQIBJK0BRq0BZgIBIq8BM68BOAIBIboBSroBegIBH7oBhQG6AYsBAgEetQFItQFqAgEctwEztwE4AgEbwgFKwgF6AgEZwgGFAcIBiwECARi9AUa9AWYCARa/ATO/ATgCARXFARPFAbUBAgEKxwEJxwHeBQIBEsoBCcoB3QUCARDNAbcBzQHRAQIBCNQBmAHUAfQBAgEG0gGSAtIBngICAQTSAXbSAXwCAQN3d3eeAQIBUHp3eqsBAgFOkQF2kQHaAQIBPJgBC5gBugECATmZAQuZAZcBAgE3xwF2xwHbBQIBE8oBd8oB2gUCARGYAXmYAbcBAgE6mQFJmQFeAgE4</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1ZEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcVmVyaWZ5RmlsdGVyZWRGbG93X0FjdGlvbkJ1dHRvbnMueGFtbFsBjgEBlwEBAkcDigIOAgEBUgVpFQIBbGoFbh0CAWpvBXMaAgFldAWDAQoCAVmEAQWIARMCAVSJAQWNAR4CAVKOAQWVARcCAU2WAQWvAQoCAT6wAQW3ARUCATi4AQW/ARUCATLAAQXHARUCASzIAQXPARUCASbQAQXXARUCASDYAQXvAQoCAQvwAQX0AR0CAQn1AQWDAhACAQeEAgWIAhMCAQJqvwFq4QECAWtxgwFx3wECAWlx6gFx8AECAWhvT29dAgFmdBN0IQIBWnYJdq4BAgFjeQmBARQCAVyGAZgBhgH0AQIBWIQBkwKEAZ8CAgFWhAF2hAF8AgFViwGYAYsB9QECAVOOATuOAUMCAVCQATGQAUMCAU6TAZgBkwH1AQIBUZYBE5YBPwIBP5gBCZgB3QECAUqbAQmtARQCAUK1AUq1AXoCAT21AYUBtQGLAQIBPLABQ7ABYAIBOrIBM7IBOAIBOb0BSr0BegIBN70BhQG9AYsBAgE2uAFFuAFkAgE0ugEzugE4AgEzxQFKxQF6AgExxQGFAcUBiwECATDAAUbAAWYCAS7CATPCATgCAS3NAUrNAXoCASvNAYUBzQGLAQIBKsgBSMgBagIBKMoBM8oBOAIBJ9UBStUBegIBJdUBhQHVAYsBAgEk0AFG0AFmAgEi0gEz0gE4AgEh2AET2AG1AQIBDNoBCeIBFAIBGeUBCe0BFAIBEvABtwHwAdEBAgEKgQKYAYEC8QECAQiGApgBhgL0AQIBBoQCkgKEAp4CAgEEhAJ2hAJ8AgEDdnd2qwECAWR6C3q9AQIBYXsLgAEjAgFdmAF2mAHaAQIBS58BC58BugECAUigAQulASMCAUSmAQusARsCAUPbAQvbAeAFAgEe3AEL4QEjAgEa5gEL5gHfBQIBF+cBC+wBIwIBE3p5eroBAgFifUx9dQIBYH5RflYCAV97wQF73gECAV6fAXmfAbcBAgFJogFMogFqAgFHowFRowFWAgFGoAHBAaAB3gECAUXbAXjbAd0FAgEf3gFM3gF2AgEd3wFR3wFVAgEc3AHBAdwB3gECARvmAXnmAdwFAgEY6QFM6QF2AgEW6gFR6gFWAgEV5wHBAecB3gECARQ=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -224,7 +274,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="675,51">
+      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="697,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -232,30 +282,54 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="675,87" />
-      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="675,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="697,87" />
+      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="675,239" />
-      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="675,134" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="GetAttribute_1" sap:VirtualizedContainerService.HintSize="675,134" />
-      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="314,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,277">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,342">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="675,425" />
-      <sap2010:ViewStateData Id="ImageFound_1" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="ImageFound_2" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="ImageFound_3" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="ImageFound_4" sap:VirtualizedContainerService.HintSize="675,106" />
-      <sap2010:ViewStateData Id="ImageFound_5" sap:VirtualizedContainerService.HintSize="675,106">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="697,490" />
+      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="697,134" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="GetAttribute_1" sap:VirtualizedContainerService.HintSize="697,134" />
+      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_4" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="222,146">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_2" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,433">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="697,581" />
+      <sap2010:ViewStateData Id="ImageFound_1" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="ImageFound_2" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="ImageFound_3" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="ImageFound_4" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="ImageFound_5" sap:VirtualizedContainerService.HintSize="697,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -264,18 +338,35 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="LogMessage_6" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="675,239" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="675,87" />
-      <sap2010:ViewStateData Id="TypeInto_2" sap:VirtualizedContainerService.HintSize="675,134" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="697,2996">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="336,342">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="VerifyFilteredFlow_ActionButtons_1" sap:VirtualizedContainerService.HintSize="737,3196" />
+      <sap2010:ViewStateData Id="LogMessage_6" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_6" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="697,490" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="697,87" />
+      <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="TypeInto_2" sap:VirtualizedContainerService.HintSize="697,134" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="719,3800">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="VerifyFilteredFlow_ActionButtons_1" sap:VirtualizedContainerService.HintSize="759,3880" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
