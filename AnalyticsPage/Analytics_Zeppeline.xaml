@@ -120,7 +120,35 @@
       <Variable x:TypeArguments="x:Boolean" Name="element_ClearPopUp" />
       <Variable x:TypeArguments="x:Boolean" Name="element_CancelButton_OnClearPopup" />
       <Variable x:TypeArguments="x:Boolean" Name="element_OKButton_OnClearPopUp" />
+      <Variable x:TypeArguments="x:Boolean" Name="element_MessageBoxContainer" />
+      <Variable x:TypeArguments="x:String" Default="[&quot;ZeppelineDown_&quot;+randomNo]" Name="screenShotName" />
     </Sequence.Variables>
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_2">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_22">
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Login To Mosaic" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="LoginPage\LoginToApp.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="validation" />
+              <InArgument x:TypeArguments="x:Boolean" x:Key="functionality">True</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="correctUser">amol.adkitte@lntinfotech.com</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="correctPassword">Test@1234</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="ApplicationURL" />
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_3">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_23">
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="call_Select Project" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="ProjectPage\SelectProject.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="projectName">Sanity_UiPath</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
     <ui:WaitUiElementAppear DisplayName="find_AnalyticsMenuItem" FoundElement="[element_AnalyticsMenuItem]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_1" WaitActive="True" WaitVisible="True">
       <ui:WaitUiElementAppear.Target>
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="5dc3fc829b69397235ee2a1be6de9617" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='sidebar' tag='A' href='#/notebooks' parentclass='sidebar-ul' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
@@ -141,6 +169,45 @@
         <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_AnalyticsMenuItem]" WaitForReady="INTERACTIVE" />
       </ui:Click.Target>
     </ui:Click>
+    <ui:UiElementExists DisplayName="Element Exists" Exists="[element_MessageBoxContainer]" sap2010:WorkflowViewState.IdRef="UiElementExists_30">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="ad55a10473190edf2295f56fd25ab73e" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[element_MessageBoxContainer.ToString.Equals(&quot;True&quot;)]" sap2010:WorkflowViewState.IdRef="If_19">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_21">
+          <Delay Duration="00:00:05" sap2010:WorkflowViewState.IdRef="Delay_1" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_9" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">[screenShotName]</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Verify_Message workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_8" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">java.lang.IllegalArgumentException: URI is not absolute</InArgument>
+              <OutArgument x:TypeArguments="x:Boolean" x:Key="flag" />
+              <OutArgument x:TypeArguments="x:String" x:Key="out_actualMessage" />
+              <InArgument x:TypeArguments="x:String" x:Key="TC_No" />
+              <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_35" Level="Error" Message="[&quot;Zeppeline is Down, notified to support team &quot;+Environment.CurrentDirectory.ToString+&quot;\Screenshots\FailedScreenshot\&quot;+screenShotName+System.DateTime.Now.ToString(&quot;yyyy_MM_dd-HH&quot;)+&quot;.png&quot;]" />
+          <ui:SendOutlookMail Account="{x:Null}" Bcc="{x:Null}" Cc="{x:Null}" MailMessage="{x:Null}" TimeoutMS="{x:Null}" Body="[&quot;Hi Team,&quot;+vbNewLine+&#xD;&#xA;        &quot;We are creating Notebook with Zeppeline but Zeppline is Down, PFA screenshot for same&quot; +vbNewLine+&#xD;&#xA;&quot;&quot;+vbNewLine+&#xD;&#xA;&quot;&quot;+vbNewLine+&#xD;&#xA;&quot;Thanks,&quot;+vbNewLine+&#xD;&#xA;&quot;Automation Team&quot;]" DisplayName="Send Outlook Mail Message" sap2010:WorkflowViewState.IdRef="SendOutlookMail_1" IsBodyHtml="False" IsDraft="False" Subject="ERROR : Zeppeline is Down" To="amol.adkitte@lntinfotech.com">
+            <ui:SendOutlookMail.Files>
+              <scg:List x:TypeArguments="InArgument(x:String)" Capacity="4">
+                <InArgument x:TypeArguments="x:String">[Environment.CurrentDirectory.ToString+"\Screenshots\FailedScreenshot\"+screenShotName+System.DateTime.Now.ToString("yyyy_MM_dd-HH")+".png"]</InArgument>
+              </scg:List>
+            </ui:SendOutlookMail.Files>
+          </ui:SendOutlookMail>
+          <TerminateWorkflow DisplayName="Terminate workflow" sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" Reason="Zeppeline Down" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_36" Level="Error" Message="Zeppeline is Up " />
+      </If.Else>
+    </If>
     <ui:WaitUiElementAppear DisplayName="element_AnalyticsZeppeline_ZeppelineTab" FoundElement="[element_AnalyticsZeppeline_ZeppelineTab]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_10" WaitActive="True" WaitVisible="True">
       <ui:WaitUiElementAppear.Target>
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="afbc128c8f38914c4547cb8bfd7234c7" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Zeppelin' parentid='app' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
@@ -824,12 +891,67 @@
         <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_27" Level="Error" Message="[&quot;D_Analytics-zeppline_1 to 9_Zeppline : FAILURE :Clear pop up does not displays.&quot; +element_ClearPopUp.ToString]" />
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>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A02dA2MDAaYCpAOPAaQDiwIDAaQCpAOWAqQDnAIDAaMCogNPogNnAwGhAqkDjwGpA8gCAwGfAqkD0wKpA9kCAwGeAqcDV6cDdwMBnAKuA48BrgPIAgMBmgKuA9MCrgPZAgMBmQKsA1SsA3EDAZcCswOPAbMDyAIDAZUCswPTArMD2QIDAZQCsQNSsQNtAwGSArgDjwG4A8gCAwGQArgD0wK4A9kCAwGPArYDU7YDbwMBjQK9A48BvQP5AQMBiwK9A4QCvQOKAgMBigK7A1O7A28DAYgCwgOPAcIDrgMDAYYCwgO5A8IDvwMDAYUCwANOwANlAwGDAscDjwHHA9gCAwGBAscD4wLHA+kCAwGAAsUDVcUDcwMB/gHMA48BzAOWAwMB/AHMA6EDzAOnAwMB+wHKA1fKA3cDAfkB0QOPAdEDsQIDAfcB0QO8AtEDwgIDAfYBzwNRzwNrAwH0AdYDjwHWA7ECAwHyAdYDvALWA8ICAwHxAdQDXNQDgQEDAe8B2wOPAdsDlAIDAe0B2wOfAtsDpQIDAewB2QNS2QNtAwHqAeADjwHgA/EBAwHoAeAD/AHgA4ICAwHnAd4DTN4DYQMB5QHnBIAB5wTtAQMBhwGmBYABpgXuAQIBYQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_22" sap:VirtualizedContainerService.HintSize="336,211">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_2" sap:VirtualizedContainerService.HintSize="1036,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_6" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_23" sap:VirtualizedContainerService.HintSize="336,211">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_3" sap:VirtualizedContainerService.HintSize="1036,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="1036,106" />
       <sap2010:ViewStateData Id="Click_1" sap:VirtualizedContainerService.HintSize="1036,68" />
+      <sap2010:ViewStateData Id="UiElementExists_30" sap:VirtualizedContainerService.HintSize="1036,106" />
+      <sap2010:ViewStateData Id="Delay_1" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_9" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_8" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="LogMessage_35" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="SendOutlookMail_1" sap:VirtualizedContainerService.HintSize="314,145">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="Sequence_21" sap:VirtualizedContainerService.HintSize="336,778">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_36" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_19" sap:VirtualizedContainerService.HintSize="1036,926" />
       <sap2010:ViewStateData Id="WaitUiElementAppear_10" sap:VirtualizedContainerService.HintSize="1036,106" />
       <sap2010:ViewStateData Id="WaitUiElementAppear_11" sap:VirtualizedContainerService.HintSize="1036,106" />
       <sap2010:ViewStateData Id="WaitUiElementAppear_6" sap:VirtualizedContainerService.HintSize="1036,106" />
@@ -1005,7 +1127,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="1036,5710">
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="1036,5670">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
@@ -1526,14 +1648,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1058,16105">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1058,17359">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Analytics_Zeppeline_1" sap:VirtualizedContainerService.HintSize="1098,16185">
+      <sap2010:ViewStateData Id="Analytics_Zeppeline_1" sap:VirtualizedContainerService.HintSize="1098,17759">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="ShouldCollapseAll">False</x:Boolean>
