@@ -74,6 +74,7 @@
       <Variable x:TypeArguments="x:String" Name="get_FilteredRCP_DSName" />
       <Variable x:TypeArguments="ui:UiElement" Name="UiElement_OkayButton" />
       <Variable x:TypeArguments="ui:UiElement" Name="UiElement_CancelButton" />
+      <Variable x:TypeArguments="x:Boolean" Name="Is_RCPTypeDSTabDisplayed" />
     </Sequence.Variables>
     <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click data dropdown" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
       <ui:Click.CursorPosition>
@@ -134,10 +135,40 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="f9be385f10beefcad89a65023c4cb29f" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='RCP type datasources' parentid='tabs' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
       </ui:WaitUiElementAppear.Target>
     </ui:WaitUiElementAppear>
+    <ui:UiElementExists DisplayName="Element Exists" Exists="[Is_RCPTypeDSTabDisplayed]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[UiElement_RCPTypeDSTab]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[Is_RCPTypeDSTabDisplayed]" sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="D_FLow_periodic_TCNo_102: Success: RCP type Ds tab is displayed" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Flow_TC188_RCP_DS_TabIsDisplayed</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">True</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="D_FLow_periodic_TCNo_102: FAILED: RCP type Ds tab is not displayed" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Flow_TC188_RCP_DS_TabNotDisplayed</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
+      </If.Else>
+    </If>
     <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Click_OnElement workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\Click_OnElement.xaml">
       <ui:InvokeWorkflowFile.Arguments>
         <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[UiElement_RCPTypeDSTab]</InArgument>
         <InArgument x:TypeArguments="x:String" x:Key="elementName">UiElement_RCPTypeDSTab</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="TC_No">D_FLow_periodic_TCNo_102</InArgument>
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
     <ui:WaitUiElementAppear DisplayName="Find Element 'INPUT'" FoundElement="[UiElement_RCPFilter]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_2" WaitActive="False" WaitVisible="False">
@@ -149,6 +180,7 @@
       <ui:InvokeWorkflowFile.Arguments>
         <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[UiElement_RCPFilter]</InArgument>
         <InArgument x:TypeArguments="x:String" x:Key="elementName">UiElement_RCPFilter</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="TC_No">D_FLow_periodic_TCNo_102</InArgument>
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
     <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke EnterText_InTextBox workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Generic\EnterText_InTextBox.xaml">
@@ -156,6 +188,7 @@
         <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[UiElement_RCPFilter]</InArgument>
         <InArgument x:TypeArguments="x:String" x:Key="elementName">RCP_FilterBox</InArgument>
         <InArgument x:TypeArguments="x:String" x:Key="textToEnter">[RCP_DSName]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="TC_No">D_FLow_periodic_TCNo_102</InArgument>
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
     <ui:WaitUiElementAppear DisplayName="Find Element 'A  javascript:;'" FoundElement="[UiElement_FilteredRCP_DSName]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_4" WaitActive="False" WaitVisible="False">
@@ -173,10 +206,26 @@
     </ui:GetValue>
     <If Condition="[get_FilteredRCP_DSName.Contains(RCP_DSName)]" sap2010:WorkflowViewState.IdRef="If_1">
       <If.Then>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;SUCCESS: RCP DS filtered successfully. RCP DS filtered name is: &quot;+get_FilteredRCP_DSName+ &quot; While the searched RCP DS name was: &quot;+RCP_DSName]" />
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;D_FLow_periodic_TCNo_102_SUCCESS: RCP DS filtered successfully. RCP DS filtered name is: &quot;+get_FilteredRCP_DSName+ &quot; While the searched RCP DS name was: &quot;+RCP_DSName]" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_8" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Flow_TC188_RCP_DSfilteredSuccessfully</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">True</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[&quot;FAILED: Could not filter RCP DS. The filtered name is: &quot;+get_FilteredRCP_DSName+ &quot; While the searched RCP DS name was: &quot;+RCP_DSName]" />
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[&quot;D_FLow_periodic_TCNo_102_FAILED: Could not filter RCP DS. The filtered name is: &quot;+get_FilteredRCP_DSName+ &quot; While the searched RCP DS name was: &quot;+RCP_DSName]" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_9" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Flow_TC188_RCP_DSfilterFailure</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
       </If.Else>
     </If>
     <ui:WaitUiElementAppear DisplayName="Find Element 'SPAN'" FoundElement="[UiElement_ActionCheckBox]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_3" WaitActive="False" WaitVisible="False">
@@ -188,6 +237,7 @@
       <ui:InvokeWorkflowFile.Arguments>
         <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[UiElement_ActionCheckBox]</InArgument>
         <InArgument x:TypeArguments="x:String" x:Key="elementName">RCP_SelectActionBox</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="TC_No">D_FLow_periodic_TCNo_102</InArgument>
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
     <ui:WaitUiElementAppear DisplayName="Find Element Okay 'BUTTON'" FoundElement="[UiElement_OkayButton]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_5" WaitActive="False" WaitVisible="False">
@@ -204,13 +254,14 @@
       <ui:InvokeWorkflowFile.Arguments>
         <InArgument x:TypeArguments="ui:UiElement" x:Key="element">[UiElement_OkayButton]</InArgument>
         <InArgument x:TypeArguments="x:String" x:Key="elementName">Okay button- To Add the RCP DS in flow</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="TC_No">D_FLow_periodic_TCNo_102</InArgument>
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
-    <sads:DebugSymbol.Symbol>dz9EOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQWRkUkNQX0RTLnhhbWw5AVkBYgECQwPSAQ4CAQFHNEdaAgECTgVcEAIBS10FaxACAUhsBYMBFQIBR4QBBYgBHgIBQ4kBBY4BHQIBPo8BBZMBHgIBOpQBBZkBHQIBNZoBBaABHQIBLqEBBaUBHgIBKqYBBa0BEwIBJa4BBbUBCgIBGbYBBboBHgIBFbsBBcABHQIBEMEBBcUBHgIBDMYBBcoBHgIBCMsBBdABHQIBA1qYAVr7AgIBTGmYAWn8AQIBSl1HXU0CAUmEAUmEAWMCAUWGAZgBhgGPAgIBRIsBRIsBXAIBQYwBRIwBWgIBQIkBvAGJAdoBAgE/jwFNjwFkAgE8kQGYAZEBiAICATuWAUSWAVkCATiXAUSXAVcCATeUAbwBlAHaAQIBNpwBRJwBWQIBM54BRJ4BUAIBMZ0BRJ0BUQIBMJoBwAGaAeIBAgEvoQFXoQF3AgEsowGYAaMB+AECASurATGrAUkCASaoAV+oAX8CASiuAROuAUICARqwAQmwAZ4CAgEhswEJswGWAgIBHbYBTLYBaAIBF7gBmAG4AawDAgEWvQFEvQFeAgETvgFEvgFXAgESuwG8AbsB2gECARHBAVPBAWsCAQ7DAZgBwwGDAgIBDcYBVcYBbwIBCsgBmAHIAYUCAgEJzQFEzQFaAgEGzgFEzgFqAgEFywG8AcsB2gECAQSwAXawAZsCAgEiswF3swGTAgIBHg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dz9EOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcRmxvd1BhZ2VcQWRkUkNQX0RTLnhhbWxcAVkBYgECQwOFAg4CAQFHNEdaAgECTwVdEAIBcV4FbBACAW5tBYQBFQIBbYUBBYkBHgIBaYoBBY4BGgIBY48BBaYBCgIBUqcBBa0BHQIBTK4BBbIBHgIBSLMBBbkBHQIBQroBBcEBHQIBOsIBBcYBHgIBNscBBc4BEwIBMc8BBeYBCgIBG+cBBesBHgIBF+wBBfIBHQIBEfMBBfcBHgIBDfgBBfwBHgIBCf0BBYMCHQIBA1uYAVv7AgIBcmqYAWr8AQIBcF5HXk0CAW+FAUmFAWMCAWuHAZgBhwGPAgIBaowBb4wBdQIBaIoBPYoBWQIBZowBSowBZAIBZI8BE48BLwIBU5EBCZkBFAIBXJwBCaQBFAIBVakBRKkBXAIBUKoBRKoBWgIBT6sBPqsBVgIBTqcBvAGnAdoBAgFNrgFNrgFkAgFKsAGYAbABiAICAUm1AUS1AVkCAUa2AUS2AVcCAUW3AT63AVYCAUSzAbwBswHaAQIBQ7wBRLwBWQIBQL4BRL4BUAIBPr0BRL0BUQIBPb8BPr8BVgIBPLoBwAG6AeIBAgE7wgFXwgF3AgE4xAGYAcQB+AECATfMATHMAUkCATLJAV/JAX8CATTPARPPAUICARzRAQnZARQCASjcAQnkARQCAR/nAUznAWgCARnpAZgB6QGsAwIBGO4BRO4BXgIBFe8BRO8BVwIBFPABPvABVgIBE+wBvAHsAdoBAgES8wFT8wFrAgEP9QGYAfUBgwICAQ74AVX4AW8CAQv6AZgB+gGFAgIBCv8BRP8BWgIBB4ACRIACagIBBoECPoECVgIBBf0BvAH9AdoBAgEEkgELkgG8AQIBYZMBC5gBIwIBXZ0BC50BvwECAVqeAQujASMCAVbSAQvSAbkCAgEt0wEL2AEjAgEp3QEL3QGxAgIBJN4BC+MBIwIBIJIBeJIBuQECAWKVAUyVAWwCAWCWAVGWAVUCAV+TAcEBkwHeAQIBXp0BeJ0BvAECAVugAUygAW0CAVmhAVGhAVYCAVieAcEBngHeAQIBV9IBeNIBtgICAS7VAUzVAXECASzWAVHWAVUCASvTAcEB0wHeAQIBKt0Bed0BrgICASXgAUzgAWoCASPhAVHhAVYCASLeAcEB3gHeAQIBIQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Click_2" sap:VirtualizedContainerService.HintSize="653,106">
+      <sap2010:ViewStateData Id="Click_2" sap:VirtualizedContainerService.HintSize="697,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -218,7 +269,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Click_3" sap:VirtualizedContainerService.HintSize="653,106" />
+      <sap2010:ViewStateData Id="Click_3" sap:VirtualizedContainerService.HintSize="697,106" />
       <sap2010:ViewStateData Id="ClickImage_1" sap:VirtualizedContainerService.HintSize="314,106" />
       <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,230">
         <sap:WorkflowViewStateService.ViewState>
@@ -227,7 +278,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="653,51">
+      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="697,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -235,29 +286,65 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="653,106" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="653,87" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_2" sap:VirtualizedContainerService.HintSize="653,106" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="653,87" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="653,87" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_4" sap:VirtualizedContainerService.HintSize="653,106" />
-      <sap2010:ViewStateData Id="GetValue_2" sap:VirtualizedContainerService.HintSize="653,68" />
-      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="653,239" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_3" sap:VirtualizedContainerService.HintSize="653,106" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_4" sap:VirtualizedContainerService.HintSize="653,87" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_5" sap:VirtualizedContainerService.HintSize="653,106" />
-      <sap2010:ViewStateData Id="WaitUiElementAppear_6" sap:VirtualizedContainerService.HintSize="653,106" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="653,87" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="675,2365">
+      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="697,68" />
+      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_6" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="336,342">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="AddRCP_DS_1" sap:VirtualizedContainerService.HintSize="715,3125" />
+      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_7" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="697,490" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="697,87" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_2" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="697,87" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="697,87" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_4" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="GetValue_2" sap:VirtualizedContainerService.HintSize="697,68" />
+      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_8" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_9" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="697,490" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_3" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_4" sap:VirtualizedContainerService.HintSize="697,87" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_5" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_6" sap:VirtualizedContainerService.HintSize="697,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_5" sap:VirtualizedContainerService.HintSize="697,87" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="719,3254">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="AddRCP_DS_1" sap:VirtualizedContainerService.HintSize="759,3494" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
