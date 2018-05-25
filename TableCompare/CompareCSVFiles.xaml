@@ -76,9 +76,23 @@
       <Variable x:TypeArguments="sd:DataTable" Name="ExpectedDataTable" />
       <Variable x:TypeArguments="sd:DataTable" Name="dataTable3" />
       <Variable x:TypeArguments="x:Boolean" Name="Found" />
+      <Variable x:TypeArguments="x:String" Name="str2" />
+      <Variable x:TypeArguments="x:String" Name="str1" />
     </Sequence.Variables>
     <ui:ReadCsvFile Encoding="{x:Null}" DataTable="[ActualDataTable]" Delimitator="Comma" DisplayName="Read CSV" FilePath="D:\UIPath\Mosaic_RegressionSuite_UIPath\TestData\FlowTableCompare\ActualFiles\SortNode48112.csv" sap2010:WorkflowViewState.IdRef="ReadCsvFile_1" />
+    <ui:RemoveDataRow Row="{x:Null}" DataTable="[ActualDataTable]" DisplayName="Remove data row" sap2010:WorkflowViewState.IdRef="RemoveDataRow_1" RowIndex="0" />
     <ui:ReadCsvFile Encoding="{x:Null}" DataTable="[ExpectedDataTable]" Delimitator="Comma" DisplayName="Read CSV" FilePath="[Environment.CurrentDirectory.ToString+&quot;\TestData\FlowTableCompare\ExpectedFiles\SortNode.csv&quot;]" sap2010:WorkflowViewState.IdRef="ReadCsvFile_2" />
+    <ui:RemoveDataRow Row="{x:Null}" DataTable="[ExpectedDataTable]" DisplayName="Remove data row" sap2010:WorkflowViewState.IdRef="RemoveDataRow_2" RowIndex="0" />
+    <ui:OutputDataTable DataTable="[ActualDataTable]" DisplayName="Output data table" sap2010:WorkflowViewState.IdRef="OutputDataTable_1" Text="[str1]" />
+    <ui:OutputDataTable DataTable="[ExpectedDataTable]" DisplayName="Output data table" sap2010:WorkflowViewState.IdRef="OutputDataTable_2" Text="[str2]" />
+    <If Condition="[str1.Trim.Contains(str2.Trim)]" sap2010:WorkflowViewState.IdRef="If_4">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Info" Message="matched" />
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Info" Message="not MATCHED" />
+      </If.Else>
+    </If>
     <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_1">
       <ui:CommentOut.Body>
         <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_4">
@@ -121,85 +135,104 @@
         </Sequence>
       </ui:CommentOut.Body>
     </ui:CommentOut>
-    <Sequence DisplayName="Find Similarities" sap2010:WorkflowViewState.IdRef="Sequence_7">
-      <ui:BuildDataTable DataTable="[ActualDataTable]" DisplayName="Build data table" sap2010:WorkflowViewState.IdRef="BuildDataTable_3" TableInfo="&lt;NewDataSet&gt;&#xD;&#xA;  &lt;xs:schema id=&quot;NewDataSet&quot; xmlns=&quot;&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msdata=&quot;urn:schemas-microsoft-com:xml-msdata&quot;&gt;&#xD;&#xA;    &lt;xs:element name=&quot;NewDataSet&quot; msdata:IsDataSet=&quot;true&quot; msdata:MainDataTable=&quot;TableName&quot; msdata:UseCurrentLocale=&quot;true&quot;&gt;&#xD;&#xA;      &lt;xs:complexType&gt;&#xD;&#xA;        &lt;xs:choice minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt;&#xD;&#xA;          &lt;xs:element name=&quot;TableName&quot;&gt;&#xD;&#xA;            &lt;xs:complexType&gt;&#xD;&#xA;            &lt;/xs:complexType&gt;&#xD;&#xA;          &lt;/xs:element&gt;&#xD;&#xA;        &lt;/xs:choice&gt;&#xD;&#xA;      &lt;/xs:complexType&gt;&#xD;&#xA;    &lt;/xs:element&gt;&#xD;&#xA;  &lt;/xs:schema&gt;&#xD;&#xA;&lt;/NewDataSet&gt;" />
-      <ui:BuildDataTable DataTable="[ExpectedDataTable]" DisplayName="Build data table" sap2010:WorkflowViewState.IdRef="BuildDataTable_4" TableInfo="&lt;NewDataSet&gt;&#xD;&#xA;  &lt;xs:schema id=&quot;NewDataSet&quot; xmlns=&quot;&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msdata=&quot;urn:schemas-microsoft-com:xml-msdata&quot;&gt;&#xD;&#xA;    &lt;xs:element name=&quot;NewDataSet&quot; msdata:IsDataSet=&quot;true&quot; msdata:MainDataTable=&quot;TableName&quot; msdata:UseCurrentLocale=&quot;true&quot;&gt;&#xD;&#xA;      &lt;xs:complexType&gt;&#xD;&#xA;        &lt;xs:choice minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt;&#xD;&#xA;          &lt;xs:element name=&quot;TableName&quot;&gt;&#xD;&#xA;            &lt;xs:complexType&gt;&#xD;&#xA;            &lt;/xs:complexType&gt;&#xD;&#xA;          &lt;/xs:element&gt;&#xD;&#xA;        &lt;/xs:choice&gt;&#xD;&#xA;      &lt;/xs:complexType&gt;&#xD;&#xA;    &lt;/xs:element&gt;&#xD;&#xA;  &lt;/xs:schema&gt;&#xD;&#xA;&lt;/NewDataSet&gt;" />
-      <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[&quot;actual data table is&quot; +ActualDataTable.ToString]" />
-      <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[&quot;expected data table is&quot; +ExpectedDataTable.ToString]" />
-      <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
-        <Assign.To>
-          <OutArgument x:TypeArguments="x:Boolean">[Found]</OutArgument>
-        </Assign.To>
-        <Assign.Value>
-          <InArgument x:TypeArguments="x:Boolean">False</InArgument>
-        </Assign.Value>
-      </Assign>
-      <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="going in for each" />
-      <ui:ForEachRow DataTable="[ActualDataTable]" DisplayName="For each row" sap2010:WorkflowViewState.IdRef="ForEachRow_3">
-        <ui:ForEachRow.Body>
-          <ActivityAction x:TypeArguments="sd:DataRow">
-            <ActivityAction.Argument>
-              <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
-            </ActivityAction.Argument>
-            <Sequence DisplayName="Body" sap2010:WorkflowViewState.IdRef="Sequence_6">
-              <ui:ForEachRow DataTable="[ExpectedDataTable]" DisplayName="For each row" sap2010:WorkflowViewState.IdRef="ForEachRow_2">
-                <ui:ForEachRow.Body>
-                  <ActivityAction x:TypeArguments="sd:DataRow">
-                    <ActivityAction.Argument>
-                      <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row2" />
-                    </ActivityAction.Argument>
-                    <Sequence DisplayName="Body" sap2010:WorkflowViewState.IdRef="Sequence_5">
-                      <If Condition="[cint(row(0)).Equals(cint(row2(0)))]" sap2010:WorkflowViewState.IdRef="If_2">
-                        <If.Then>
-                          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_8">
-                            <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
-                              <Assign.To>
-                                <OutArgument x:TypeArguments="x:Boolean">[Found]</OutArgument>
-                              </Assign.To>
-                              <Assign.Value>
-                                <InArgument x:TypeArguments="x:Boolean">True</InArgument>
-                              </Assign.Value>
-                            </Assign>
-                            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="match" />
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_2">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_10">
+          <Sequence DisplayName="Find Similarities" sap2010:WorkflowViewState.IdRef="Sequence_7">
+            <ui:BuildDataTable DataTable="[ActualDataTable]" DisplayName="Build data table" sap2010:WorkflowViewState.IdRef="BuildDataTable_3" TableInfo="&lt;NewDataSet&gt;&#xA;  &lt;xs:schema id=&quot;NewDataSet&quot; xmlns=&quot;&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msdata=&quot;urn:schemas-microsoft-com:xml-msdata&quot;&gt;&#xA;    &lt;xs:element name=&quot;NewDataSet&quot; msdata:IsDataSet=&quot;true&quot; msdata:MainDataTable=&quot;TableName&quot; msdata:UseCurrentLocale=&quot;true&quot;&gt;&#xA;      &lt;xs:complexType&gt;&#xA;        &lt;xs:choice minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt;&#xA;          &lt;xs:element name=&quot;TableName&quot;&gt;&#xA;            &lt;xs:complexType&gt;&#xA;            &lt;/xs:complexType&gt;&#xA;          &lt;/xs:element&gt;&#xA;        &lt;/xs:choice&gt;&#xA;      &lt;/xs:complexType&gt;&#xA;    &lt;/xs:element&gt;&#xA;  &lt;/xs:schema&gt;&#xA;&lt;/NewDataSet&gt;" />
+            <ui:BuildDataTable DataTable="[ExpectedDataTable]" DisplayName="Build data table" sap2010:WorkflowViewState.IdRef="BuildDataTable_4" TableInfo="&lt;NewDataSet&gt;&#xA;  &lt;xs:schema id=&quot;NewDataSet&quot; xmlns=&quot;&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msdata=&quot;urn:schemas-microsoft-com:xml-msdata&quot;&gt;&#xA;    &lt;xs:element name=&quot;NewDataSet&quot; msdata:IsDataSet=&quot;true&quot; msdata:MainDataTable=&quot;TableName&quot; msdata:UseCurrentLocale=&quot;true&quot;&gt;&#xA;      &lt;xs:complexType&gt;&#xA;        &lt;xs:choice minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt;&#xA;          &lt;xs:element name=&quot;TableName&quot;&gt;&#xA;            &lt;xs:complexType&gt;&#xA;            &lt;/xs:complexType&gt;&#xA;          &lt;/xs:element&gt;&#xA;        &lt;/xs:choice&gt;&#xA;      &lt;/xs:complexType&gt;&#xA;    &lt;/xs:element&gt;&#xA;  &lt;/xs:schema&gt;&#xA;&lt;/NewDataSet&gt;" />
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[&quot;actual data table is&quot; +ActualDataTable.ToString]" />
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[&quot;expected data table is&quot; +ExpectedDataTable.ToString]" />
+            <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:Boolean">[Found]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+              </Assign.Value>
+            </Assign>
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="going in for each" />
+            <ui:ForEachRow DataTable="[ActualDataTable]" DisplayName="For each row" sap2010:WorkflowViewState.IdRef="ForEachRow_3">
+              <ui:ForEachRow.Body>
+                <ActivityAction x:TypeArguments="sd:DataRow">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+                  </ActivityAction.Argument>
+                  <Sequence DisplayName="Body" sap2010:WorkflowViewState.IdRef="Sequence_6">
+                    <ui:ForEachRow DataTable="[ExpectedDataTable]" DisplayName="For each row" sap2010:WorkflowViewState.IdRef="ForEachRow_2">
+                      <ui:ForEachRow.Body>
+                        <ActivityAction x:TypeArguments="sd:DataRow">
+                          <ActivityAction.Argument>
+                            <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row2" />
+                          </ActivityAction.Argument>
+                          <Sequence DisplayName="Body" sap2010:WorkflowViewState.IdRef="Sequence_5">
+                            <If Condition="[cint(row(0)).Equals(cint(row2(0)))]" sap2010:WorkflowViewState.IdRef="If_2">
+                              <If.Then>
+                                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_8">
+                                  <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="x:Boolean">[Found]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="match" />
+                                </Sequence>
+                              </If.Then>
+                              <If.Else>
+                                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_9">
+                                  <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="x:Boolean">[Found]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="not matched" />
+                                </Sequence>
+                              </If.Else>
+                            </If>
                           </Sequence>
-                        </If.Then>
-                        <If.Else>
-                          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_9">
-                            <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
-                              <Assign.To>
-                                <OutArgument x:TypeArguments="x:Boolean">[Found]</OutArgument>
-                              </Assign.To>
-                              <Assign.Value>
-                                <InArgument x:TypeArguments="x:Boolean">False</InArgument>
-                              </Assign.Value>
-                            </Assign>
-                            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="not matched" />
-                          </Sequence>
-                        </If.Else>
-                      </If>
-                    </Sequence>
-                  </ActivityAction>
-                </ui:ForEachRow.Body>
-              </ui:ForEachRow>
-            </Sequence>
-          </ActivityAction>
-        </ui:ForEachRow.Body>
-      </ui:ForEachRow>
-    </Sequence>
-    <If Condition="[Found=True]" sap2010:WorkflowViewState.IdRef="If_3">
-      <If.Then>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;:SUCESS:&quot;+&quot;Tables are Matching&quot;]" />
-      </If.Then>
-      <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="[&quot;:FAILURE:&quot;+&quot;Tables are Not Matching&quot;]" />
-      </If.Else>
-    </If>
-    <sads:DebugSymbol.Symbol>dzxEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcQ29tcGFyZUNTVkZpbGVzLnhhbWwyAYUCAe8CAQMBcwHTAQECRwPGAQ4CAQFQBVCPAgIBN1EFUZsCAgEzUgV7FQIBMnwFvAEQAgEJvQEFxAEKAgECUDNQRgIBOVB7UNwBAgE4UTNRSAIBNVF9UegBAgE0fQd9hAgCAS9+B36GCAIBLH8Hf7UBAgEqgAEHgAG5AQIBKIEBB4gBEAIBJIkBB4kBigECASKKAQe7ARcCAQq9ARO9ASECAQO/AQm/AbEBAgEHwgEJwgG3AQIBBX0kfTcCATB+JH45AgEtf3R/sgECASuAAXSAAbYBAgEphgEzhgE4AgEngwE0gwE7AgEliQF0iQGHAQIBI4oBIIoBMwIBIJABDbgBGAIBC78Bdr8BrgECAQjCAXfCAbQBAgEGkQEPtwEfAgEMkQEokQE9AgEelwEVtAEgAgENmAEXswEcAgEOmAElmAFLAgEPmgEbpAEmAgEXpwEbsQEmAgEQmwEdogEmAgEaowEdowGUAQIBGKgBHa8BJgIBE7ABHbABmgECARGgAUmgAU0CAR2dAUqdAVECARujAYoBowGRAQIBGa0BSa0BTgIBFqoBSqoBUQIBFLABigGwAZcBAgES</sads:DebugSymbol.Symbol>
+                        </ActivityAction>
+                      </ui:ForEachRow.Body>
+                    </ui:ForEachRow>
+                  </Sequence>
+                </ActivityAction>
+              </ui:ForEachRow.Body>
+            </ui:ForEachRow>
+          </Sequence>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_3">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_11">
+          <If Condition="[Found=True]" sap2010:WorkflowViewState.IdRef="If_3">
+            <If.Then>
+              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;:SUCESS:&quot;+&quot;Tables are Matching&quot;]" />
+            </If.Then>
+            <If.Else>
+              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="[&quot;:FAILURE:&quot;+&quot;Tables are Not Matching&quot;]" />
+            </If.Else>
+          </If>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
+    <sads:DebugSymbol.Symbol>d0lEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcVGFibGVDb21wYXJlXENvbXBhcmVDU1ZGaWxlcy54YW1sHgGFAgHvAgEDAXMB0wEBAkcD4AEOAgEBUgVSjwICASNTBVOjAQIBH1QFVJsCAgEbVQVVpQECARdWBVabAQIBElcFV50BAgENWAVfCgIBBWAFiQEVAgEEigEF0AEVAgED0QEF3gEVAgECUjNSRgIBJVJ7UtwBAgEkU50BU6ABAgEiUzBTQwIBIFQzVEgCAR1UfVToAQIBHFWfAVWiAQIBGlUwVUUCARhWkAFWmAECARVWI1Y2AgETV5IBV5oBAgEQVyNXOAIBDlgTWDQCAQZaCVqDAQIBC10JXYcBAgEJWndagAECAQxdd12EAQIBCg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="ReadCsvFile_1" sap:VirtualizedContainerService.HintSize="823,59" />
-      <sap2010:ViewStateData Id="ReadCsvFile_2" sap:VirtualizedContainerService.HintSize="823,59" />
+      <sap2010:ViewStateData Id="ReadCsvFile_1" sap:VirtualizedContainerService.HintSize="653,59" />
+      <sap2010:ViewStateData Id="RemoveDataRow_1" sap:VirtualizedContainerService.HintSize="653,22" />
+      <sap2010:ViewStateData Id="ReadCsvFile_2" sap:VirtualizedContainerService.HintSize="653,59" />
+      <sap2010:ViewStateData Id="RemoveDataRow_2" sap:VirtualizedContainerService.HintSize="653,22" />
+      <sap2010:ViewStateData Id="OutputDataTable_1" sap:VirtualizedContainerService.HintSize="653,22" />
+      <sap2010:ViewStateData Id="OutputDataTable_2" sap:VirtualizedContainerService.HintSize="653,22" />
+      <sap2010:ViewStateData Id="LogMessage_10" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_11" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="653,239" />
       <sap2010:ViewStateData Id="BuildDataTable_2" sap:VirtualizedContainerService.HintSize="516,59" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="464,60" />
       <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="464,60" />
@@ -235,7 +268,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="823,51">
+      <sap2010:ViewStateData Id="CommentOut_1" sap:VirtualizedContainerService.HintSize="653,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -291,17 +324,47 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="823,239" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="845,2514">
+      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="845,1946">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CompareCSVFiles_1" sap:VirtualizedContainerService.HintSize="885,2634" />
+      <sap2010:ViewStateData Id="CommentOut_2" sap:VirtualizedContainerService.HintSize="653,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="653,238" />
+      <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="675,362">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_3" sap:VirtualizedContainerService.HintSize="653,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="675,1082">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CompareCSVFiles_1" sap:VirtualizedContainerService.HintSize="715,1162" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
