@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="CompareCSVFile_Text" this:CompareCSVFile_Text.statusViewNo="2355144"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="CompareCSVFile_Text" this:CompareCSVFile_Text.statusViewNo="2355144" this:CompareCSVFile_Text.TC_No="GENERIC"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -13,6 +13,9 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="statusViewNo" Type="InArgument(x:String)" />
+    <x:Property Name="ActualFilePath" Type="InArgument(x:String)" />
+    <x:Property Name="ExpectedFilePath" Type="InArgument(x:String)" />
+    <x:Property Name="TC_No" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -70,9 +73,9 @@
       <Sequence.Variables>
         <Variable x:TypeArguments="sd:DataTable" Name="dt1" />
         <Variable x:TypeArguments="x:String" Name="test" />
-        <Variable x:TypeArguments="x:String" Name="strVariable" />
+        <Variable x:TypeArguments="x:String" Name="ActualFileString" />
         <Variable x:TypeArguments="sd:DataRow[]" Name="variable1" />
-        <Variable x:TypeArguments="x:String" Name="str2" />
+        <Variable x:TypeArguments="x:String" Name="ExpectedFileString" />
         <Variable x:TypeArguments="sd:DataTable" Name="dt2" />
         <Variable x:TypeArguments="x:String" Name="test2" />
         <Variable x:TypeArguments="x:Int32" Name="count" />
@@ -91,8 +94,8 @@
           </Sequence>
         </ui:CommentOut.Body>
       </ui:CommentOut>
-      <ui:ReadTextFile Content="[strVariable]" DisplayName="Read text file" FileName="TestData\Flow\joinNode.csv" sap2010:WorkflowViewState.IdRef="ReadTextFile_1" />
-      <ui:ReadTextFile Content="[str2]" DisplayName="Read text file" FileName="TestData\Flow\joinNode1.csv" sap2010:WorkflowViewState.IdRef="ReadTextFile_2" />
+      <ui:ReadTextFile Content="[ActualFileString]" DisplayName="Read text file" FileName="[ActualFilePath]" sap2010:WorkflowViewState.IdRef="ReadTextFile_1" />
+      <ui:ReadTextFile Content="[ExpectedFileString]" DisplayName="Read text file" FileName="[ExpectedFilePath]" sap2010:WorkflowViewState.IdRef="ReadTextFile_2" />
       <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_3">
         <ui:CommentOut.Body>
           <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_3">
@@ -197,16 +200,16 @@
           </Sequence>
         </ui:CommentOut.Body>
       </ui:CommentOut>
-      <If Condition="[strVariable.Replace(statusViewNo,&quot;&quot;).Trim.Equals(str2.Trim)]" sap2010:WorkflowViewState.IdRef="If_2">
+      <If Condition="[ActualFileString.Replace(statusViewNo,&quot;&quot;).Trim.Equals(ExpectedFileString.Trim)]" sap2010:WorkflowViewState.IdRef="If_2">
         <If.Then>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="Files Equal" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="[TC_No+&quot; Files are Equal. Data has been matched successfully&quot;]" />
         </If.Then>
         <If.Else>
-          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Error" Message="Files Not Equal" />
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Error" Message="[TC_No+&quot; Files are not Equal. Could not match the data&quot;]" />
         </If.Else>
       </If>
     </Sequence>
-    <sads:DebugSymbol.Symbol>d0FEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxHZW5lcmljXENvbXBhcmVDU1ZGaWxlX1RleHQueGFtbBcBbwF3AQJEA9IBDgIBAUUF0AEQAgECUAdWFwIBG1cHXRcCARpeB16mAQIBFl8HX6ABAgESYAdtFwIBEW4HhAEXAgEQhQEHiwEXAgEPjAEHkgEXAgEOkwEHmQEXAgENmgEHxwEXAgEMyAEHzwEMAgEDXlZecgIBGV4gXi8CARdfT19sAgEVXyBfKAIBE8gBFcgBXgIBBMoBC8oBiAECAQrNAQvNAY0BAgEIygF4ygGFAQIBC80Bec0BigECAQk=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0hEOlxVSVBhdGhcTW9zYWljX1JlZ3Jlc3Npb25TdWl0ZV9VSVBhdGhcR2VuZXJpY1xDb21wYXJlQ1NWRmlsZV9UZXh0LnhhbWwYAZgBAaABAQMBbwF3AQJHA9UBDgIBAUgF0wEQAgECUwdZFwIBH1oHYBcCAR5hB2GhAQIBGWIHYqUBAgEUYwdwFwIBE3EHhwEXAgESiAEHjgEXAgERjwEHlQEXAgEQlgEHnAEXAgEPnQEHygEXAgEOywEH0gEMAgEDYVthbQIBHGEgYTQCARpiXWJxAgEXYiBiNgIBFcsBFcsBcQIBBM0BC80BxQECAQvQAQvQAcABAgEIzQF4zQHCAQIBDNABedABvQECAQk=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -359,7 +362,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ForEachRow_2" sap:VirtualizedContainerService.HintSize="779,1004" />
-      <sap2010:ViewStateData Id="Sequence_17" sap:VirtualizedContainerService.HintSize="801,1129">
+      <sap2010:ViewStateData Id="Sequence_17" sap:VirtualizedContainerService.HintSize="801,1128">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -391,7 +394,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CompareCSVFile_Text_1" sap:VirtualizedContainerService.HintSize="737,1533" />
+      <sap2010:ViewStateData Id="CompareCSVFile_Text_1" sap:VirtualizedContainerService.HintSize="737,1613" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
