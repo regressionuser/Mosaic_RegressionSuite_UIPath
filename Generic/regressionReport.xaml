@@ -70,6 +70,11 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="regressionReport" sap2010:WorkflowViewState.IdRef="Sequence_4">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="ReportOutput" />
+      <Variable x:TypeArguments="x:Int32" Name="ErrorCount" />
+      <Variable x:TypeArguments="x:Int32" Name="SuccessCount" />
+    </Sequence.Variables>
     <Sequence DisplayName="CreateReportFile" sap2010:WorkflowViewState.IdRef="Sequence_3">
       <Sequence.Variables>
         <Variable x:TypeArguments="x:String" Name="jsonContent" />
@@ -102,14 +107,46 @@
         </ui:ForEach.Body>
       </ui:ForEach>
     </Sequence>
-    <ui:SendOutlookMail Account="{x:Null}" Bcc="{x:Null}" Cc="{x:Null}" MailMessage="{x:Null}" TimeoutMS="{x:Null}" Body="[&quot;Attached is the regression report. Report path with module name is:&quot;+regressionReportPath]" DisplayName="Send Outlook Mail Message" sap2010:WorkflowViewState.IdRef="SendOutlookMail_1" IsBodyHtml="False" IsDraft="False" Subject="Automation Execution Report- UI Path" To="amol.adkitte@lntinfotech.com">
+    <ui:ReadTextFile Content="[ReportOutput]" DisplayName="Read text file" FileName="[regressionReportPath]" sap2010:WorkflowViewState.IdRef="ReadTextFile_3" />
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Int32">[SuccessCount]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Int32">[Split(ReportOutput,"SUCCESS").Length-1]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Int32">[ErrorCount]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Int32">[Split(ReportOutput,"ERROR").Length-1]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;Success Count - &quot;+SuccessCount.ToString]" />
+    <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;Error Count - &quot;+ErrorCount.ToString]" />
+    <ui:ExcelApplicationScope Password="{x:Null}" DisplayName="Excel application scope" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_1" WorkbookPath="C:\Users\10648882\Desktop\SummaryReport.xlsx">
+      <ui:ExcelApplicationScope.Body>
+        <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_5">
+            <ui:ExcelWriteCell Cell="B1" DisplayName="Write Cell" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_2" SheetName="Sheet1" Text="[SuccessCount.ToString]" />
+            <ui:ExcelWriteCell Cell="C1" DisplayName="Write Cell" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_1" SheetName="Sheet1" Text="[ErrorCount.ToString]" />
+          </Sequence>
+        </ActivityAction>
+      </ui:ExcelApplicationScope.Body>
+    </ui:ExcelApplicationScope>
+    <ui:SendOutlookMail Account="{x:Null}" Bcc="{x:Null}" Cc="{x:Null}" MailMessage="{x:Null}" TimeoutMS="{x:Null}" Body="[&quot;Attached is the regression report. Report path with module name is:&quot;+regressionReportPath]" DisplayName="Send Outlook Mail Message" sap2010:WorkflowViewState.IdRef="SendOutlookMail_1" IsBodyHtml="False" IsDraft="False" Subject="Automation Execution Report- UI Path" To="suyog.talathi@lntinfotech.com">
       <ui:SendOutlookMail.Files>
         <scg:List x:TypeArguments="InArgument(x:String)" Capacity="4">
           <InArgument x:TypeArguments="x:String">[regressionReportPath]</InArgument>
         </scg:List>
       </ui:SendOutlookMail.Files>
     </ui:SendOutlookMail>
-    <sads:DebugSymbol.Symbol>dz5EOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxHZW5lcmljXHJlZ3Jlc3Npb25SZXBvcnQueGFtbBsBZwHMAQEDAfkBAZoDAQJIA3EOAgEBSQVoEAIBCWkFbxoCAQJPB1gSAgEdWQdZnAECARhaB2cUAgEKaZQDabIDAgEIbDJsSAIBBml6aeIBAgEEaeoCaZADAgEDUAlXEgIBHllWWWgCARtZIFkvAgEZWnpanAECARdgDWQYAgELVTRVzAECASFSNVJFAgEfYQ9hxQECARJiD2KdAQIBEGMPY8UBAgEMYboBYcIBAgEVYaEBYa4BAgETYmZimgECARFjjgFjwgECAQ9jQWNZAgEN</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dz5EOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxHZW5lcmljXHJlZ3Jlc3Npb25SZXBvcnQueGFtbDMBZwHMAQEDAfkBAZoDAQJIA5YBDgIBAU4FbRACASluBW6hAQIBJG8Fdg4CASB3BX4OAgEcfwV/qwECARmAAQWAAacBAgEWgQEFjQEgAgEJjgEFlAEaAgECVAddEgIBPV4HXpwBAgE4XwdsFAIBKm5Vbm0CASduHm4uAgEldC90VwIBI3EwcT4CASF8L3xVAgEfeTB5PAIBHX9yf6gBAgEagAFygAGkAQIBF4EBoAGBAc4BAgEVhwELigEWAgEKjgGUA44BswMCAQiRATKRAUgCAQaOAXqOAeIBAgEEjgHqAo4BkAMCAQNVCVwSAgE+XlZeaAIBO14gXi8CATlfel+cAQIBN2UNaRgCASuIAQ2IAaoBAgEQiQENiQGoAQIBC1o0WswBAgFBVzVXRQIBP2YPZsUBAgEyZw9nnQECATBoD2jFAQIBLIgBJYgBKQIBFIgBjgGIAacBAgESiAGAAYgBiAECARGJASWJASkCAQ+JAY4BiQGlAQIBDYkBgAGJAYgBAgEMZroBZsIBAgE1ZqEBZq4BAgEzZ2ZnmgECATFojgFowgECAS9oQWhZAgEt</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -141,7 +178,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="352,546" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="374,993">
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="414,993">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -149,7 +186,43 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="SendOutlookMail_1" sap:VirtualizedContainerService.HintSize="374,145">
+      <sap2010:ViewStateData Id="ReadTextFile_3" sap:VirtualizedContainerService.HintSize="414,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="414,60" />
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="414,60" />
+      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="414,91">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="414,91">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExcelWriteCell_2" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="ExcelWriteCell_1" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,338">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExcelApplicationScope_1" sap:VirtualizedContainerService.HintSize="414,447" />
+      <sap2010:ViewStateData Id="SendOutlookMail_1" sap:VirtualizedContainerService.HintSize="414,145">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -157,14 +230,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="396,1302">
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="436,2342">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="regressionReport_1" sap:VirtualizedContainerService.HintSize="436,1382" />
+      <sap2010:ViewStateData Id="regressionReport_1" sap:VirtualizedContainerService.HintSize="476,2422" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
