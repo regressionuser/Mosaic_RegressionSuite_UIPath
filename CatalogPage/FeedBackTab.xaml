@@ -1,0 +1,1198 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="FeedBackTab" this:FeedBackTab.randomNo="[new Random().Next(100,9999).ToString]"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:this="clr-namespace:"
+ xmlns:ui="http://schemas.uipath.com/workflow/activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="randomNo" Type="InArgument(x:String)" />
+    <x:Property Name="feedBackTitle" Type="OutArgument(x:String)" />
+    <x:Property Name="feedBackDescription" Type="OutArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>FeedBackTab_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.Core</AssemblyReference>
+      <AssemblyReference>UiPath.Core.Activities</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="FeedBackTab" sap2010:WorkflowViewState.IdRef="Sequence_2">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:Boolean" Name="isFeedBackTabPresent" />
+      <Variable x:TypeArguments="x:Boolean" Name="isTitleFieldPresent" />
+      <Variable x:TypeArguments="x:Boolean" Name="isFeedbackDescriptionFieldPresent" />
+      <Variable x:TypeArguments="x:Boolean" Name="isRatingFieldPresent" />
+      <Variable x:TypeArguments="x:Boolean" Name="isSubmitButtonPresent" />
+      <Variable x:TypeArguments="x:String" Name="errorMessageForEmptyTitleFields" />
+      <Variable x:TypeArguments="x:String" Name="errorMessageForEmptyDescriptionFields" />
+      <Variable x:TypeArguments="x:String" Name="successMessageForAddedFeedBack" />
+      <Variable x:TypeArguments="x:String" Name="submittedTitle" />
+      <Variable x:TypeArguments="x:String" Name="submittedDescription" />
+      <Variable x:TypeArguments="x:Boolean" Name="isUpVoteButtonPresent" />
+      <Variable x:TypeArguments="x:Boolean" Name="isDownVoteButtonPresent" />
+      <Variable x:TypeArguments="x:String" Name="successMessageForSubmittedVote" />
+      <Variable x:TypeArguments="x:String" Name="voteCount" />
+      <Variable x:TypeArguments="x:String" Name="errorMessageForAlreadyVoted" />
+      <Variable x:TypeArguments="x:String" Name="feedBackCountOnDashBoardTab" />
+      <Variable x:TypeArguments="x:Boolean" Name="feedBackSectionOnDashboardTab" />
+      <Variable x:TypeArguments="x:Boolean" Name="messageFlag" />
+      <Variable x:TypeArguments="x:String" Name="messageText" />
+      <Variable x:TypeArguments="x:String" Default="D:\Mosaic_RegressionSuite_UIPath1\Mosaic_RegressionSuite_UIPath\Reports\DataSource\FeedbackTab\Feedback.docx" Name="ReportPath" />
+      <Variable x:TypeArguments="ui:UiElement" Name="element_DashboardTab" />
+      <Variable x:TypeArguments="x:String" Name="parentClass" />
+    </Sequence.Variables>
+    <ui:UiElementExists DisplayName="Element Exists 'A'" Exists="[isFeedBackTabPresent]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="2b709de960fb02f002d93e7e261b2fbd" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Feedback' parentid='tabs' tag='A' /&gt;" TimeoutMS="2000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[isFeedBackTabPresent]" sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="D_Data_TCNo_71 _FeedBack:SUCESS: Feedback tab present " />
+          <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" DisplayName="Click 'A'" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+            <ui:Click.CursorPosition>
+              <ui:CursorPosition Position="Center">
+                <ui:CursorPosition.OffsetX>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetX>
+                <ui:CursorPosition.OffsetY>
+                  <InArgument x:TypeArguments="x:Int32" />
+                </ui:CursorPosition.OffsetY>
+              </ui:CursorPosition>
+            </ui:Click.CursorPosition>
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="2b709de960fb02f002d93e7e261b2fbd" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Feedback' parentid='tabs' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:Click.Target>
+          </ui:Click>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_14">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="D_Data_TCNo_71 _FeedBack:FAILURE: Feedback not tab present " />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Feedback_tab_exist_condition</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:UiElementExists DisplayName="Element Exists 'INPUT'" Exists="[isTitleFieldPresent]" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="d9501b89e079c4be73d6120fad5c2835" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' parentid='newContent' tag='INPUT' type='text' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[isTitleFieldPresent]" sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Info" Message="D_Data_TCNo_71 _FeedBack:SUCESS:Title field on feedback tab present." />
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_49">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="D_Data_TCNo_71 _FeedBack:FAILURE:Title field on feedback tab not present." />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_34" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Feedback_Title_Field_exist_Condition</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:UiElementExists DisplayName="Element Exists 'INPUT'" Exists="[isFeedbackDescriptionFieldPresent]" sap2010:WorkflowViewState.IdRef="UiElementExists_3">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="5a95ba27e2913839c0c67f21aa4106b1" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='TEXTAREA' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[isFeedbackDescriptionFieldPresent]" sap2010:WorkflowViewState.IdRef="If_3">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="D_Data_TCNo_71 _FeedBack:SUCESS:Feedback description field on feedback tab present." />
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_50">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Error" Message="D_Data_TCNo_71 _FeedBack:FAILURE:Feedback description field on feedback tab not present." />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_35" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Feedback_description_field_exist_condition</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:UiElementExists DisplayName="Element Exists 'INPUT'" Exists="[isRatingFieldPresent]" sap2010:WorkflowViewState.IdRef="UiElementExists_4">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="67964faab0ee71c0ba708da6c9d55c69" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='DIV' class='col-md-10' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[isRatingFieldPresent]" sap2010:WorkflowViewState.IdRef="If_4">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="D_Data_TCNo_71 _FeedBack:SUCESS: Rating field on feedback tab present." />
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_51">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Error" Message="D_Data_TCNo_71 _FeedBack:FAILURE: Rating field on feedback tab not present." />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_36" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Feedback_rating_field_exist_condition</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:UiElementExists DisplayName="Element Exists 'INPUT'" Exists="[isSubmitButtonPresent]" sap2010:WorkflowViewState.IdRef="UiElementExists_5">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="8c124c71d472b683be2b2ef207b6feb2" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='BUTTON' type='button' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[isSubmitButtonPresent]" sap2010:WorkflowViewState.IdRef="If_5">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Info" Message="D_Data_TCNo_71 _FeedBack :SUCESS: Submit button on feedback tab present." />
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_52">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Error" Message="D_Data_TCNo_71 _FeedBack :FAILURE: Submit button on feedback tab not present." />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_37" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Feedback_tab_submit_button_exist_condition</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="500" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_3" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8c124c71d472b683be2b2ef207b6feb2" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='BUTTON' type='button' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="verifyMessage" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Please enter title</InArgument>
+        <OutArgument x:TypeArguments="x:Boolean" x:Key="flag">[messageFlag]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_actualMessage">[messageText]</OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="TC_No">D_Data_TCNo_71_Feedback Tab</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[feedBackTitle]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">["TestTitle_"+randomNo]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:TypeInto DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="False" DelayBefore="1000" DelayMS="1000" DisplayName="Type into 'INPUT'" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="[feedBackTitle]">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d9501b89e079c4be73d6120fad5c2835" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='INPUT' type='text' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:TypeInto.Target>
+    </ui:TypeInto>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="500" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_5" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8c124c71d472b683be2b2ef207b6feb2" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='BUTTON' type='button' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="verifyMessage" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Please enter description</InArgument>
+        <OutArgument x:TypeArguments="x:Boolean" x:Key="flag">[messageFlag]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_actualMessage">[messageText]</OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="TC_No" xml:space="preserve">D_Data_TCNo_71_FeedBack Tab </InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:SetValue ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Set Text 'INPUT'" sap2010:WorkflowViewState.IdRef="SetValue_1">
+      <ui:SetValue.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="659dc856389a182a9de12bc5b412158c" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' parentid='newContent' tag='INPUT' type='text' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:SetValue.Target>
+      <ui:SetValue.Text>
+        <InArgument x:TypeArguments="x:String">
+          <Literal x:TypeArguments="x:String" Value="" />
+        </InArgument>
+      </ui:SetValue.Text>
+    </ui:SetValue>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[feedBackDescription]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">["TestDescription_"+randomNo]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:TypeInto DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="False" DelayBefore="1000" DelayMS="1000" DisplayName="Type into 'INPUT'" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_4" SendWindowMessages="False" SimulateType="False" Text="[feedBackDescription]">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="f9de1eb2b9441994fddfbb0eb4170c4e" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='TEXTAREA' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:TypeInto.Target>
+    </ui:TypeInto>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="500" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_11" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="9cee66233f9eac3f25dae825484da3f4" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='BUTTON' type='button' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="verifyMessage" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_9" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Please enter title</InArgument>
+        <OutArgument x:TypeArguments="x:Boolean" x:Key="flag">[messageFlag]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_actualMessage">[messageText]</OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="TC_No" xml:space="preserve">D_Data_TCNo_71_Feedback Tab </InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:TypeInto DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayBefore="1000" DelayMS="1000" DisplayName="Type into 'INPUT'" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_2" SendWindowMessages="False" SimulateType="False" Text="[feedBackTitle]">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d9501b89e079c4be73d6120fad5c2835" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='1' parentid='newContent' tag='INPUT' type='text' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:TypeInto.Target>
+    </ui:TypeInto>
+    <ui:TypeInto DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayBefore="1000" DelayMS="1000" DisplayName="Type into 'INPUT'" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_3" SendWindowMessages="False" SimulateType="False" Text="[feedBackDescription]">
+      <ui:TypeInto.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="369130ad9b34181416861b5c633a7caa" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='TEXTAREA' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:TypeInto.Target>
+    </ui:TypeInto>
+    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'LABEL  starOne'" sap2010:WorkflowViewState.IdRef="Click_9" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="4b85ec86313a11caacf99936f6206e89" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl id='starFour' tag='LABEL' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="500" DelayMS="500" DisplayName="Click 'BUTTON'" sap2010:WorkflowViewState.IdRef="Click_7" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="9cee66233f9eac3f25dae825484da3f4" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='BUTTON' type='button' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="verifyMessage" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_12" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Feedback submitted successfully</InArgument>
+        <OutArgument x:TypeArguments="x:Boolean" x:Key="flag">[messageFlag]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_actualMessage">[messageText]</OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="TC_No">D_Data_TCNo_71_Feedback Tab</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:GetAttribute Attribute="aaname" ContinueOnError="False" DisplayName="Get attribute 'SPAN'" sap2010:WorkflowViewState.IdRef="GetAttribute_1">
+      <ui:GetAttribute.Result>
+        <OutArgument x:TypeArguments="x:String">[submittedTitle]</OutArgument>
+      </ui:GetAttribute.Result>
+      <ui:GetAttribute.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="d16207471fe0975b733dc9b843ad9eab" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='SPAN' class='ng-binding' parentclass='col-md-12 feedBackPadding' title='MOSAIC' idx='1' /&gt;" TimeoutMS="1000" WaitForReady="INTERACTIVE" />
+      </ui:GetAttribute.Target>
+    </ui:GetAttribute>
+    <If Condition="[submittedTitle.Contains(feedBackTitle)]" sap2010:WorkflowViewState.IdRef="If_10">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_15">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_21" Level="Info" Message="D_Data_TCNo_71_Feedback Tab : SUCESS : Feedback title displays on feedback section." />
+          <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_3">
+            <ui:CommentOut.Body>
+              <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_24">
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log Report " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_15" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess" />
+                    <InArgument x:TypeArguments="x:String" x:Key="LogMessage" xml:space="preserve">D_Data_TCNo_71 _SUCESS:  Feedback title displays on feedback section.</InArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[ReportPath]</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+              </Sequence>
+            </ui:CommentOut.Body>
+          </ui:CommentOut>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_16">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_22" Level="Error" Message="[&quot;D_Data_TCNo_71_Feedback Tab : FAILURE :Feedback title does not displays on feedback section. Actual Title - &quot; +feedBackTitle+ &quot; Expected Title - &quot; +submittedTitle]" />
+          <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_4">
+            <ui:CommentOut.Body>
+              <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_25">
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log Report " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_16" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess" />
+                    <InArgument x:TypeArguments="x:String" x:Key="LogMessage">["D_Data_TCNo_71 _FAILURE: Feedback title does not displays on feedback section. Actual Title - " +feedBackTitle+ " Expected Title - " +submittedTitle]</InArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[ReportPath]</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+              </Sequence>
+            </ui:CommentOut.Body>
+          </ui:CommentOut>
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:GetAttribute Attribute="aaname" ContinueOnError="False" DisplayName="Get attribute 'SPAN'" sap2010:WorkflowViewState.IdRef="GetAttribute_2">
+      <ui:GetAttribute.Result>
+        <OutArgument x:TypeArguments="x:String">[submittedDescription]</OutArgument>
+      </ui:GetAttribute.Result>
+      <ui:GetAttribute.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="9a8f6fb45b07210222f5a62523478b48" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='SPAN' parentclass='col-md-12 feedBackPadding' class='ng-binding' parentid='newContent' title='MOSAIC' idx='2' /&gt;" TimeoutMS="1000" WaitForReady="INTERACTIVE" />
+      </ui:GetAttribute.Target>
+    </ui:GetAttribute>
+    <If Condition="[submittedDescription.Contains(feedBackDescription)]" sap2010:WorkflowViewState.IdRef="If_11">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_17">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_23" Level="Info" Message="D_Data_TCNo_71_Feedback Tab :SUCESS : Feedback description displays on feedback section." />
+          <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_5">
+            <ui:CommentOut.Body>
+              <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_26">
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log Report " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_17" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess" />
+                    <InArgument x:TypeArguments="x:String" x:Key="LogMessage" xml:space="preserve">D_Data_TCNo_71 _SUCESS:  Feedback description displays on feedback section.</InArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[ReportPath]</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+              </Sequence>
+            </ui:CommentOut.Body>
+          </ui:CommentOut>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_18">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_24" Level="Error" Message="[&quot;D_Data_TCNo_71_Feedback Tab :FAILURE: Feedback description displays on feedback section. Actual Description - &quot;+feedBackDescription+ &quot; Expected description - &quot;+submittedDescription]" />
+          <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_6">
+            <ui:CommentOut.Body>
+              <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_27">
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log Report " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_18" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess" />
+                    <InArgument x:TypeArguments="x:String" x:Key="LogMessage" xml:space="preserve">["D_Data_TCNo_71 _FAILURE:  Feedback description displays on feedback section. Actual Description - "+feedBackDescription+ " Expected description - "+submittedDescription]</InArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[ReportPath]</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+              </Sequence>
+            </ui:CommentOut.Body>
+          </ui:CommentOut>
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:UiElementExists DisplayName="Element Exists 'I'" Exists="[isUpVoteButtonPresent]" sap2010:WorkflowViewState.IdRef="UiElementExists_6">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="c57e82dab908f01b65ff1d5e65f7dcc6" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='I' class='fa fa-caret-up fa-2x pull-left voting' parentclass='btn btn-default votingButton' title='MOSAIC' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[isUpVoteButtonPresent]" sap2010:WorkflowViewState.IdRef="If_12">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_25" Level="Info" Message="D_Data_TCNo_71_Feedback Tab :SUCESS: Up vote button present." />
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_53">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_26" Level="Error" Message="D_Data_TCNo_71_Feedback Tab :FAILURE: Up vote button does not present." />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_38" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Feedback_tab_Upvote_button_exist_condition</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:UiElementExists DisplayName="Element Exists 'I'" Exists="[isDownVoteButtonPresent]" sap2010:WorkflowViewState.IdRef="UiElementExists_7">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="30d185f3614050c32fc440d7ee9bde77" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='I' class='fa fa-caret-down fa-2x voting' parentclass='btn btn-default votingButton' title='MOSAIC' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[isDownVoteButtonPresent]" sap2010:WorkflowViewState.IdRef="If_13">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_27" Level="Info" Message="D_Data_TCNo_71_Feedback Tab :SUCESS: Down vote button present." />
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_54">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_28" Level="Error" Message="D_Data_TCNo_71_Feedback Tab :FAILURE: Down vote button does not present." />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_39" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Feedback_tab_DownVote_button_exist_condition</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:GetAttribute ContinueOnError="{x:Null}" Attribute="aaname" DisplayName="Get attribute 'BUTTON'" sap2010:WorkflowViewState.IdRef="GetAttribute_4">
+      <ui:GetAttribute.Result>
+        <OutArgument x:TypeArguments="x:String">[voteCount]</OutArgument>
+      </ui:GetAttribute.Result>
+      <ui:GetAttribute.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="ea7eb2c333bf4a2a3d74c7f9115c2827" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='BUTTON' class='btn btn-default votingButton ng-binding' parentclass='col-md-1' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:GetAttribute.Target>
+    </ui:GetAttribute>
+    <If Condition="[voteCount.Contains(&quot;0&quot;)]" sap2010:WorkflowViewState.IdRef="If_16">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_33" Level="Info" Message="D_Data_TCNo_71_Feedback Tab :SUCESS :Default vote count matched with expected, before giving vote." />
+      </If.Then>
+      <If.Else>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_55">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_34" Level="Error" Message="[&quot;D_Data_TCNo_71_Feedback Tab :FAILURE :Default vote count does not matched with expected before giving vote. Actual is &quot; +voteCount+ &quot; Expected is 0&quot;]" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke TakeScreenshot workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_40" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Feedback_tab_vote_count</InArgument>
+              <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" DisplayName="Click 'I'" sap2010:WorkflowViewState.IdRef="Click_12" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="c57e82dab908f01b65ff1d5e65f7dcc6" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='I' class='fa fa-caret-up fa-2x pull-left voting' parentclass='btn btn-default votingButton' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="verifyMessage" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_19" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Vote submitted.</InArgument>
+        <OutArgument x:TypeArguments="x:Boolean" x:Key="flag">[messageFlag]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_actualMessage">[messageText]</OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="TC_No" xml:space="preserve">D_Data_TCNo_71_Feedback Tab </InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:GetAttribute ContinueOnError="{x:Null}" Attribute="aaname" DisplayName="Get attribute 'BUTTON'" sap2010:WorkflowViewState.IdRef="GetAttribute_3">
+      <ui:GetAttribute.Result>
+        <OutArgument x:TypeArguments="x:String">[voteCount]</OutArgument>
+      </ui:GetAttribute.Result>
+      <ui:GetAttribute.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="2450dc159a5a9d845228e44db998a252" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='BUTTON' class='btn btn-default votingButton ng-binding' parentclass='col-md-1' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:GetAttribute.Target>
+    </ui:GetAttribute>
+    <If Condition="[voteCount.Contains(&quot;1&quot;)]" sap2010:WorkflowViewState.IdRef="If_15">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_31" Level="Info" Message="D_Data_TCNo_71_Feedback Tab :SUCESS :Up vote count matched with expected, after giving vote." />
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_32" Level="Error" Message="[&quot;D_Data_TCNo_71_Feedback Tab :FAILURE :Up vote count does not matched with expected, after giving vote. Actual is &quot; +voteCount+ &quot; Expected is 1&quot;]" />
+      </If.Else>
+    </If>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1500" DelayMS="2000" DisplayName="Click 'I'" sap2010:WorkflowViewState.IdRef="Click_14" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="b348b1c7f62c81d1ae863675c9b8dc76" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='I' class='fa fa-caret-up fa-2x pull-left voted' parentclass='btn btn-default votingButton' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="verifyMessage" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_22" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">You already voted</InArgument>
+        <OutArgument x:TypeArguments="x:Boolean" x:Key="flag">[messageFlag]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_actualMessage">[messageText]</OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="TC_No" xml:space="preserve">D_Data_TCNo_71_Feedback Tab </InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="2000" DelayMS="2000" DisplayName="Click 'I'" sap2010:WorkflowViewState.IdRef="Click_16" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="b695fa0dba7070750ff9b05c311f7cda" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='I' class='fa fa-caret-down fa-2x voting' parentclass='btn btn-default votingButton' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:GetAttribute ContinueOnError="{x:Null}" Attribute="aaname" DisplayName="Get attribute 'BUTTON'" sap2010:WorkflowViewState.IdRef="GetAttribute_5">
+      <ui:GetAttribute.Result>
+        <OutArgument x:TypeArguments="x:String">[voteCount]</OutArgument>
+      </ui:GetAttribute.Result>
+      <ui:GetAttribute.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="2450dc159a5a9d845228e44db998a252" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='BUTTON' class='btn btn-default votingButton ng-binding' parentclass='col-md-1' title='MOSAIC' /&gt;" TimeoutMS="1000" WaitForReady="INTERACTIVE" />
+      </ui:GetAttribute.Target>
+    </ui:GetAttribute>
+    <If Condition="[voteCount.Contains(&quot;0&quot;)]" sap2010:WorkflowViewState.IdRef="If_18">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_37" Level="Info" Message="D_Data_TCNo_71_Feedback Tab :SUCESS :Default vote count matched with expected, before giving vote." />
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_38" Level="Error" Message="[&quot;D_Data_TCNo_71_Feedback Tab :FAILURE: Default vote count does not matched with expected before giving vote. Actual is &quot; +voteCount+ &quot; Expected is 0&quot;]" />
+      </If.Else>
+    </If>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="2000" DelayMS="2000" DisplayName="Click 'I'" sap2010:WorkflowViewState.IdRef="Click_17" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="b695fa0dba7070750ff9b05c311f7cda" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='I' class='fa fa-caret-down fa-2x voting' parentclass='btn btn-default votingButton' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="verifyMessage" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_25" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">Vote submitted.</InArgument>
+        <OutArgument x:TypeArguments="x:Boolean" x:Key="flag">[messageFlag]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_actualMessage">[messageText]</OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="TC_No" xml:space="preserve">D_Data_TCNo_71_Feedback Tab </InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:GetAttribute ContinueOnError="{x:Null}" Attribute="aaname" DisplayName="Get attribute 'BUTTON'" sap2010:WorkflowViewState.IdRef="GetAttribute_6">
+      <ui:GetAttribute.Result>
+        <OutArgument x:TypeArguments="x:String">[voteCount]</OutArgument>
+      </ui:GetAttribute.Result>
+      <ui:GetAttribute.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="2450dc159a5a9d845228e44db998a252" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='BUTTON' class='btn btn-default votingButton ng-binding' parentclass='col-md-1' title='MOSAIC' /&gt;" WaitForReady="INTERACTIVE" />
+      </ui:GetAttribute.Target>
+    </ui:GetAttribute>
+    <If Condition="[voteCount.Contains(&quot;-1&quot;)]" sap2010:WorkflowViewState.IdRef="If_20">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_41" Level="Info" Message="D_Data_TCNo_71_Feedback Tab : SUCESS :Down vote count matched with expected, before giving vote." />
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_42" Level="Error" Message="[&quot;D_Data_TCNo_71_Feedback Tab : FAILURE :Down vote count does not matched with expected before giving vote. Actual is &quot; +voteCount+ &quot; Expected is 0&quot;]" />
+      </If.Else>
+    </If>
+    <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" DisplayName="Click 'I'" sap2010:WorkflowViewState.IdRef="Click_19" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+      <ui:Click.CursorPosition>
+        <ui:CursorPosition Position="Center">
+          <ui:CursorPosition.OffsetX>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetX>
+          <ui:CursorPosition.OffsetY>
+            <InArgument x:TypeArguments="x:Int32" />
+          </ui:CursorPosition.OffsetY>
+        </ui:CursorPosition>
+      </ui:Click.CursorPosition>
+      <ui:Click.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="b695fa0dba7070750ff9b05c311f7cda" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='newContent' tag='I' class='fa fa-caret-down fa-2x voted' parentclass='btn btn-default votingButton' title='MOSAIC' /&gt;" TimeoutMS="1000" WaitForReady="INTERACTIVE" />
+      </ui:Click.Target>
+    </ui:Click>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="verifyMessage" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_28" UnSafe="False" WorkflowFileName="Generic\Verify_Message.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="expectedMessage">You already voted</InArgument>
+        <OutArgument x:TypeArguments="x:Boolean" x:Key="flag">[messageFlag]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_actualMessage">[messageText]</OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="TC_No" xml:space="preserve">D_Data_TCNo_71_Feedback Tab </InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_7">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_61">
+          <ui:WaitUiElementAppear ContinueOnError="True" DisplayName="element_DashboardTab" FoundElement="[element_DashboardTab]" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_1" WaitActive="False" WaitVisible="True">
+            <ui:WaitUiElementAppear.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="d8964721b738c5eee25941883e3e7a3c" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl aaname='Dashboard' parentid='tabs' tag='A' /&gt;" WaitForReady="INTERACTIVE" />
+            </ui:WaitUiElementAppear.Target>
+          </ui:WaitUiElementAppear>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_8">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_62">
+          <ui:GetAttribute Attribute="parentclass" ContinueOnError="True" DisplayName="Get attribute" sap2010:WorkflowViewState.IdRef="GetAttribute_9">
+            <ui:GetAttribute.Result>
+              <OutArgument x:TypeArguments="x:String">[parentClass]</OutArgument>
+            </ui:GetAttribute.Result>
+            <ui:GetAttribute.Target>
+              <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_DashboardTab]" WaitForReady="INTERACTIVE" />
+            </ui:GetAttribute.Target>
+          </ui:GetAttribute>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_9">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_63">
+          <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_54" Level="Info" Message="[&quot;parent class - &quot;+parentClass]" />
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
+    <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_10">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_64">
+          <If Condition="[parentClass.Contains(&quot;active&quot;)]" sap2010:WorkflowViewState.IdRef="If_25">
+            <If.Then>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_60">
+                <ui:Click ClickType="CLICK_SINGLE" DelayBefore="1000" DelayMS="1000" sap2010:WorkflowViewState.IdRef="Click_22" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                  <ui:Click.CursorPosition>
+                    <ui:CursorPosition Position="Center">
+                      <ui:CursorPosition.OffsetX>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetX>
+                      <ui:CursorPosition.OffsetY>
+                        <InArgument x:TypeArguments="x:Int32" />
+                      </ui:CursorPosition.OffsetY>
+                    </ui:CursorPosition>
+                  </ui:Click.CursorPosition>
+                  <ui:Click.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[element_DashboardTab]" WaitForReady="INTERACTIVE" />
+                  </ui:Click.Target>
+                </ui:Click>
+                <ui:UiElementExists DisplayName="Element Exists 'DIV'" Exists="[feedBackSectionOnDashboardTab]" sap2010:WorkflowViewState.IdRef="UiElementExists_10">
+                  <ui:UiElementExists.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="217e5fef64d1fb28e4e8e077d7cd435a" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='dashboard' tag='DIV' idx='28' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+                  </ui:UiElementExists.Target>
+                </ui:UiElementExists>
+                <ui:GetAttribute ContinueOnError="{x:Null}" Attribute="aaname" DisplayName="Get attribute 'H2'" sap2010:WorkflowViewState.IdRef="GetAttribute_8">
+                  <ui:GetAttribute.Result>
+                    <OutArgument x:TypeArguments="x:String">[feedBackCountOnDashBoardTab]</OutArgument>
+                  </ui:GetAttribute.Result>
+                  <ui:GetAttribute.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="bb55b0a2cc82f93f3914d4a61aebe7e2" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl idx='3' tag='H2' /&gt;" TimeoutMS="2000" WaitForReady="INTERACTIVE" />
+                  </ui:GetAttribute.Target>
+                </ui:GetAttribute>
+                <If Condition="[feedBackSectionOnDashboardTab]" sap2010:WorkflowViewState.IdRef="If_27">
+                  <If.Then>
+                    <Sequence sap2010:WorkflowViewState.IdRef="Sequence_58">
+                      <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_49" Level="Info" Message="D_Data_TCNo_71_Feedback Tab : SUCESS :Feedback section displays on dashboard tab." />
+                      <If Condition="[feedBackCountOnDashBoardTab.Contains(&quot;1&quot;)]" sap2010:WorkflowViewState.IdRef="If_26">
+                        <If.Then>
+                          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_56">
+                            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_50" Level="Info" Message="D_Data_TCNo_71_Feedback Tab : SUCESS :Feedback count matched with expected on dashboard tab." />
+                          </Sequence>
+                        </If.Then>
+                        <If.Else>
+                          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_57">
+                            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_51" Level="Error" Message="[&quot;D_Data_TCNo_71_Feedback Tab : FAILURE :Feedback count does not matches with expected on dashboard tab. Actual count is : &quot; +feedBackCountOnDashBoardTab+ &quot; Expected count is : 1&quot;]" />
+                            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log Report " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_41" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+                              <ui:InvokeWorkflowFile.Arguments>
+                                <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Feedback_count_on_Dashboard</InArgument>
+                                <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+                              </ui:InvokeWorkflowFile.Arguments>
+                            </ui:InvokeWorkflowFile>
+                          </Sequence>
+                        </If.Else>
+                      </If>
+                    </Sequence>
+                  </If.Then>
+                  <If.Else>
+                    <Sequence sap2010:WorkflowViewState.IdRef="Sequence_59">
+                      <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_52" Level="Error" Message="D_Data_TCNo_71_Feedback Tab : FAILURE :Feedback section does not displays on dashboard tab." />
+                      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Log Report " sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_42" UnSafe="False" WorkflowFileName="Generic\TakeScreenshot.xaml">
+                        <ui:InvokeWorkflowFile.Arguments>
+                          <InArgument x:TypeArguments="x:String" x:Key="ErrorPageName">Feedback_section_on_dashboard_page</InArgument>
+                          <InArgument x:TypeArguments="x:Boolean" x:Key="SuccessScreenshot">False</InArgument>
+                        </ui:InvokeWorkflowFile.Arguments>
+                      </ui:InvokeWorkflowFile>
+                    </Sequence>
+                  </If.Else>
+                </If>
+              </Sequence>
+            </If.Then>
+            <If.Else>
+              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_53" Level="Error" Message="D_Data_TCNo_71_Feedback Tab : ERROR : Dashboard Tab is disabled" />
+            </If.Else>
+          </If>
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Click_2" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="336,361">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_14" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="901,509" />
+      <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="LogMessage_6" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_4" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_34" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_49" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="901,490" />
+      <sap2010:ViewStateData Id="UiElementExists_3" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="LogMessage_7" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_8" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_35" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_50" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="901,490" />
+      <sap2010:ViewStateData Id="UiElementExists_4" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="LogMessage_9" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_10" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_36" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_51" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="901,490" />
+      <sap2010:ViewStateData Id="UiElementExists_5" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="LogMessage_11" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_12" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_37" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_52" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="901,490" />
+      <sap2010:ViewStateData Id="Click_3" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="901,87" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="901,60" />
+      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="901,134" />
+      <sap2010:ViewStateData Id="Click_5" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_6" sap:VirtualizedContainerService.HintSize="901,87" />
+      <sap2010:ViewStateData Id="SetValue_1" sap:VirtualizedContainerService.HintSize="901,134" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="901,60" />
+      <sap2010:ViewStateData Id="TypeInto_4" sap:VirtualizedContainerService.HintSize="901,134" />
+      <sap2010:ViewStateData Id="Click_11" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_9" sap:VirtualizedContainerService.HintSize="901,87" />
+      <sap2010:ViewStateData Id="TypeInto_2" sap:VirtualizedContainerService.HintSize="901,134" />
+      <sap2010:ViewStateData Id="TypeInto_3" sap:VirtualizedContainerService.HintSize="901,134" />
+      <sap2010:ViewStateData Id="Click_9" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="Click_7" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_12" sap:VirtualizedContainerService.HintSize="901,87" />
+      <sap2010:ViewStateData Id="GetAttribute_1" sap:VirtualizedContainerService.HintSize="901,134" />
+      <sap2010:ViewStateData Id="LogMessage_21" sap:VirtualizedContainerService.HintSize="416,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_15" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_24" sap:VirtualizedContainerService.HintSize="336,211">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_3" sap:VirtualizedContainerService.HintSize="416,289">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_15" sap:VirtualizedContainerService.HintSize="438,544">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_22" sap:VirtualizedContainerService.HintSize="416,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_16" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_25" sap:VirtualizedContainerService.HintSize="336,211">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_4" sap:VirtualizedContainerService.HintSize="416,289">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_16" sap:VirtualizedContainerService.HintSize="438,544">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_10" sap:VirtualizedContainerService.HintSize="901,692" />
+      <sap2010:ViewStateData Id="GetAttribute_2" sap:VirtualizedContainerService.HintSize="901,134" />
+      <sap2010:ViewStateData Id="LogMessage_23" sap:VirtualizedContainerService.HintSize="416,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_17" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_26" sap:VirtualizedContainerService.HintSize="336,211">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_5" sap:VirtualizedContainerService.HintSize="416,289">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_17" sap:VirtualizedContainerService.HintSize="438,544">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_24" sap:VirtualizedContainerService.HintSize="416,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_18" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_27" sap:VirtualizedContainerService.HintSize="336,211">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_6" sap:VirtualizedContainerService.HintSize="416,289">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_18" sap:VirtualizedContainerService.HintSize="438,544">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_11" sap:VirtualizedContainerService.HintSize="901,692" />
+      <sap2010:ViewStateData Id="UiElementExists_6" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="LogMessage_25" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_26" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_38" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_53" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_12" sap:VirtualizedContainerService.HintSize="901,490" />
+      <sap2010:ViewStateData Id="UiElementExists_7" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="LogMessage_27" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_28" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_39" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_54" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_13" sap:VirtualizedContainerService.HintSize="901,490" />
+      <sap2010:ViewStateData Id="GetAttribute_4" sap:VirtualizedContainerService.HintSize="901,134" />
+      <sap2010:ViewStateData Id="LogMessage_33" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_34" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_40" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_55" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_16" sap:VirtualizedContainerService.HintSize="901,490" />
+      <sap2010:ViewStateData Id="Click_12" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_19" sap:VirtualizedContainerService.HintSize="901,87" />
+      <sap2010:ViewStateData Id="GetAttribute_3" sap:VirtualizedContainerService.HintSize="901,134" />
+      <sap2010:ViewStateData Id="LogMessage_31" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_32" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_15" sap:VirtualizedContainerService.HintSize="901,239" />
+      <sap2010:ViewStateData Id="Click_14" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_22" sap:VirtualizedContainerService.HintSize="901,87" />
+      <sap2010:ViewStateData Id="Click_16" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="GetAttribute_5" sap:VirtualizedContainerService.HintSize="901,134" />
+      <sap2010:ViewStateData Id="LogMessage_37" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_38" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_18" sap:VirtualizedContainerService.HintSize="901,239" />
+      <sap2010:ViewStateData Id="Click_17" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_25" sap:VirtualizedContainerService.HintSize="901,87" />
+      <sap2010:ViewStateData Id="GetAttribute_6" sap:VirtualizedContainerService.HintSize="901,134" />
+      <sap2010:ViewStateData Id="LogMessage_41" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="LogMessage_42" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_20" sap:VirtualizedContainerService.HintSize="901,239" />
+      <sap2010:ViewStateData Id="Click_19" sap:VirtualizedContainerService.HintSize="901,106" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_28" sap:VirtualizedContainerService.HintSize="901,87" />
+      <sap2010:ViewStateData Id="WaitUiElementAppear_1" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Sequence_61" sap:VirtualizedContainerService.HintSize="336,230">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_7" sap:VirtualizedContainerService.HintSize="901,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="GetAttribute_9" sap:VirtualizedContainerService.HintSize="314,96" />
+      <sap2010:ViewStateData Id="Sequence_62" sap:VirtualizedContainerService.HintSize="336,220">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_8" sap:VirtualizedContainerService.HintSize="901,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_54" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Sequence_63" sap:VirtualizedContainerService.HintSize="336,215">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_9" sap:VirtualizedContainerService.HintSize="901,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Click_22" sap:VirtualizedContainerService.HintSize="314,68" />
+      <sap2010:ViewStateData Id="UiElementExists_10" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="GetAttribute_8" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_49" sap:VirtualizedContainerService.HintSize="697,91" />
+      <sap2010:ViewStateData Id="LogMessage_50" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Sequence_56" sap:VirtualizedContainerService.HintSize="336,215">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_51" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_41" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_57" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_26" sap:VirtualizedContainerService.HintSize="697,490" />
+      <sap2010:ViewStateData Id="Sequence_58" sap:VirtualizedContainerService.HintSize="719,745">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_52" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_42" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_59" sap:VirtualizedContainerService.HintSize="336,342">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_27" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_60" sap:VirtualizedContainerService.HintSize="336,465">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_53" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="If_25" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_64" sap:VirtualizedContainerService.HintSize="222,175">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_10" sap:VirtualizedContainerService.HintSize="901,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="923,12620">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FeedBackTab_1" sap:VirtualizedContainerService.HintSize="963,12740">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>
+            <x:Boolean x:Key="ShouldCollapseAll">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
