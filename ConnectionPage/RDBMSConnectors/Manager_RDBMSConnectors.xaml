@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Manager_RDBMSConnectors" this:Manager_RDBMSConnectors.RandomNo="[new Random().Next(100,99999999).ToString]"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Manager_RDBMSConnectors" this:Manager_RDBMSConnectors.RandomNo="[new Random().Next(100,999).ToString]"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
@@ -67,7 +67,10 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="Manager_RDBMSConnectors" sap2010:WorkflowViewState.IdRef="Sequence_2">
-    <ui:ClickImage ContinueOnError="{x:Null}" ClickType="CLICK_SINGLE" DelayBefore="2000" DelayMS="2000" DisplayName="Click image 'Configure New Connection Button'" sap2010:WorkflowViewState.IdRef="ClickImage_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:Boolean" Name="ConnectionCreationCheckFlag" />
+    </Sequence.Variables>
+    <ui:ClickImage ClickType="CLICK_SINGLE" ContinueOnError="True" DelayBefore="2000" DelayMS="2000" DisplayName="Click image 'Configure New Connection Button'" sap2010:WorkflowViewState.IdRef="ClickImage_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
       <ui:ClickImage.CursorPosition>
         <ui:CursorPosition Position="Center">
           <ui:CursorPosition.OffsetX>
@@ -85,7 +88,7 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" TimeoutMS="5000" WaitForReady="COMPLETE" />
       </ui:ClickImage.Target>
     </ui:ClickImage>
-    <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Select item 'SELECT'" sap2010:WorkflowViewState.IdRef="SelectItem_2" Item="RDBMS">
+    <ui:SelectItem DelayAfter="{x:Null}" DelayBefore="{x:Null}" ContinueOnError="True" DisplayName="Select item 'SELECT'" sap2010:WorkflowViewState.IdRef="SelectItem_2" Item="RDBMS">
       <ui:SelectItem.Items>
         <scg:List x:TypeArguments="x:String" Capacity="8">
           <x:String>Select connection type</x:String>
@@ -115,7 +118,7 @@
           </Sequence>
         </ui:CommentOut.Body>
       </ui:CommentOut>
-      <ui:FindChildren Children="[FindChildrenResult]" DisplayName="Find children 'SELECT'" Filter="&lt;webctrl /&gt;" sap2010:WorkflowViewState.IdRef="FindChildren_1" Scope="FIND_CHILDREN">
+      <ui:FindChildren Children="[FindChildrenResult]" ContinueOnError="True" DisplayName="Find children 'SELECT'" Filter="&lt;webctrl /&gt;" sap2010:WorkflowViewState.IdRef="FindChildren_1" Scope="FIND_CHILDREN">
         <ui:FindChildren.Target>
           <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="fcbedd2bbd93c93fa8920343e21b6f10" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='SELECT' parentclass='ui-select' parentid='app' parentname='createCompnentForm' title='MOSAIC' idx='2' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
         </ui:FindChildren.Target>
@@ -139,7 +142,7 @@
                 <Variable x:TypeArguments="x:String" Name="Type" />
                 <Variable x:TypeArguments="x:String" Name="RDBMSConnectionName_Generic" />
               </Sequence.Variables>
-              <ui:GetAttribute ContinueOnError="{x:Null}" Attribute="aaname" DisplayName="Get attribute" sap2010:WorkflowViewState.IdRef="GetAttribute_1">
+              <ui:GetAttribute Attribute="aaname" ContinueOnError="True" DisplayName="Get attribute" sap2010:WorkflowViewState.IdRef="GetAttribute_1">
                 <ui:GetAttribute.Result>
                   <OutArgument x:TypeArguments="x:String">[Type]</OutArgument>
                 </ui:GetAttribute.Result>
@@ -151,7 +154,7 @@
               <If Condition="[Type.Contains(&quot;Oracle&quot;)]" DisplayName="If:RDBMS Connection Type Is Oracle" sap2010:WorkflowViewState.IdRef="If_1">
                 <If.Then>
                   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
-                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_Utility.xaml">
+                    <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_Utility.xaml">
                       <ui:InvokeWorkflowFile.Arguments>
                         <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
                         <InArgument x:TypeArguments="x:String" x:Key="Type">[Type]</InArgument>
@@ -160,11 +163,16 @@
                         <InArgument x:TypeArguments="x:String" x:Key="Username">sangeeta</InArgument>
                         <InArgument x:TypeArguments="x:String" x:Key="DatabaseName">MAXIQ</InArgument>
                         <InArgument x:TypeArguments="x:String" x:Key="Password">password</InArgument>
-                        <InArgument x:TypeArguments="x:String" x:Key="ConnectionName">RDBMS_Oracle_Con_</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="ConnectionName">RDBMS_Oracle_con_</InArgument>
                         <OutArgument x:TypeArguments="x:String" x:Key="NewConnectionName">[RDBMSConnectionName_Generic]</OutArgument>
+                        <InOutArgument x:TypeArguments="x:Boolean" x:Key="ConnectionCreationFlag">[ConnectionCreationCheckFlag]</InOutArgument>
                       </ui:InvokeWorkflowFile.Arguments>
                     </ui:InvokeWorkflowFile>
-                    <AddToCollection x:TypeArguments="x:String" Collection="[RDBMSdsName_List]" DisplayName="Add to collection" sap2010:WorkflowViewState.IdRef="AddToCollection`1_1" Item="[RDBMSConnectionName_Generic]" />
+                    <If Condition="[ConnectionCreationCheckFlag]" sap2010:WorkflowViewState.IdRef="If_11">
+                      <If.Then>
+                        <AddToCollection x:TypeArguments="x:String" Collection="[RDBMSdsName_List]" DisplayName="Add to collection" sap2010:WorkflowViewState.IdRef="AddToCollection`1_1" Item="[RDBMSConnectionName_Generic]" />
+                      </If.Then>
+                    </If>
                     <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;Connection Name - &quot; +RDBMSConnectionName_Generic]" />
                   </Sequence>
                 </If.Then>
@@ -174,10 +182,10 @@
                   <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_13">
                     <If Condition="[Type.Contains(&quot;Teradata&quot;)]" DisplayName="If:RDBMS Connection Type Is Teradata" sap2010:WorkflowViewState.IdRef="If_7">
                       <If.Then>
-                        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_TeraDataConnectionConnection.xaml">
+                        <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_TeraDataConnectionConnection.xaml">
                           <ui:InvokeWorkflowFile.Arguments>
                             <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
-                            <InArgument x:TypeArguments="x:String" x:Key="TeraDataCon">TeradDatConnectionName</InArgument>
+                            <InArgument x:TypeArguments="x:String" x:Key="TeraDataCon">TeradDatAcon_</InArgument>
                             <OutArgument x:TypeArguments="x:String" x:Key="NewTeraDataConnectionName" />
                           </ui:InvokeWorkflowFile.Arguments>
                         </ui:InvokeWorkflowFile>
@@ -186,69 +194,12 @@
                   </Sequence>
                 </ui:CommentOut.Body>
               </ui:CommentOut>
-              <If Condition="[Type.Contains(&quot;IBM DB2&quot;)]" DisplayName="If:RDBMS Connection Type Is IBM DB2" sap2010:WorkflowViewState.IdRef="If_2">
-                <If.Then>
-                  <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_Utility.xaml">
-                    <ui:InvokeWorkflowFile.Arguments>
-                      <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
-                      <InArgument x:TypeArguments="x:String" x:Key="Type">[Type]</InArgument>
-                      <InArgument x:TypeArguments="x:String" x:Key="IPAddress">dataconnector.canadacentral.cloudapp.azure.com</InArgument>
-                      <InArgument x:TypeArguments="x:String" x:Key="Port">1521</InArgument>
-                      <InArgument x:TypeArguments="x:String" x:Key="Username">sangeeta</InArgument>
-                      <InArgument x:TypeArguments="x:String" x:Key="DatabaseName">MAXIQ</InArgument>
-                      <InArgument x:TypeArguments="x:String" x:Key="Password">password</InArgument>
-                      <InArgument x:TypeArguments="x:String" x:Key="ConnectionName">Automation_RDBMS_IBMDB2Connection_</InArgument>
-                      <OutArgument x:TypeArguments="x:String" x:Key="NewConnectionName" />
-                    </ui:InvokeWorkflowFile.Arguments>
-                  </ui:InvokeWorkflowFile>
-                </If.Then>
-              </If>
-              <If Condition="[Type.Contains(&quot;Postgres&quot;)]" DisplayName="If:RDBMS Connection Type Is Postgres" sap2010:WorkflowViewState.IdRef="If_3">
-                <If.Then>
-                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_9">
-                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_Utility.xaml">
-                      <ui:InvokeWorkflowFile.Arguments>
-                        <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
-                        <InArgument x:TypeArguments="x:String" x:Key="Type">[Type]</InArgument>
-                        <InArgument x:TypeArguments="x:String" x:Key="IPAddress">dataconnector.canadacentral.cloudapp.azure.com</InArgument>
-                        <InArgument x:TypeArguments="x:String" x:Key="Port">5432</InArgument>
-                        <InArgument x:TypeArguments="x:String" x:Key="Username">maxiq</InArgument>
-                        <InArgument x:TypeArguments="x:String" x:Key="DatabaseName">maxiq</InArgument>
-                        <InArgument x:TypeArguments="x:String" x:Key="Password">maxiq</InArgument>
-                        <InArgument x:TypeArguments="x:String" x:Key="ConnectionName">RDBMS_PostgresCon_</InArgument>
-                        <OutArgument x:TypeArguments="x:String" x:Key="NewConnectionName">[RDBMSConnectionName_Generic]</OutArgument>
-                      </ui:InvokeWorkflowFile.Arguments>
-                    </ui:InvokeWorkflowFile>
-                    <AddToCollection x:TypeArguments="x:String" Collection="[RDBMSdsName_List]" DisplayName="Add to collection" sap2010:WorkflowViewState.IdRef="AddToCollection`1_5" Item="[RDBMSConnectionName_Generic]" />
-                  </Sequence>
-                </If.Then>
-              </If>
-              <If Condition="[Type.Contains(&quot;mysql&quot;)]" DisplayName="If:RDBMS Connection Type Is mysql" sap2010:WorkflowViewState.IdRef="If_4">
-                <If.Then>
-                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_10">
-                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_Utility.xaml">
-                      <ui:InvokeWorkflowFile.Arguments>
-                        <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
-                        <InArgument x:TypeArguments="x:String" x:Key="Type">[Type]</InArgument>
-                        <InArgument x:TypeArguments="x:String" x:Key="IPAddress">unitraxnew2.vhb44jbg2kvupl5flawkhkcarc.ux.internal.cloudapp.net</InArgument>
-                        <InArgument x:TypeArguments="x:String" x:Key="Port">3306</InArgument>
-                        <InArgument x:TypeArguments="x:String" x:Key="Username">root</InArgument>
-                        <InArgument x:TypeArguments="x:String" x:Key="DatabaseName">sangeeta</InArgument>
-                        <InArgument x:TypeArguments="x:String" x:Key="Password">maxiq</InArgument>
-                        <InArgument x:TypeArguments="x:String" x:Key="ConnectionName">RDBMS_MySql_Con_</InArgument>
-                        <OutArgument x:TypeArguments="x:String" x:Key="NewConnectionName">[RDBMSConnectionName_Generic]</OutArgument>
-                      </ui:InvokeWorkflowFile.Arguments>
-                    </ui:InvokeWorkflowFile>
-                    <AddToCollection x:TypeArguments="x:String" Collection="[RDBMSdsName_List]" DisplayName="Add to collection" sap2010:WorkflowViewState.IdRef="AddToCollection`1_6" Item="[RDBMSConnectionName_Generic]" />
-                  </Sequence>
-                </If.Then>
-              </If>
-              <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_9">
+              <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_21">
                 <ui:CommentOut.Body>
-                  <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_16">
-                    <If Condition="[Type.Contains(&quot;IBM Netezza&quot;)]" DisplayName="If:RDBMS Connection Type Is IBM Netezza" sap2010:WorkflowViewState.IdRef="If_5">
+                  <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_26">
+                    <If Condition="[Type.Contains(&quot;IBM DB2&quot;)]" DisplayName="If:RDBMS Connection Type Is IBM DB2" sap2010:WorkflowViewState.IdRef="If_2">
                       <If.Then>
-                        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_Utility.xaml">
+                        <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_Utility.xaml">
                           <ui:InvokeWorkflowFile.Arguments>
                             <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
                             <InArgument x:TypeArguments="x:String" x:Key="Type">[Type]</InArgument>
@@ -257,7 +208,82 @@
                             <InArgument x:TypeArguments="x:String" x:Key="Username">sangeeta</InArgument>
                             <InArgument x:TypeArguments="x:String" x:Key="DatabaseName">MAXIQ</InArgument>
                             <InArgument x:TypeArguments="x:String" x:Key="Password">password</InArgument>
-                            <InArgument x:TypeArguments="x:String" x:Key="ConnectionName">Automation_RDBMS_OracleConnection_</InArgument>
+                            <InArgument x:TypeArguments="x:String" x:Key="ConnectionName">Automation_RDBMS_IBMDB2Connection_</InArgument>
+                            <OutArgument x:TypeArguments="x:String" x:Key="NewConnectionName" />
+                            <InOutArgument x:TypeArguments="x:Boolean" x:Key="ConnectionCreationFlag">[ConnectionCreationCheckFlag]</InOutArgument>
+                          </ui:InvokeWorkflowFile.Arguments>
+                        </ui:InvokeWorkflowFile>
+                      </If.Then>
+                    </If>
+                  </Sequence>
+                </ui:CommentOut.Body>
+              </ui:CommentOut>
+              <If Condition="[Type.Contains(&quot;Postgres&quot;)]" DisplayName="If:RDBMS Connection Type Is Postgres" sap2010:WorkflowViewState.IdRef="If_3">
+                <If.Then>
+                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_9">
+                    <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_Utility.xaml">
+                      <ui:InvokeWorkflowFile.Arguments>
+                        <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
+                        <InArgument x:TypeArguments="x:String" x:Key="Type">[Type]</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="IPAddress">dataconnector.canadacentral.cloudapp.azure.com</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="Port">5432</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="Username">maxiq</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="DatabaseName">maxiq</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="Password">maxiq</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="ConnectionName">RDBMS_Postgrescon_</InArgument>
+                        <OutArgument x:TypeArguments="x:String" x:Key="NewConnectionName">[RDBMSConnectionName_Generic]</OutArgument>
+                        <InOutArgument x:TypeArguments="x:Boolean" x:Key="ConnectionCreationFlag">[ConnectionCreationCheckFlag]</InOutArgument>
+                      </ui:InvokeWorkflowFile.Arguments>
+                    </ui:InvokeWorkflowFile>
+                    <If Condition="[ConnectionCreationCheckFlag]" sap2010:WorkflowViewState.IdRef="If_10">
+                      <If.Then>
+                        <AddToCollection x:TypeArguments="x:String" Collection="[RDBMSdsName_List]" DisplayName="Add to collection" sap2010:WorkflowViewState.IdRef="AddToCollection`1_5" Item="[RDBMSConnectionName_Generic]" />
+                      </If.Then>
+                    </If>
+                  </Sequence>
+                </If.Then>
+              </If>
+              <If Condition="[Type.Contains(&quot;mysql&quot;)]" DisplayName="If:RDBMS Connection Type Is mysql" sap2010:WorkflowViewState.IdRef="If_4">
+                <If.Then>
+                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_10">
+                    <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_Utility.xaml">
+                      <ui:InvokeWorkflowFile.Arguments>
+                        <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
+                        <InArgument x:TypeArguments="x:String" x:Key="Type">[Type]</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="IPAddress">unitraxnew2.vhb44jbg2kvupl5flawkhkcarc.ux.internal.cloudapp.net</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="Port">3306</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="Username">root</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="DatabaseName">sangeeta</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="Password">maxiq</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="ConnectionName">RDBMS_MySql_con_</InArgument>
+                        <OutArgument x:TypeArguments="x:String" x:Key="NewConnectionName">[RDBMSConnectionName_Generic]</OutArgument>
+                        <InOutArgument x:TypeArguments="x:Boolean" x:Key="ConnectionCreationFlag">[ConnectionCreationCheckFlag]</InOutArgument>
+                      </ui:InvokeWorkflowFile.Arguments>
+                    </ui:InvokeWorkflowFile>
+                    <If Condition="[ConnectionCreationCheckFlag]" sap2010:WorkflowViewState.IdRef="If_9">
+                      <If.Then>
+                        <AddToCollection x:TypeArguments="x:String" Collection="[RDBMSdsName_List]" DisplayName="Add to collection" sap2010:WorkflowViewState.IdRef="AddToCollection`1_6" Item="[RDBMSConnectionName_Generic]" />
+                      </If.Then>
+                    </If>
+                  </Sequence>
+                </If.Then>
+              </If>
+              <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_9">
+                <ui:CommentOut.Body>
+                  <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_16">
+                    <If Condition="[Type.Contains(&quot;IBM Netezza&quot;)]" DisplayName="If:RDBMS Connection Type Is IBM Netezza" sap2010:WorkflowViewState.IdRef="If_5">
+                      <If.Then>
+                        <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_Utility.xaml">
+                          <ui:InvokeWorkflowFile.Arguments>
+                            <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
+                            <InArgument x:TypeArguments="x:String" x:Key="Type">[Type]</InArgument>
+                            <InArgument x:TypeArguments="x:String" x:Key="IPAddress">dataconnector.canadacentral.cloudapp.azure.com</InArgument>
+                            <InArgument x:TypeArguments="x:String" x:Key="Port">1521</InArgument>
+                            <InArgument x:TypeArguments="x:String" x:Key="Username">sangeeta</InArgument>
+                            <InArgument x:TypeArguments="x:String" x:Key="DatabaseName">MAXIQ</InArgument>
+                            <InArgument x:TypeArguments="x:String" x:Key="Password">password</InArgument>
+                            <InArgument x:TypeArguments="x:String" x:Key="ConnectionName">Automation_RDBMS_Oraclecon_</InArgument>
+                            <OutArgument x:TypeArguments="x:String" x:Key="NewConnectionName" />
                           </ui:InvokeWorkflowFile.Arguments>
                         </ui:InvokeWorkflowFile>
                       </If.Then>
@@ -268,7 +294,7 @@
               <If Condition="[Type.Contains(&quot;SQL Server&quot;)]" DisplayName="If:RDBMS Connection Type Is SQL Server" sap2010:WorkflowViewState.IdRef="If_6">
                 <If.Then>
                   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_12">
-                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_Utility.xaml">
+                    <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_Utility.xaml">
                       <ui:InvokeWorkflowFile.Arguments>
                         <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
                         <InArgument x:TypeArguments="x:String" x:Key="Type">[Type]</InArgument>
@@ -277,11 +303,16 @@
                         <InArgument x:TypeArguments="x:String" x:Key="Username">maxiq</InArgument>
                         <InArgument x:TypeArguments="x:String" x:Key="DatabaseName">tempdb</InArgument>
                         <InArgument x:TypeArguments="x:String" x:Key="Password">Newuser1</InArgument>
-                        <InArgument x:TypeArguments="x:String" x:Key="ConnectionName">RDBMS_SQLServerCon_</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="ConnectionName">RDBMS_SQLServercon_</InArgument>
                         <OutArgument x:TypeArguments="x:String" x:Key="NewConnectionName">[RDBMSConnectionName_Generic]</OutArgument>
+                        <InOutArgument x:TypeArguments="x:Boolean" x:Key="ConnectionCreationFlag">[ConnectionCreationCheckFlag]</InOutArgument>
                       </ui:InvokeWorkflowFile.Arguments>
                     </ui:InvokeWorkflowFile>
-                    <AddToCollection x:TypeArguments="x:String" Collection="[RDBMSdsName_List]" DisplayName="Add to collection" sap2010:WorkflowViewState.IdRef="AddToCollection`1_7" Item="[RDBMSConnectionName_Generic]" />
+                    <If Condition="[ConnectionCreationCheckFlag]" sap2010:WorkflowViewState.IdRef="If_12">
+                      <If.Then>
+                        <AddToCollection x:TypeArguments="x:String" Collection="[RDBMSdsName_List]" DisplayName="Add to collection" sap2010:WorkflowViewState.IdRef="AddToCollection`1_7" Item="[RDBMSConnectionName_Generic]" />
+                      </If.Then>
+                    </If>
                   </Sequence>
                 </If.Then>
               </If>
@@ -292,30 +323,36 @@
                   </Sequence>
                 </ui:CommentOut.Body>
               </ui:CommentOut>
-              <If Condition="[Type.Contains(&quot;Teradata&quot;)]" DisplayName="If:RDBMS Connection Type Is SQL Server" sap2010:WorkflowViewState.IdRef="If_8">
-                <If.Then>
-                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_15">
-                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_9" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_TeraDataConnection.xaml">
-                      <ui:InvokeWorkflowFile.Arguments>
-                        <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
-                        <InArgument x:TypeArguments="x:String" x:Key="TeraDataCon">RDBMS_TeraData_Con_</InArgument>
-                        <OutArgument x:TypeArguments="x:String" x:Key="NewTeraDataConnectionName">[RDBMSConnectionName_Generic]</OutArgument>
-                      </ui:InvokeWorkflowFile.Arguments>
-                    </ui:InvokeWorkflowFile>
-                    <AddToCollection x:TypeArguments="x:String" Collection="[RDBMSdsName_List]" DisplayName="Add to collection" sap2010:WorkflowViewState.IdRef="AddToCollection`1_9" Item="[RDBMSConnectionName_Generic]" />
+              <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_20">
+                <ui:CommentOut.Body>
+                  <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_25">
+                    <If Condition="[Type.Contains(&quot;Teradata&quot;)]" DisplayName="If:RDBMS Connection Type Is SQL Server" sap2010:WorkflowViewState.IdRef="If_8">
+                      <If.Then>
+                        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_15">
+                          <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="Invoke workflow file" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_9" UnSafe="False" WorkflowFileName="ConnectionPage\RDBMSConnectors\Manager_RDBMS_TeraDataConnection.xaml">
+                            <ui:InvokeWorkflowFile.Arguments>
+                              <InArgument x:TypeArguments="x:String" x:Key="RandomNo" />
+                              <InArgument x:TypeArguments="x:String" x:Key="TeraDataCon">RDBMS_TeraData_con_</InArgument>
+                              <OutArgument x:TypeArguments="x:String" x:Key="NewTeraDataConnectionName">[RDBMSConnectionName_Generic]</OutArgument>
+                            </ui:InvokeWorkflowFile.Arguments>
+                          </ui:InvokeWorkflowFile>
+                          <AddToCollection x:TypeArguments="x:String" Collection="[RDBMSdsName_List]" DisplayName="Add to collection" sap2010:WorkflowViewState.IdRef="AddToCollection`1_9" Item="[RDBMSConnectionName_Generic]" />
+                        </Sequence>
+                      </If.Then>
+                    </If>
                   </Sequence>
-                </If.Then>
-              </If>
+                </ui:CommentOut.Body>
+              </ui:CommentOut>
             </Sequence>
           </ActivityAction>
         </ui:ForEach.Body>
       </ui:ForEach>
     </Sequence>
-    <sads:DebugSymbol.Symbol>d1xEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxDb25uZWN0aW9uUGFnZVxSREJNU0Nvbm5lY3RvcnNcTWFuYWdlcl9SREJNU0Nvbm5lY3RvcnMueGFtbHgBcwGeAQECRQO7Ag4CAQFGBVcVAwGRAVgFZhUDAY4BZwW5AhACAQJGY0ZpAwGTAUZURloDAZIBVUpVegMBlgFVhQFViwEDAZUBUjNSOAMBlAFYswFYugEDAY8BZJgBZPsBAwGQAWsHdRcDAY0Bdgd6GQMBiAF7B4IBEAMBhAGDAQe4AhQCAQN4hQF4sQIDAYwBeLwCeMICAwGLAXZkdncDAYoBdiF2NwMBiQGAATyAAVEDAYcBfT19TwMBhQGDAX6DAZQBAwGDAYkBDbUCGAIBBI4BD5UBIQIBfZYBD5YBtwECAXqXAQ+rARQCAWKsAQ+8AR8CAWG9AQ/NARQCAVTOAQ/hARQCAT/iAQ/1ARQCASr2AQ+LAh8CASmMAg+fAhQCARSgAg+mAh8CAROnAg+0AhQCAQWOAUWOAU0DAYABkAE7kAFBAgF+kwFpkwFxAwGBAZYBfJYBtAECAXuXAR2XAUICAWOZAROpAR4CAWW9AR29AUMCAVW/ARPLASsCAVfOAR3OAUQCAUDQARPfAR4CAULiAR3iAUECASvkARPzAR4CAS2MAh2MAkYCARWOAhOdAh4CARenAh2nAkQCAQapAhOyAh4CAQiaARWmAS0CAW6nARWnAd4BAgFpqAEVqAHEAQIBZsMBUMMBfgIBYMgBVcgBdwIBX8UBT8UBVwIBXsQBS8QBTwIBXccBT8cBVwIBXMIBS8IBUQIBWsYBU8YBWAIBWb8BvwG/AfoBAgFY0QEV3QEtAgFI3gEV3gHeAQIBQ+UBFfEBLQIBM/IBFfIB3gECAS6PAhWbAi0CAR2cAhWcAt4BAgEYqgIVsAItAgEOsQIVsQLeAQIBCZ4BUp4BgAECAXmjAVejAWgCAXikAVukAXgCAXagAVGgAVkCAXWfAU2fAVECAXSiAVGiAVkCAXOdAU2dAVMCAXGhAVWhAVoCAXCaAcEBmgH8AQIBb6cBTKcBYAIBbKcBvAGnAdsBAgFqqAGCAagBwQECAWfVAVLVAYABAgFT2gFX2gFpAgFS2wFb2wF4AgFQ1wFR1wFWAgFP1gFN1gFRAgFO2QFR2QFWAgFN1AFN1AFTAgFL2AFV2AFaAgFK0QHBAdEB/AECAUneAUzeAWACAUbeAbwB3gHbAQIBROkBUukBkQECAT7uAVfuAWcCAT3vAVvvAXgCATvrAVHrAVUCATrqAU3qAVECATntAVHtAVYCATjoAU3oAVMCATbsAVXsAV0CATXlAcEB5QH8AQIBNPIBTPIBYAIBMfIBvAHyAdsBAgEvkwJSkwJfAgEomAJXmAJqAgEnmQJbmQJ4AgEllQJRlQJWAgEklAJNlAJRAgEjlwJRlwJZAgEikgJNkgJTAgEglgJVlgJbAgEfjwLBAY8C/AECAR6cAkycAmACARucArwBnALbAQIBGa0CVK0CZwIBEq4CY64CgAECARCqAsEBqgKHAgIBD7ECTLECYAIBDLECvAGxAtsBAgEK</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1xEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxDb25uZWN0aW9uUGFnZVxSREJNU0Nvbm5lY3RvcnNcTWFuYWdlcl9SREJNU0Nvbm5lY3RvcnMueGFtbHkBcwGZAQECRQPgAg4CAQFJBVoVAwGTAVsFaRUDAY8BagXeAhACAQJJX0llAwGWAUk9SUMDAZUBSVBJVgMBlAFYSlh6AwGZAViFAViLAQMBmAFVM1U4AwGXAVtRW1cDAZEBW68BW7YBAwGQAWeYAWf7AQMBkgFuB3gXAwGOAXkHfRkDAYgBfgeFARADAYQBhgEH3QIUAgEDe4UBe7ECAwGNAXu8AnvCAgMBjAF5SHlOAwGLAXl7eY4BAwGKAXkheTcDAYkBgwE8gwFRAwGHAYABPYABTwMBhQGGAX6GAZQBAwGDAYwBDdoCGAIBBJEBD5gBIQIBfJkBD5kBtwECAXmaAQ+zARQCAVu0AQ/EAR8CAVrFAQ/cAR8CAVndAQ/1ARQCAT72AQ+OAhQCASOPAg+lAh8CASKmAg++AhQCAQe/Ag/FAh8CAQbGAg/ZAh8CAQWRAUORAUkDAYABkQEqkQEyAgF/kwE7kwFBAgF9lgFplgFxAwGBAZkBfJkBtAECAXqaAR2aAUICAVycAROxAR4CAV7dAR3dAUQCAT/fARPzAR4CAUH2AR32AUECAST4AROMAh4CASamAh2mAkYCAQioAhO8Ah4CAQqdARWqAS0CAWqrARWvARoCAWKwARWwAcQBAgFf4AEV7QEtAgFK7gEV8gEaAgFC+QEVhgItAgEvhwIViwIaAgEnqQIVtgItAgETtwIVuwIaAgELoQFSoQGAAQIBeKYBV6YBaAIBd50BPJ0BQgIBdqcBW6cBeAIBdKgBY6gBgAECAXKjAVGjAVkCAXGiAU2iAVECAXClAVGlAVkCAW+gAU2gAVMCAW2kAVWkAVoCAWydAb0BnQH4AQIBa6sBI6sBQgIBY60BGa0B4gECAWWwAYIBsAHBAQIBYOQBUuQBgAECAVjpAVfpAWkCAVfgATzgAUICAVbqAVvqAXgCAVTrAWPrAYABAgFS5gFR5gFWAgFR5QFN5QFRAgFQ6AFR6AFWAgFP4wFN4wFTAgFN5wFV5wFaAgFM4AG9AeAB+AECAUvuASPuAUICAUPwARnwAeIBAgFF/QFS/QGRAQIBPYICV4ICZwIBPPkBPPkBQgIBO4MCW4MCeAIBOYQCY4QCgAECATf/AVH/AVUCATb+AU3+AVECATWBAlGBAlYCATT8AU38AVMCATKAAlWAAl0CATH5Ab0B+QH4AQIBMIcCI4cCQgIBKIkCGYkC4gECASqtAlKtAl8CASGyAleyAmoCASCpAjypAkICAR+zAluzAngCAR20AmO0AoABAgEbrwJRrwJWAgEargJNrgJRAgEZsQJRsQJZAgEYrAJNrAJTAgEWsAJVsAJbAgEVqQK9AakC+AECARS3AiO3AkICAQy5Ahm5AuIBAgEOrQFQrQFkAgForQHAAa0B3wECAWbwAVDwAWQCAUjwAcAB8AHfAQIBRokCUIkCZAIBLYkCwAGJAt8BAgEruQJQuQJkAgERuQLAAbkC3wECAQ8=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="ClickImage_2" sap:VirtualizedContainerService.HintSize="562,51">
+      <sap2010:ViewStateData Id="ClickImage_2" sap:VirtualizedContainerService.HintSize="671,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -323,7 +360,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="SelectItem_2" sap:VirtualizedContainerService.HintSize="562,51">
+      <sap2010:ViewStateData Id="SelectItem_2" sap:VirtualizedContainerService.HintSize="671,134">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
@@ -345,7 +382,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CommentOut_2" sap:VirtualizedContainerService.HintSize="540,51">
+      <sap2010:ViewStateData Id="CommentOut_2" sap:VirtualizedContainerService.HintSize="649,336">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -353,44 +390,45 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="FindChildren_1" sap:VirtualizedContainerService.HintSize="540,51">
+      <sap2010:ViewStateData Id="FindChildren_1" sap:VirtualizedContainerService.HintSize="649,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="540,60" />
-      <sap2010:ViewStateData Id="GetAttribute_1" sap:VirtualizedContainerService.HintSize="502,51">
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="649,60" />
+      <sap2010:ViewStateData Id="GetAttribute_1" sap:VirtualizedContainerService.HintSize="611,96">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="502,51">
+      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="611,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,87">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="464,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="AddToCollection`1_1" sap:VirtualizedContainerService.HintSize="314,22" />
-      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91">
+      <sap2010:ViewStateData Id="AddToCollection`1_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_11" sap:VirtualizedContainerService.HintSize="464,208" />
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="464,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="336,404">
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="486,590">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -398,7 +436,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="502,51">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="611,738">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -429,7 +467,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CommentOut_10" sap:VirtualizedContainerService.HintSize="502,51">
+      <sap2010:ViewStateData Id="CommentOut_10" sap:VirtualizedContainerService.HintSize="611,436">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
@@ -444,7 +482,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="502,51">
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,234">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -452,6 +490,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_26" sap:VirtualizedContainerService.HintSize="486,358">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_21" sap:VirtualizedContainerService.HintSize="611,436" />
       <sap2010:ViewStateData Id="InvokeWorkflowFile_3" sap:VirtualizedContainerService.HintSize="314,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -459,8 +505,16 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="AddToCollection`1_5" sap:VirtualizedContainerService.HintSize="314,22" />
-      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="336,273">
+      <sap2010:ViewStateData Id="AddToCollection`1_5" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_10" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="336,302">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -468,7 +522,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="502,51">
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="611,450">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -476,15 +530,15 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_4" sap:VirtualizedContainerService.HintSize="314,87">
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_4" sap:VirtualizedContainerService.HintSize="464,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="AddToCollection`1_6" sap:VirtualizedContainerService.HintSize="314,22" />
-      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="336,273">
+      <sap2010:ViewStateData Id="AddToCollection`1_6" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="464,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -492,7 +546,15 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="502,51">
+      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="486,459">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="611,607">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -516,16 +578,17 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CommentOut_9" sap:VirtualizedContainerService.HintSize="502,51" />
-      <sap2010:ViewStateData Id="InvokeWorkflowFile_6" sap:VirtualizedContainerService.HintSize="314,87">
+      <sap2010:ViewStateData Id="CommentOut_9" sap:VirtualizedContainerService.HintSize="611,436" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_6" sap:VirtualizedContainerService.HintSize="464,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="AddToCollection`1_7" sap:VirtualizedContainerService.HintSize="314,22" />
-      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="336,273">
+      <sap2010:ViewStateData Id="AddToCollection`1_7" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_12" sap:VirtualizedContainerService.HintSize="464,208" />
+      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="486,459">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -533,7 +596,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="502,51">
+      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="611,607">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -549,7 +612,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CommentOut_15" sap:VirtualizedContainerService.HintSize="502,224" />
+      <sap2010:ViewStateData Id="CommentOut_15" sap:VirtualizedContainerService.HintSize="611,224" />
       <sap2010:ViewStateData Id="InvokeWorkflowFile_9" sap:VirtualizedContainerService.HintSize="314,87">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -566,7 +629,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_8" sap:VirtualizedContainerService.HintSize="502,51">
+      <sap2010:ViewStateData Id="If_8" sap:VirtualizedContainerService.HintSize="464,420">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -574,42 +637,57 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="524,1258">
+      <sap2010:ViewStateData Id="Sequence_25" sap:VirtualizedContainerService.HintSize="486,544">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_20" sap:VirtualizedContainerService.HintSize="611,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="540,1392">
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="633,4696">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="649,4830">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="562,1798">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="671,5576">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="584,2104">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="693,6020">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Manager_RDBMSConnectors_1" sap:VirtualizedContainerService.HintSize="624,2464">
+      <sap2010:ViewStateData Id="Manager_RDBMSConnectors_1" sap:VirtualizedContainerService.HintSize="733,6140">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="ShouldCollapseAll">True</x:Boolean>
-            <x:Boolean x:Key="ShouldExpandAll">False</x:Boolean>
+            <x:Boolean x:Key="ShouldCollapseAll">False</x:Boolean>
+            <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>

@@ -127,7 +127,7 @@
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
           <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="D_Monitor-TCNo_004_SUCCESS: Ui checked for Completed Tab" />
-          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="ReportTC2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+          <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="ReportTC2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
             <ui:InvokeWorkflowFile.Arguments>
               <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
               <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">True</InArgument>
@@ -158,7 +158,7 @@
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_8">
           <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
             <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Error" Message="[&quot;D_Monitor-TCNo_003_FAILED: Filter Box Displayed &quot;+is_FilterBoxDisplayed.ToString+&quot;Page No Displayed &quot;+is_PageNoDisplayed.ToString]" />
-            <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="ReportTC2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+            <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="ReportTC2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
               <ui:InvokeWorkflowFile.Arguments>
                 <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_Monitor-TCNo_004_ERROR</InArgument>
                 <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">False</InArgument>
@@ -178,76 +178,78 @@
         <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;" TimeoutMS="3000" WaitForReady="COMPLETE" />
       </ui:ImageFound.Target>
     </ui:ImageFound>
-    <ui:TypeInto Activate="True" ClickBeforeTyping="True" ContinueOnError="True" DelayBefore="6000" DelayBetweenKeys="100" DelayMS="2000" DisplayName="Type into 'FilterBox' Running Tab" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="[FilteredDSName]">
-      <ui:TypeInto.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="f04d21bd05e6e0cffd5340530d02a3e7" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='content' tag='INPUT' /&gt;" WaitForReady="COMPLETE" />
-      </ui:TypeInto.Target>
-    </ui:TypeInto>
     <ui:UiElementExists DisplayName="IsFilteredRow for DS/Flow displayed - Running Tab" Exists="[is_FiteredTableRow1Displayed]" sap2010:WorkflowViewState.IdRef="UiElementExists_4">
       <ui:UiElementExists.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="e7b0a2aa9035a88a2ed2dc9f12ed8f26" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TABLE' /&gt;&lt;webctrl isleaf='1' tableCol='6' tag='TD' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="e7b0a2aa9035a88a2ed2dc9f12ed8f26" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TABLE' /&gt;&lt;webctrl isleaf='1' tableCol='6' tag='TD' /&gt;" TimeoutMS="90000" WaitForReady="INTERACTIVE" />
       </ui:UiElementExists.Target>
     </ui:UiElementExists>
-    <ui:GetValue ContinueOnError="True" DisplayName="Completed Tab: Get Filtered Row text" sap2010:WorkflowViewState.IdRef="GetValue_1">
-      <ui:GetValue.Target>
-        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e6486326b53009952986ef9dadde5a6d" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TABLE' /&gt;&lt;webctrl idx='1' isleaf='1' tableCol='6' tag='TD' /&gt;" WaitForReady="COMPLETE" />
-      </ui:GetValue.Target>
-      <ui:GetValue.Value>
-        <OutArgument x:TypeArguments="x:String">[CompletedTabFilteredResultStatus]</OutArgument>
-      </ui:GetValue.Value>
-    </ui:GetValue>
     <If Condition="[is_FiteredTableRow1Displayed]" sap2010:WorkflowViewState.IdRef="If_4">
       <If.Then>
-        <If Condition="[CompletedTabFilteredResultStatus.ToLower.Contains(&quot;succeeded&quot;)]" sap2010:WorkflowViewState.IdRef="If_3">
-          <If.Then>
-            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
-              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[&quot;D_Monitor-TCNo_005_SUCCESS: Completed Tab Status for Ds &quot;+FilteredDSName +&quot;  is :&quot;+CompletedTabFilteredResultStatus.ToString]" />
-              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="ReportTC2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
-                <ui:InvokeWorkflowFile.Arguments>
-                  <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_Monitor-TCNo_005_SUCCESS</InArgument>
-                  <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">True</InArgument>
-                  <InArgument x:TypeArguments="x:String" x:Key="LogMessage" xml:space="preserve">["D_Monitor-TCNo_005_SUCCESS: Completed Tab Status for Ds "+FilteredDSName +"  is :"+CompletedTabFilteredResultStatus.ToString]</InArgument>
-                  <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportPath]</InArgument>
-                </ui:InvokeWorkflowFile.Arguments>
-              </ui:InvokeWorkflowFile>
-              <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
-                <Assign.To>
-                  <OutArgument x:TypeArguments="x:Boolean">[JobStatus]</OutArgument>
-                </Assign.To>
-                <Assign.Value>
-                  <InArgument x:TypeArguments="x:Boolean">True</InArgument>
-                </Assign.Value>
-              </Assign>
-              <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[&quot;D_Monitor-TCNo_005_INFO: Job Status Is:&quot;+JobStatus.ToString]" />
-              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="ReportTC2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
-                <ui:InvokeWorkflowFile.Arguments>
-                  <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
-                  <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">True</InArgument>
-                  <InArgument x:TypeArguments="x:String" x:Key="LogMessage">["D_Monitor-TCNo_005_INFO: Job Status Is:"+JobStatus.ToString]</InArgument>
-                  <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportPath]</InArgument>
-                </ui:InvokeWorkflowFile.Arguments>
-              </ui:InvokeWorkflowFile>
-            </Sequence>
-          </If.Then>
-          <If.Else>
-            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_10">
-              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_9">
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Error" Message="[&quot;D_Monitor-TCNo_005_ERROR: Complted Tab Status for Ds &quot;+FilteredDSName +&quot;  is :&quot;+CompletedTabFilteredResultStatus.ToString]" />
-                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="ReportTC2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_11">
+          <ui:TypeInto Activate="True" ClickBeforeTyping="True" ContinueOnError="True" DelayBefore="2000" DelayBetweenKeys="100" DelayMS="4000" DisplayName="Type into 'FilterBox' Running Tab" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="[FilteredDSName]">
+            <ui:TypeInto.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="f04d21bd05e6e0cffd5340530d02a3e7" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl parentid='content' tag='INPUT' /&gt;" WaitForReady="COMPLETE" />
+            </ui:TypeInto.Target>
+          </ui:TypeInto>
+          <ui:GetValue ContinueOnError="True" DisplayName="Completed Tab: Get Filtered Row text" sap2010:WorkflowViewState.IdRef="GetValue_1">
+            <ui:GetValue.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e6486326b53009952986ef9dadde5a6d" Selector="&lt;html app='chrome.exe' title='MOSAIC' /&gt;&lt;webctrl tag='TABLE' /&gt;&lt;webctrl idx='1' isleaf='1' tableCol='6' tag='TD' /&gt;" WaitForReady="COMPLETE" />
+            </ui:GetValue.Target>
+            <ui:GetValue.Value>
+              <OutArgument x:TypeArguments="x:String">[CompletedTabFilteredResultStatus]</OutArgument>
+            </ui:GetValue.Value>
+          </ui:GetValue>
+          <If Condition="[CompletedTabFilteredResultStatus.ToLower.Contains(&quot;succeeded&quot;)]" sap2010:WorkflowViewState.IdRef="If_3">
+            <If.Then>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[&quot;D_Monitor-TCNo_005_SUCCESS: Completed Tab Status for Ds &quot;+FilteredDSName +&quot;  is :&quot;+CompletedTabFilteredResultStatus.ToString]" />
+                <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="ReportTC2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
                   <ui:InvokeWorkflowFile.Arguments>
-                    <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_Monitor-TCNo_005_ERROR</InArgument>
-                    <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">False</InArgument>
-                    <InArgument x:TypeArguments="x:String" x:Key="LogMessage" xml:space="preserve">["D_Monitor-TCNo_005_ERROR: Complted Tab Status for Ds "+FilteredDSName +"  is :"+CompletedTabFilteredResultStatus.ToString]</InArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_Monitor-TCNo_005_SUCCESS</InArgument>
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">True</InArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="LogMessage" xml:space="preserve">["D_Monitor-TCNo_005_SUCCESS: Completed Tab Status for Ds "+FilteredDSName +"  is :"+CompletedTabFilteredResultStatus.ToString]</InArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportPath]</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+                <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Boolean">[JobStatus]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[&quot;D_Monitor-TCNo_005_INFO: Job Status Is:&quot;+JobStatus.ToString]" />
+                <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="ReportTC2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName" />
+                    <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">True</InArgument>
+                    <InArgument x:TypeArguments="x:String" x:Key="LogMessage">["D_Monitor-TCNo_005_INFO: Job Status Is:"+JobStatus.ToString]</InArgument>
                     <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportPath]</InArgument>
                   </ui:InvokeWorkflowFile.Arguments>
                 </ui:InvokeWorkflowFile>
               </Sequence>
-            </Sequence>
-          </If.Else>
-        </If>
+            </If.Then>
+            <If.Else>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_10">
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_9">
+                  <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Error" Message="[&quot;D_Monitor-TCNo_005_ERROR: Complted Tab Status for Ds &quot;+FilteredDSName +&quot;  is :&quot;+CompletedTabFilteredResultStatus.ToString]" />
+                  <ui:InvokeWorkflowFile ContinueOnError="True" DisplayName="ReportTC2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="Generic\GenerteLogsApplicationScopeUtility.xaml">
+                    <ui:InvokeWorkflowFile.Arguments>
+                      <InArgument x:TypeArguments="x:String" x:Key="ScreenshotName">D_Monitor_TCNo_005_ERROR</InArgument>
+                      <InArgument x:TypeArguments="x:Boolean" x:Key="ScreenshotTypeSucess">False</InArgument>
+                      <InArgument x:TypeArguments="x:String" x:Key="LogMessage" xml:space="preserve">["D_Monitor_TCNo_005_ERROR_Complted Tab Status for Ds "+FilteredDSName +"  is :"+CompletedTabFilteredResultStatus.ToString]</InArgument>
+                      <InArgument x:TypeArguments="x:String" x:Key="ReportPath">[LogReportPath]</InArgument>
+                    </ui:InvokeWorkflowFile.Arguments>
+                  </ui:InvokeWorkflowFile>
+                </Sequence>
+              </Sequence>
+            </If.Else>
+          </If>
+        </Sequence>
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Error" Message="[&quot;ERROR: Submitted Job is not available in completed tab as well, Job Name:  &quot;+FilteredDSName]" />
+        <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Error" Message="[&quot;D_Monitor-TCNo_005_ERROR: Submitted Job is not available in completed tab as well, Job Name:  &quot;+FilteredDSName]" />
       </If.Else>
     </If>
     <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_2">
@@ -274,12 +276,12 @@
         </Sequence>
       </ui:CommentOut.Body>
     </ui:CommentOut>
-    <sads:DebugSymbol.Symbol>d0ZEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxNb25pdG9yUGFnZVxNb25pdG9yX0NvbXBsZXRlZFRhYi54YW1sYQFyAb0BAQJGA5YCDgIBAUwFUw4CAX9UBWUVAgF7ZgVzFQIBdnQFeBoCAXF5BX0aAgFsfgWsAQoCAU+tAQW0ARUCAUm1AQW5ARMCAUG6AQW+ARoCATy/AQXGARMCATfHAQX8AQoCAQP9AQWUAhUCAQJRMVE2AwGCAU4yTj0DAYABVGdUbQIBfGNfY48BAgF+YDNgOAIBfWY6ZkACAXlmTWZUAgF4ZrUBZroBAgF3cZgBcfQBAgF6doMBduMBAgF1du4BdvQBAgF0dEN0XAIBcnuDAXvuAQIBcHv5AXv/AQIBb3lEeVoCAW1+E35DAgFQgAEJmwEUAgFingEJqgEUAgFTsgFKsgF6AgFOsgGFAbIBiwECAU2tAT6tAVQCAUuvATOvATgCAUq3AZgBtwH4AQIBSLUBhAG1AYoBAgFHtQFLtQFRAgFGtQGvArUBwQICAUS1AXa1AXsCAUO1AV61AWQCAUK8AYMBvAGCAgIBQLwBjQK8AZMCAgE/ugFgugGAAQIBPcQBMcQBUwIBOb8BIr8BKAIBOMEBmAHBAZ8CAgE7xwETxwEzAgEEyQEJ9wEOAgEJ+gEJ+gHlAQIBBoEBC4EBtQECAWqCAQuJASMCAWSKAQuaARsCAWOfAQupARYCAVTJARfJAWMCAQrLAQ3mARgCARvpAQ31ARgCAQz6AXj6AeIBAgEHgQF4gQGyAQIBa4cBSYcBWAIBaIUBVIUBWAIBZ4YBSYYBgQECAWaCAawBggHdAQIBZaABDaABmAICAV6hAQ2oASUCAVXMAQ/MAZQCAgEzzQEP1AEnAgEq1QEP3AEYAgEm3QEP3QHJAQIBI94BD+UBJwIBHOoBD/QBGgIBDaABe6ABlQICAV+mAUumAVoCAVyjAU+jAWcCAVukAVakAVsCAVqlAUulAc8BAgFXoQGuAaEB3wECAVbMAXzMAZECAgE00gFN0gFcAgExzwFRzwFrAgEw0AFY0AFcAgEvzQGwAc0B4QECASvaATvaAT8CASnXATzXAUcCASfdAXzdAcYBAgEk4wFN4wFcAgEh4QFY4QFcAgEg4gFN4gGLAQIBHt4BsAHeAeEBAgEd6wER6wGUAgIBF+wBEfMBKQIBDusBf+sBkQICARjxAU/xAV4CARXuAVPuAWsCARTvAVrvAV8CARPsAbIB7AHjAQIBDw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0ZEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxNb25pdG9yUGFnZVxNb25pdG9yX0NvbXBsZXRlZFRhYi54YW1sZwFyAb0BAQJGA5gCDgIBAUwFUw4DAYUBVAVlFQMBgQFmBXMVAgF8dAV4GgIBd3kFfRoCAXJ+BawBCgIBU60BBbQBFQIBTbUBBbkBGgIBSLoBBf4BCgIBA/8BBZYCFQIBAlExUTYDAYgBTjJOPQMBhgFUZ1RtAwGCAWNfY48BAwGEAWAzYDgDAYMBZjpmQAIBf2ZNZlQCAX5mtQFmugECAX1xmAFx9AEDAYABdoMBduMBAgF7du4BdvQBAgF6dEN0XAIBeHuDAXvuAQIBdnv5AXv/AQIBdXlEeVoCAXN+E35DAgFUgAEJmwEUAgFnngEJqgEUAgFXsgFKsgF6AgFSsgGFAbIBiwECAVGtAT6tAVQCAU+vATOvATgCAU63AYMBtwGCAgIBTLcBjQK3AZQCAgFLtQFgtQGAAQIBSboBE7oBMwIBBLwBCfkBFAIBCfwBCfwB+AECAQaBAQuBAbUBAgFwggELiQEjAgFpigELmgEbAgFonwELqQEWAgFYvQELwQEZAgFAwgELyQEZAgE7ygEL+AEQAgEK/AF4/AH1AQIBB4EBeIEBsgECAXGCATKCATgCAW+HAUmHAVgCAW2FAVSFAVgCAWyGAUmGAYEBAgFrggGoAYIB2QECAWqgAQ2gAZgCAgFjoQENqAElAgFZvwGeAb8B/gECAUe9AYoBvQGQAQIBRr0BUb0BVwIBRb0BtQK9AccCAgFDvQF8vQGBAQIBQr0BZL0BagIBQccBN8cBWQIBPcIBKMIBLgIBPMQBngHEAaUCAgE/ygEZygFlAgELzAEP5wEaAgEd6gEP9gEaAgENoAF7oAGVAgIBZKEBNKEBOgIBYqYBS6YBWgIBYKMBT6MBZwIBX6QBVqQBWwIBXqUBS6UBzwECAVuhAaoBoQHbAQIBWs0BEc0BlgICATfOARHVASkCAS3WARHdARoCASneARHeAcsBAgEm3wER5gEpAgEe6wER9QEcAgEOzQF+zQGTAgIBOM4BOM4BPgIBNtMBT9MBXgIBNNABU9ABbQIBM9EBWtEBXgIBMs4BrgHOAd8BAgEu2wE92wFBAgEs2AE+2AFJAgEq3gF+3gHIAQIBJ98BON8BPgIBJeQBT+QBXgIBI+IBWuIBXgIBIuMBT+MBjQECASDfAa4B3wHfAQIBH+wBE+wBlgICARntARP0ASsCAQ/sAYEB7AGTAgIBGu0BOu0BQAIBGPIBUfIBYAIBFu8BVe8BbQIBFfABXPABYQIBFO0BsAHtAeEBAgEQ</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="1058,60" />
-      <sap2010:ViewStateData Id="ClickImage_2" sap:VirtualizedContainerService.HintSize="1058,106">
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="1080,60" />
+      <sap2010:ViewStateData Id="ClickImage_2" sap:VirtualizedContainerService.HintSize="1080,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -287,7 +289,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="SelectItem_1" sap:VirtualizedContainerService.HintSize="1058,134">
+      <sap2010:ViewStateData Id="SelectItem_1" sap:VirtualizedContainerService.HintSize="1080,134">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -295,7 +297,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="1058,106">
+      <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="1080,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -303,7 +305,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="UiElementExists_3" sap:VirtualizedContainerService.HintSize="1058,106" />
+      <sap2010:ViewStateData Id="UiElementExists_3" sap:VirtualizedContainerService.HintSize="1080,106" />
       <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,87">
         <sap:WorkflowViewStateService.ViewState>
@@ -367,7 +369,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="1058,614">
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="1080,614">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -375,7 +377,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ImageFound_2" sap:VirtualizedContainerService.HintSize="1058,106">
+      <sap2010:ViewStateData Id="ImageFound_2" sap:VirtualizedContainerService.HintSize="1080,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -383,7 +385,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="1058,134">
+      <sap2010:ViewStateData Id="UiElementExists_4" sap:VirtualizedContainerService.HintSize="1080,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -391,7 +393,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="UiElementExists_4" sap:VirtualizedContainerService.HintSize="1058,106">
+      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="719,134">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -399,7 +401,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="GetValue_1" sap:VirtualizedContainerService.HintSize="1058,106">
+      <sap2010:ViewStateData Id="GetValue_1" sap:VirtualizedContainerService.HintSize="719,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -461,8 +463,15 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="741,1292">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LogMessage_10" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="1058,996" />
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="1080,1440" />
       <sap2010:ViewStateData Id="ClickImage_3" sap:VirtualizedContainerService.HintSize="314,106">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -478,15 +487,15 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CommentOut_2" sap:VirtualizedContainerService.HintSize="1058,308" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="1080,3446">
+      <sap2010:ViewStateData Id="CommentOut_2" sap:VirtualizedContainerService.HintSize="1080,308" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="1102,3570">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Monitor_CompletedTab_1" sap:VirtualizedContainerService.HintSize="1120,3526" />
+      <sap2010:ViewStateData Id="Monitor_CompletedTab_1" sap:VirtualizedContainerService.HintSize="1142,3650" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -2,7 +2,6 @@
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
- xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
@@ -70,46 +69,42 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="Generic_VerifyElementOnPage" sap2010:WorkflowViewState.IdRef="Sequence_1">
-    <TryCatch DisplayName="Try catch" sap2010:WorkflowViewState.IdRef="TryCatch_1">
-      <TryCatch.Try>
-        <If Condition="[condition]" DisplayName="Verify element " sap2010:WorkflowViewState.IdRef="If_2">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:Boolean" Name="elementIsPresent" />
+    </Sequence.Variables>
+    <ui:UiElementExists DisplayName="Element Exists" Exists="[elementIsPresent]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[element]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <If Condition="[condition]" DisplayName="Verify element " sap2010:WorkflowViewState.IdRef="If_6">
+      <If.Then>
+        <If Condition="[elementIsPresent]" DisplayName="Verify element on page for valid condition" sap2010:WorkflowViewState.IdRef="If_4">
           <If.Then>
-            <If Condition="[element.IsVisible]" DisplayName="Verify element on page for valid condition" sap2010:WorkflowViewState.IdRef="If_1">
-              <If.Then>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[TC_No+ &quot; : SUCCESS - UI element - &quot; +elementName.ToString+ &quot; verified on page.&quot;]" />
-              </If.Then>
-              <If.Else>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Error" Message="[TC_No+ &quot; : FAILURE - element - &quot; +elementName.ToString+ &quot; present condition - &quot; +element.IsVisible.ToString]" />
-              </If.Else>
-            </If>
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Info" Message="[TC_No+ &quot; : SUCCESS - UI element - &quot; +elementName.ToString+ &quot; verified on page.&quot;]" />
           </If.Then>
           <If.Else>
-            <If Condition="[isElementExistCondition]" DisplayName="Verify element on page for in-valid condition" sap2010:WorkflowViewState.IdRef="If_3">
-              <If.Then>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[TC_No+ &quot; : SUCCESS - UI element - &quot; +elementName.ToString+ &quot; present condition - &quot; +element.IsVisible.ToString+ &quot; - Functionality verified successfully.&quot;]" />
-              </If.Then>
-              <If.Else>
-                <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Error" Message="[TC_No+ &quot; : FAILURE - UI element - &quot; +elementName.ToString+ &quot; present condition - &quot; +element.IsVisible.ToString+ &quot; - Functionality does not verified successfully.&quot;]" />
-              </If.Else>
-            </If>
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Error" Message="[TC_No+ &quot; : FAILURE - element - &quot; +elementName.ToString+ &quot; present condition - &quot; +elementIsPresent.ToString]" />
           </If.Else>
         </If>
-      </TryCatch.Try>
-      <TryCatch.Catches>
-        <Catch x:TypeArguments="s:NullReferenceException" sap2010:WorkflowViewState.IdRef="Catch`1_1">
-          <ActivityAction x:TypeArguments="s:NullReferenceException">
-            <ActivityAction.Argument>
-              <DelegateInArgument x:TypeArguments="s:NullReferenceException" Name="exception" />
-            </ActivityAction.Argument>
-          </ActivityAction>
-        </Catch>
-      </TryCatch.Catches>
-    </TryCatch>
-    <sads:DebugSymbol.Symbol>d0JEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxHZW5lcmljXFZlcmlmeUVsZW1lbnRfT25QYWdlLnhhbWwRAXgBgAEBAkgDbQ4CAQFJBWsQAgECSwlgDgIBA0sXSyQCAQRNDVQSAgENVw1eEgIBBk0bTTACAQ5PEU/oAQIBEVIRUoUCAgEPVxtXNgIBB1kRWbwCAgELXBFcxgICAQlPfk/lAQIBElJ/UoICAgEQWX5ZuQICAQxcf1zDAgIBCg==</sads:DebugSymbol.Symbol>
+      </If.Then>
+      <If.Else>
+        <If Condition="[isElementExistCondition]" DisplayName="Verify element on page for in-valid condition" sap2010:WorkflowViewState.IdRef="If_5">
+          <If.Then>
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[TC_No+ &quot; : SUCCESS - UI element - &quot; +elementName.ToString+ &quot; present condition - &quot; +element.IsVisible.ToString+ &quot; - Functionality verified successfully.&quot;]" />
+          </If.Then>
+          <If.Else>
+            <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Error" Message="[TC_No+ &quot; : FAILURE - UI element - &quot; +elementName.ToString+ &quot; present condition - &quot; +isElementExistCondition.ToString+ &quot; - Functionality does not verified successfully.&quot;]" />
+          </If.Else>
+        </If>
+      </If.Else>
+    </If>
+    <sads:DebugSymbol.Symbol>d0JEOlxNb3NhaWNfUmVncmVzc2lvblN1aXRlX1VJUGF0aFxHZW5lcmljXFZlcmlmeUVsZW1lbnRfT25QYWdlLnhhbWwUAXgBgAEBAkcDZw4CAQFLBU8aAgEbUAVlCgIBAk1gTWYCASBLPUtRAgEeTUpNVQIBHFATUCACAQNSCVkOAgEPXAljDgIBBVIXUisCARBUDVTkAQIBF1cNV4ACAgESXBdcMgIBBl4NXrgCAgENYQ1hyAICAQhUelThAQIBGFd7V/0BAgETXnpetQICAQ5he2HFAgIBCQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="200,51">
+      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="1331,68" />
+      <sap2010:ViewStateData Id="LogMessage_6" sap:VirtualizedContainerService.HintSize="314,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -117,7 +112,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="200,51">
+      <sap2010:ViewStateData Id="LogMessage_7" sap:VirtualizedContainerService.HintSize="314,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -125,39 +120,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="200,51">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="200,51">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_5" sap:VirtualizedContainerService.HintSize="200,51">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="200,51">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,208">
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="653,239">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -165,7 +128,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Catch`1_1" sap:VirtualizedContainerService.HintSize="468,21">
+      <sap2010:ViewStateData Id="LogMessage_8" sap:VirtualizedContainerService.HintSize="314,91">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -173,15 +136,44 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TryCatch_1" sap:VirtualizedContainerService.HintSize="482,435" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="504,559">
+      <sap2010:ViewStateData Id="LogMessage_9" sap:VirtualizedContainerService.HintSize="314,91">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="653,239">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="1331,387">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1353,619">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Generic_VerifyElementOnPage_1" sap:VirtualizedContainerService.HintSize="544,719" />
+      <sap2010:ViewStateData Id="Generic_VerifyElementOnPage_1" sap:VirtualizedContainerService.HintSize="1393,699">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
